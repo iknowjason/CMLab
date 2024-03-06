@@ -139,7 +139,9 @@ Description:  A simple ansible ping test using ssh against linux2 host in the 'l
 ### Ansible Live Response DFIR Lab Example
 
 Run the Live Response DFIR Lab examples created by Brian Olson
+
 Reference: https://github.com/brian-olson/ansible-live-response
+
 There are three playbooks.  First, setup the lamp stack on target linux2.  Second, perform triage.  Third, perform response.
 
 Step 2.1: Run the ansible playbook lamp.yml.  This is Ansible playbook that install the LAMP stack.
