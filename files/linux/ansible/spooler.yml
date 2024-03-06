@@ -1,0 +1,7 @@
+---
+- hosts: windows
+  tasks:
+  - name: disable print spooler
+    ansible.windows.win_powershell:
+      script: |
+        stop-service spooler
