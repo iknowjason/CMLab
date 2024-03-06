@@ -1,21 +1,17 @@
-# CM Lab
+# Configuration Management (CM) Lab
 
 ## Overview
 
-Automated Emulation is a simple terraform template creating a customizable and automated Breach and Attack Simulation lab.  It automically builds the following resources hosted in AWS:
+Configuration Management (CM) Lab is a simple terraform template creating a small enterprise Security lab to practice automation for Configuration Management (CM) tooling.  It automically builds the following resources hosted in AWS:
 
-* One Linux server deploying Caldera and VECTR (vectr.io)
-* Linux Server:  The latest Caldera 5.0 with Magma VueJS web application
-* One Windows Client (Windows Server 2022) auto-configured for Caldera agent deployment, and other Red & Blue tools
+* Two Ubuntu Linux Servers (one CM server, one clients)
+* Two Windows Server 2022
+* CM Tools Automatically Deployed: Ansible, Chef, Puppet, Saltstack, DSCv2, DSCv3 
 * Windows Client:  Atomic Red Team (ART) automated deployment
 * Windows Client:  Sysmon automated deployment
 
 See the **Features and Capabilities** section for more details.
-
-## Key Differences
-
-This lab differs from other popular ```Cyber Ranges``` in its design and philosophy.  No secondary tools like Ansible are necessary.  Feel free to use them if you like.  But they aren't required for configuration management.  Instead of using 3rd party configuration management tools, this lab uses terraform providers (AWS SDK) and builtin AWS features (```user data```).  You don't have to rely on a secondary agent or deal with outdated libraries or networking issues with agentless push or updating a secondary tool that causes issues over time.  This increases ```stability, consistency, and speed``` for building and configuring cloud resources.  Use terraform, bash, and powershell to build and configure.  A small user-data script is pushed into the system and runs.  Individual configuration management scripts are uploaded to an S3 bucket.  The master script instructs the system which smaller scripts to run which builds the system.  With good documentation, the location of these scripts should make it easy to add and customize.  See the **Features and Capabilities** section for more details.     
-
+  
 ## Requirements and Setup
 
 **Tested with:**
