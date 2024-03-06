@@ -9,7 +9,7 @@ Configuration Management (CM) Lab is a terraform template creating a small enter
 * CM Tools Automatically Deployed: Ansible, Chef, Puppet, Saltstack, DSCv2, DSCv3
 * Ansible Lab with automated terraform infrastructure and configuration deployment
 * Multiple Options for Configuration:
-  - One Linux Master Server controlling One Linux Client and two Windows clients
+  - One Linux Master Server controlling one Linux Client and two Windows clients
   - One Windows Server pulling its configuration from another DSC Windows Server
   - Flexibility to remove any of the systems, to just focus on one scenario (One Linux Master, one Windows client)
 * Ansible Labs:
