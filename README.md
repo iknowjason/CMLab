@@ -9,8 +9,6 @@ Configuration Management (CM) Lab is a simple terraform template creating a smal
 * CM Tools Automatically Deployed: Ansible, Chef, Puppet, Saltstack, DSCv2, DSCv3 
 * Windows Client:  Atomic Red Team (ART) automated deployment
 * Windows Client:  Sysmon automated deployment
-
-See the **Features and Capabilities** section for more details.
   
 ## Requirements and Setup
 
