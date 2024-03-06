@@ -80,13 +80,11 @@ locals {
 }
 ```
 
-### Ansible Lab
-
-##################
-# WINDOWS EXAMPLES
-##################
+## Ansible Lab
 
 All lab commands can be found in ```files/linux/ansible/EXAMPLES.README```
+
+### Windows Examples
 
 Command 1:
 ```
@@ -112,9 +110,8 @@ ansible-playbook -i winhosts-ssh powershell-ssh.yml
 
 Description: Run the playbook called 'powershell-ssh.yml'.  This playbook runs some commands on the target hosts, using the default shell.  The default shell over SSH connection is Windows Powershell.  This runs over SSH connection against Windows hosts.
 
-####################################################
-# ANSIBLE LOCKDOWN WINDOWS SERVER 2022 CIS HARDENING
-####################################################
+### Ansible Lockdown Windows Server 2022 CIS Hardening
+
 Reference: https://github.com/ansible-lockdown/Windows-2022-CIS
 
 Command 1:
@@ -126,9 +123,7 @@ ansible-playbook -i winhosts site.yml
 Description:  This runs the Windows 2022 CIS benchmark ansible playbook against the target Windows Server 2022 systems.
 There should be two systems in the inventory list.
 
-################
-# LINUX EXAMPLES
-################
+### Linux Examples
 
 Command 1:
 ```
@@ -138,9 +133,8 @@ ansible -i linhosts linux -m ping
 
 Description:  A simple ansible ping test using ssh against linux2 host in the 'linhosts' inventory file.
 
-################################
-# LIVE RESPONSE DFIR LAB EXAMPLE
-################################
+### Ansible Live Response DFIR Lab Example
+
 Run the Live Response DFIR Lab examples created by Brian Olson
 Reference: https://github.com/brian-olson/ansible-live-response
 There are three playbooks.  First, setup the lamp stack on target linux2.  Second, perform triage.  Third, perform response.
