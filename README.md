@@ -4,11 +4,18 @@
 
 Configuration Management (CM) Lab is a terraform template creating a small enterprise Security lab to practice automation for security tooling.  It automically builds the following resources hosted in AWS:
 
-* Two Ubuntu Linux Servers (one CM server, one clients)
+* Two Ubuntu Linux Servers
 * Two Windows Server 2022
 * CM Tools Automatically Deployed: Ansible, Chef, Puppet, Saltstack, DSCv2, DSCv3 
-* Windows Client:  Atomic Red Team (ART) automated deployment
-* Windows Client:  Sysmon automated deployment
+* Multiple Options for Configuration:
+  - One Linux Master Server controlling One Linux Client and two Windows clients
+  - One Windows Server pulling its configuration from another DSC Windows Server
+  - Flexibility to remove any of the systems, to just focus on one scenario (One Linux Master, one Windows client)
+* Ansible Labs and Automation:  Terraform automatically deploys an Ansible setup.
+  - Ansible Cheat Sheet for commands pre-built and configured Ansible infrastructure setup
+  - DFIR Live Response Ansible Playbook
+  - Windows CIS Hardening Ansible Playbook
+  - Ansible setup for Linux SSH, Windows WinRM, and Windows Powershell over SSH
   
 ## Requirements and Setup
 
