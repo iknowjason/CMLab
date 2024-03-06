@@ -2,7 +2,7 @@
 
 ## Overview
 
-Configuration Management (CM) Lab is a simple terraform template creating a small enterprise Security lab to practice automation for Configuration Management (CM) tooling.  It automically builds the following resources hosted in AWS:
+Configuration Management (CM) Lab is a simple terraform template creating a small enterprise Security lab to practice automation for security tooling.  It automically builds the following resources hosted in AWS:
 
 * Two Ubuntu Linux Servers (one CM server, one clients)
 * Two Windows Server 2022
