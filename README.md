@@ -80,6 +80,9 @@ locals {
 }
 ```
 
+## Customizing Ansible Playbooks
+To add any Ansible playbooks, add any files to the ```files/linux/ansible/``` directory.  This directory is used to create a zip archive by terraform, uploaded to an S3 bucket, and then the Linux1 Master host downloads it from the S3 staging bucket.  This is a good location to update files into.  There is also a templatefiles directory in ```files/linux/templatefiles```. It stores all of the ansible template files that need rendered terraform variables for configuration dynamically built, such as host IP addresses or ansible credentials.
+
 ## Ansible Lab
 
 All lab commands can be found in ```files/linux/ansible/EXAMPLES.README```
