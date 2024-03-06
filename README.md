@@ -13,7 +13,7 @@ Configuration Management (CM) Lab is a terraform template creating a small enter
   - One Windows Server pulling its configuration from another DSC Windows Server
   - Flexibility to remove any of the systems, to just focus on one scenario (One Linux Master, one Windows client)
 * Ansible Labs:
-  - Ansible Cheat Sheet for commands pre-built and configured Ansible infrastructure setup and host communication
+  - Ansible Cheat Sheet for commands pre-built.  Pre-configured Ansible infrastructure setup and inventory files host communication.
   - DFIR Live Response Ansible Playbook
   - Windows CIS Hardening Ansible Playbook
   - Ansible setup for Linux SSH, Windows WinRM, and Windows Powershell over SSH
