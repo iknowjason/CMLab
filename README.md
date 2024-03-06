@@ -6,13 +6,14 @@ Configuration Management (CM) Lab is a terraform template creating a small enter
 
 * Two Ubuntu Linux Servers
 * Two Windows Server 2022
-* CM Tools Automatically Deployed: Ansible, Chef, Puppet, Saltstack, DSCv2, DSCv3 
+* CM Tools Automatically Deployed: Ansible, Chef, Puppet, Saltstack, DSCv2, DSCv3
+* Ansible Lab with automated terraform infrastructure and configuration deployment
 * Multiple Options for Configuration:
   - One Linux Master Server controlling One Linux Client and two Windows clients
   - One Windows Server pulling its configuration from another DSC Windows Server
   - Flexibility to remove any of the systems, to just focus on one scenario (One Linux Master, one Windows client)
-* Ansible Labs and Automation:  Terraform automatically deploys an Ansible setup.
-  - Ansible Cheat Sheet for commands pre-built and configured Ansible infrastructure setup
+* Ansible Labs:
+  - Ansible Cheat Sheet for commands pre-built and configured Ansible infrastructure setup and host communication
   - DFIR Live Response Ansible Playbook
   - Windows CIS Hardening Ansible Playbook
   - Ansible setup for Linux SSH, Windows WinRM, and Windows Powershell over SSH
@@ -26,7 +27,7 @@ Configuration Management (CM) Lab is a terraform template creating a small enter
 
 **Clone this repository:**
 ```
-git clone https://github.com/iknowjason/AutomatedEmulation
+git clone https://github.com/iknowjason/CMLab
 ```
 
 **Credentials Setup:**
@@ -79,164 +80,90 @@ locals {
 }
 ```
 
-### Caldera
+### Ansible Lab
 
-**Caldera Linux Server**
+##################
+# WINDOWS EXAMPLES
+##################
 
-Caldera is built on an Ubuntu Linux 22.04 AMI automatically with SSL support for admin console.  The following local project files are important for customization:
+All lab commands can be found in ```files/linux/ansible/EXAMPLES.README```
 
-* bas.tf:  The terraform file that builds the Linux server and all terraform variables for Caldera.
-* files/bas/bootstrap.sh.tpl:  The boostrap script for Caldera and other services.
-* files/bas/local.yml.tpl:  The Caldera configuration file that is automatically deployed
-* files/bas/caldera.service:  The caldera service file that is automatically installed
-* files/bas/abilities/:  A local directory with custom abilities that will automatically deploy to the caldera server in ```/opt/caldera/data/abilities```
-* files/bas/payloads/:  A local directory with custom payloads that will automatically deploy to the caldera server in ```/opt/caldera/data/payloads```
-
-**Troubleshooting Caldera:**
-
-SSH into the Caldera server by looking in ```terraform output``` for this line:  
+Command 1:
 ```
-ssh -i ssh_key.pem ubuntu@3.15.204.148
-```
-Once in the system, tail the user-data logfile.  You will see the steps from the ```bootstrap.sh.tpl``` script running:
-```
-tail -f /var/log/user-data.log
+cd /home/ubuntu/ansible
+ansible windows -i winhosts -m win_ping
 ```
 
-**Customiz Caldera Linux:**
+Description:  A simple ansible ping test using default WinRM against all Windows hosts in the 'winhosts' inventory file.
 
-To customize Caldera, you can modify the default admin credentials for red, blue and api keys in ```bas.tf```.  For other customizations, you can modify the ```local.yml.tpl``` Caldera configuration file.
-
-You can create custom abilities in your project that get automatically loaded into Caldera.  This image shows a custom ability for lateral-movement that is built locally from ```files/bas/abilities/lateral-movement/```.
-
-![Caldera](images/caldera2.png "Abilities")
-
-**Teraform Output:**
-
-View the terraform outputs for important Caldera access information:
+Command 2:
 ```
--------
-Caldera Console
--------
-https://ec2-18-224-151-55.us-east-2.compute.amazonaws.com:8443
-
-Caldera Console Credentials
--------------------
-blue:Caldera2024
-red:Caldera2024
-admin:Caldera2024
-
-API Keys
---------
-api_key_blue: blueadmin2024
-api_key_red: redadmin2024
-
-Caldera API Cheat Sheet
------------------------
-<CUSTOM>
---------------
-```
-**Caldera on Windows Client:**
-
-The Caldera sandcat agent is automatically installed and launches on the Windows client system.  The bootstrap script waits until Caldera is up and available, then installs Sandcat caldera agent.  It should look like this.
-
-![Caldera](images/caldera1.png "Agent View")
-
-
-To troubleshoot this, look in the following logfile on the Windows system:  
-```
-C:\Terraform\caldera_log.log
+cd /home/ubuntu/ansible
+ansible-playbook -i winhosts runcmd.yml
 ```
 
-To modify this file locally, it is located in ```files\windows\caldera.ps1.tpl```
+Description:  This runs the playbook called 'runcmd.yml' against all Windows hosts in the 'winhosts' inventory file.  It runs a couple of cmd.exe example commands.
 
-### VECTR
-
-VECTR by Security Risk Advisors is installed automatically.  From their Github repo:
-
-_VECTR is a tool that facilitates tracking of your red and blue team testing activities to measure detection and prevention capabilities across different attack scenarios_
-
-![VECTR](images/vectr.png "VECTR")
-
-Take a look at the terraform output to see the public URL and credentials for accessing VECTR:
+Command 3:
 ```
-VECTR Console
--------------
-https://ec2-3-15-204-148.us-east-2.compute.amazonaws.com:8081
-
-VECTR Credentials
------------------
-admin:11_ThisIsTheFirstPassword_11
+cd /home/ubuntu/ansible
+ansible-playbook -i winhosts-ssh powershell-ssh.yml
 ```
 
-### Red Tools
+Description: Run the playbook called 'powershell-ssh.yml'.  This playbook runs some commands on the target hosts, using the default shell.  The default shell over SSH connection is Windows Powershell.  This runs over SSH connection against Windows hosts.
 
-On the Windows Client system, the following tools are automatically deployed into ```C:\Tools\```:
+####################################################
+# ANSIBLE LOCKDOWN WINDOWS SERVER 2022 CIS HARDENING
+####################################################
+Reference: https://github.com/ansible-lockdown/Windows-2022-CIS
 
-* Atomic Red Team (ART)
-* PurpleSharp
-
-The local bootstrap script for customization is ```files\windows\red.ps1.tpl```
-
-To track monitoring of the deployment on the Windows Client, see the logfile at ```C:\Terraform\red_log.log```
-
-### Blue Tools
-
-Sysmon service and customized configuration (SwiftOnSecurity) is deployed onto the Windows Client system.  To update the sysmon version and configuration, make changes inside the ```files\sysmon``` directory.
-
-The local bootstrap script for customization is ```files\windows\sysmon.ps1.tpl```
-
-To track monitoring of the deployment on the Windows Client, see the logfile at ```C:\Terraform\blue_log.log```
-
-### Windows Client
-
-The Windows Client system is built from ```win1.tf```.  Windows Server 2022 Datacenter edition is currently used.  You can upload your own AMI image and change the data reference in win1.tf.  The local bootstrap script is located in ```files/windows/bootstrap-win.ps1.tpl```.  RDP into the Windows system and follow this logfile to see how the system is bootstrapping:
-
+Command 1:
 ```
-C:\Terraform\bootstrap_log.log
+cd /home/ubuntu/ansible/Windows-2022-CIS
+ansible-playbook -i winhosts site.yml
 ```
 
-**Customizing Build Scripts**
+Description:  This runs the Windows 2022 CIS benchmark ansible playbook against the target Windows Server 2022 systems.
+There should be two systems in the inventory list.
 
-For adding new scripts for a customized deployment, reference the arrays in ```scripts.tf``` and ```s3.tf```.  For more complex deployments, the Windows system is built to have flexibility for adding customized scripts for post-deployment configuration management.  This gets around the size limit of user-data not exceeding 16KB in size.  The s3 bucket is used for staging to upload and download scripts, files, and any artifacts needed.  How this is done:  A small master script is always deployed via user-data.  This script has instructions to download additional scripts.  This is under your control and is configured in ```scripts.tf``` and ```s3.tf```.  In ```scripts.tf```, take a look at the array called ```templatefiles```.  Add any custom terraform templatefiles here and then add them locally to ```files/windows```.  See the ```red.ps1.tpl``` and ```sysmon.ps1.tpl``` files as an example.  The file should end in ```tpl```.  This template file is generated as output into the directory called ```output```.  The terraform code strips off the ```.tpl``` in the filename when it generates into the ```output``` directory.  Make sure the filename is correct because the master script downloads based on this name.  In ```s3.tf```, each little script referenced in ```templatefiles``` is uploaded.  The master bootstrap script has a reference to this array.  It will automatically download all generated scripts from the ```templatefiles``` array and execute each script.
+################
+# LINUX EXAMPLES
+################
 
-**Terraform Outputs**
-
-See the output from ```terraform output``` to get the IP address and credentials for RDP:
+Command 1:
 ```
--------------------------
-Virtual Machine win1
--------------------------
-Instance ID: i-0eecf5439b1d8080b
-Computer Name:  win1
-Private IP: 10.100.20.10
-Public IP:  18.119.101.237
-local Admin:  RTCAdmin
-local password: wOFVYKYlk2
+cd /home/ubuntu/ansible/
+ansible -i linhosts linux -m ping
 ```
 
-### Linux
+Description:  A simple ansible ping test using ssh against linux2 host in the 'linhosts' inventory file.
 
-The linux system is built from ```bas.tf```.  The bootstrap script is located in ```files/bas/bootstrap.sh.tpl```.
+################################
+# LIVE RESPONSE DFIR LAB EXAMPLE
+################################
+Run the Live Response DFIR Lab examples created by Brian Olson
+Reference: https://github.com/brian-olson/ansible-live-response
+There are three playbooks.  First, setup the lamp stack on target linux2.  Second, perform triage.  Third, perform response.
 
-To access the Linux system and troubleshoot any bootstrap issues, SSH into the system by looking at the terraform output:
-
+Step 2.1: Run the ansible playbook lamp.yml.  This is Ansible playbook that install the LAMP stack.
+Commands:
 ```
-SSH
----
-ssh -i ssh_key.pem ubuntu@3.15.204.148
-```
-
-Then tail the user-data logfile to monitor any potential issues with the bootstrap script:
-
-```
-tail -f /var/log/user-data.log
+cd /home/ubuntu/ansible/ansible-live-response
+ansible-playbook lamp.yml -i linhosts
 ```
 
-### Future
+Step 2.2:  Run the DFIR Triage playbook
+Commands:
+```
+cd /home/ubuntu/ansible/ansible-live-response
+sudo ansible-playbook DFIR-triage.yml -i linhosts
+```
 
-This terraform was automatically generated by the Operator Lab tool.  To get future releases of the tool, follow twitter.com/securitypuck.
+Step 2.3:  Run the DFIR response playbook.  This playbook makes some changes to the host based on the findings of the triage phase.  This patches, reconfigures services.  Removes malware.  Removes unauthorized local uses and terminates suspicious processes and network connections.
 
-For an Azure version of this tool, check out PurpleCloud (https://www.purplecloud.network)
-
+Commands:
+```
+cd /home/ubuntu/ansible/ansible-live-response
+sudo ansible-playbook DFIR-respond.yml -i linhosts
+```
 
