@@ -7,6 +7,7 @@ Configuration Management (CM) Lab is a terraform template creating a small enter
 * Two Ubuntu Linux 22.04 Servers
 * Two Windows Server 2022
 * CM tools automatically deployed: Ansible, Chef, Puppet, Saltstack, DSCv2, DSCv3
+* Nice setup on Windows Servers with OpenSSH and remote SSH access using Powershell 5.1
 * "Ansible Content and Labs" with automated terraform infrastructure and configuration deployed for ansible host control
 * Multiple Options for Configuration:
   - One Linux Master Server controlling one Linux client and two Windows clients
