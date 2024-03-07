@@ -72,6 +72,61 @@ terraform output
 
 ## Features and Capabilities
 
+### Linux Systems
+
+* linux1:  The CM master server (Ubuntu 22.04).  Configuration is controlled in linux1.tf.  Bootstrap script is ```files/linux/ubuntu1.sh.tpl```.  This is the Master server that can automate managing linux2, win1, and win2.
+  -Software:  Ansible, Chef, Puppet, Saltstack, DSCv3
+* linux2:  The CM client server (Ubuntu 22.04).  Configuration is controlled in linux2.tf.  Bootstrap script is ```files/linux/ubuntu2.sh.tpl```.  This is the client server that is intended to receive configuration management changes from the linux1 server.
+  -Software:  Ansible, Chef, Puppet, Saltstack, DSCv2.
+  -Adds an ```ansible``` username for SSH Ansible authentication
+
+**Remote Access:**  You can SSH into teach system.  To get the remote IP, type ```terraform output``` and look for this as an example, either linux1 or linux2:
+
+```
+SSH to linux1
+---------------
+ssh -i ssh_key.pem ubuntu@3.145.146.86
+```
+
+
+### Windows Systems
+
+* win1:  The CM client server running Windows Server 2022.  Configuration is controlled in win1.tf.  Bootstrap script is ```files/windows/bootstrap-win1.ps1.tpl```.  This is the Windows server that is configured by the linux1 master CM.  But it can also be used for DSCv2 testing.  The win1 system can be the push/pull server.
+  -Software:  Chef, Puppet, Powershell Core 7.4, VSCode, OpenSSH
+  -Adds an ```ansible``` username for WinRM and SSH authentication using Ansible
+  -Remote Access:  SSH, WinRM, RDP
+* win2:  The CM client server running Windows Server 2022.  Configuration is controlled in win2.tf.  Bootstrap script is ```files/windows/bootstrap-win1.ps2.tpl```.  This is the Windows server that is configured by the linux1 master CM.  But it can also be used for DSCv2 testing.  The win2 system can be the push/pull server.
+  -Software:  Ansible, Chef, Puppet, Saltstack, DSCv2.
+  -Adds an ```ansible``` username for WinRM and SSH authentication using Ansible
+  -Remote Access:  SSH, WinRM, RDP
+
+**Remote Access:**
+There is a very nice OpenSSH automated configuration that allows inbound SSH access into each Windows system with a default shell of Windows Powershell 5.1.
+
+To find the SSH or RDP Remote Acess configuration, type ```terraform output``` and look for the following in the output:
+
+```
+-------------------------
+Virtual Machine win2
+-------------------------
+Instance ID: i-03b5597cd92d219a7
+Computer Name:  win2
+Private IP: 10.100.20.149
+Public IP:  13.59.251.113
+local Admin:  RTCAdmin
+local password: Proud-lion-2024!
+Ansible User:  ansible
+Ansible Pass:  Brave-monkey-2024!
+
+-------------
+SSH to win2
+-------------
+ssh RTCAdmin@13.59.251.113
+```
+
+
+### Windows Systems
+
 ### Important Firewall and White Listing
 By default when you run terraform apply, your public IPv4 address is determined via a query to ifconfig.so and the ```terraform.tfstate``` is updated automatically.  If your location changes, simply run ```terraform apply``` to update the security groups with your new public IPv4 address.  If ifconfig.me returns a public IPv6 address,  your terraform will break.  In that case you'll have to customize the white list.  To change the white list for custom rules, update this variable in ```sg.tf```:
 ```
