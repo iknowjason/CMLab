@@ -80,6 +80,7 @@ terraform output
 * **linux2:**  The CM client server (Ubuntu 22.04).  Configuration is controlled in ```linux2.tf```.  Bootstrap script is ```files/linux/ubuntu2.sh.tpl```.  This is the client server that is intended to receive configuration management changes from the linux1 server.
   
   -Software:  Ansible, Chef, Puppet, Saltstack, DSCv2.
+  
   -Adds an ```ansible``` username for SSH Ansible authentication
 
 **Remote Access:**  You can SSH into each system.  To get the remote IP, type ```terraform output``` and look for this as an example, either linux1 or linux2:
@@ -96,12 +97,17 @@ ssh -i ssh_key.pem ubuntu@3.145.146.86
 * **win1:**  The CM client server running Windows Server 2022.  Configuration is controlled in ```win1.tf```.  Bootstrap script is ```files/windows/bootstrap-win1.ps1.tpl```.  This is the Windows server that is configured by the linux1 master CM.  But it can also be used for DSCv2 testing.  The win1 system can be the push/pull server.
   
   -Software:  Chef, Puppet, Powershell Core 7.4, VSCode, OpenSSH
+  
   -Adds an ```ansible``` username for WinRM and SSH authentication using Ansible
+  
   -Remote Access:  SSH, WinRM, RDP
+  
 * **win2:**  The CM client server running Windows Server 2022.  Configuration is controlled in ```win2.tf```.  Bootstrap script is ```files/windows/bootstrap-win1.ps2.tpl```.  This is the Windows server that is configured by the linux1 master CM.  But it can also be used for DSCv2 testing.  The win2 system can be the push/pull server.
   
   -Software:  Ansible, Chef, Puppet, Saltstack, DSCv2.
+  
   -Adds an ```ansible``` username for WinRM and SSH authentication using Ansible
+  
   -Remote Access:  SSH, WinRM, RDP
 
 **Remote Access:**
