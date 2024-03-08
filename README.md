@@ -137,7 +137,7 @@ ssh RTCAdmin@13.59.251.113
 
 ### Deployment Options
 
-Since there are four systems built, feel free to scale this back to only include the systems you want.  You can simple delete the linux1.tf, linux.tf, win1.tf, or win2.tf.  Below are some options:
+Since there are four systems built, feel free to scale this back to only include the systems you want.  You can simply delete the linux1.tf, linux.tf, win1.tf, or win2.tf.  Below are some options:
 
 **Option 1:**  Run linux1 with linux2 to only practice configuration management with Linux.  Delete win1.tf and win2.tf.
 
