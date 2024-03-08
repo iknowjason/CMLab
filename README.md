@@ -77,6 +77,7 @@ terraform output
 * **linux1:**  The CM master server (Ubuntu 22.04).  Configuration is controlled in linux1.tf.  Bootstrap script is ```files/linux/ubuntu1.sh.tpl```.  This is the Master server that can automate managing linux2, win1, and win2.
   -Software:  Ansible, Chef, Puppet, Saltstack, DSCv3
 * **linux2:**  The CM client server (Ubuntu 22.04).  Configuration is controlled in linux2.tf.  Bootstrap script is ```files/linux/ubuntu2.sh.tpl```.  This is the client server that is intended to receive configuration management changes from the linux1 server.
+  
   -Software:  Ansible, Chef, Puppet, Saltstack, DSCv2.
   -Adds an ```ansible``` username for SSH Ansible authentication
 
