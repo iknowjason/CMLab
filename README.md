@@ -141,9 +141,9 @@ Since there are four systems built, feel free to scale this back to only include
 
 **Option 1:**  Run linux1 with linux2 to only practice configuration management with Linux.  Delete win1.tf and win2.tf.
 
-**Option 2:**  Run linux1 with win1, to practice having a Linux master configure a Windows client system.  Delete linux2 and win2.tf.
+**Option 2:**  Run linux1 with win1, to practice having a Linux master configure a Windows client system.  Delete linux2.tf and win2.tf.
 
-**Option 2:**  Run just testing of DSC by only running win1 and win2.  Delete the linux1, linux2 terraform files.
+**Option 2:**  Test native DSCv2 on Windows by only running win1 and win2.  Delete the linux1.tf and linux2.tf terraform files.
 
 ### Important Firewall and White Listing
 By default when you run terraform apply, your public IPv4 address is determined via a query to ifconfig.so and the ```terraform.tfstate``` is updated automatically.  If your location changes, simply run ```terraform apply``` to update the security groups with your new public IPv4 address.  If ifconfig.me returns a public IPv6 address,  your terraform will break.  In that case you'll have to customize the white list.  To change the white list for custom rules, update this variable in ```sg.tf```:
