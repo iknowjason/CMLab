@@ -82,7 +82,7 @@ terraform output
   -Software:  Ansible, Chef, Puppet, Saltstack, DSCv2.
   -Adds an ```ansible``` username for SSH Ansible authentication
 
-**Remote Access:**  You can SSH into teach system.  To get the remote IP, type ```terraform output``` and look for this as an example, either linux1 or linux2:
+**Remote Access:**  You can SSH into each system.  To get the remote IP, type ```terraform output``` and look for this as an example, either linux1 or linux2:
 
 ```
 SSH to linux1
