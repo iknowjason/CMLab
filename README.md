@@ -240,3 +240,8 @@ cd /home/ubuntu/ansible/ansible-live-response
 sudo ansible-playbook DFIR-respond.yml -i linhosts
 ```
 
+# Author
+
+Created by Jason Ostrom
+
+<a href="https://twitter.com/intent/user?screen_name=securitypuck">![X (formerly Twitter) Follow](https://img.shields.io/twitter/follow/securitypuck)</a>
