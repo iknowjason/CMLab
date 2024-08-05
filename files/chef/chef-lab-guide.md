@@ -230,6 +230,35 @@ In this section, you'll set up the Chef Workstation software on your Linux maste
     cd ~/chef-repo/.chef
     vi config.rb
     ```
-   
+
+   Edit the config.rb to match your chef environment.  Here is a blank template of what you can copy and paste into the file:
+   ```bash
+   current_dir = File.dirname(__FILE__)
+   log_level                :info
+   log_location             STDOUT
+   node_name                'node_name'
+   client_key               "USER.pem"
+   validation_client_name   'ORG_NAME-validator'
+   validation_key           "ORG_NAME-validator.pem"
+   chef_server_url          'https://example.com/organizations/ORG_NAME'
+   cache_type               'BasicFile'
+   cache_options( :path => "#{ENV['HOME']}/.chef/checksums" )
+   cookbook_path            ["#{current_dir}/../cookbooks"]
+   ```
+
+   Make changes to the following to match your previous setup.  In the example below, we show the values that you could have used previously:
+   ```
+   current_dir = File.dirname(__FILE__)
+   log_level                :info
+   log_location             STDOUT
+   node_name                'admin'
+   client_key               "admin.pem"
+   validation_client_name   'acme-validator'
+   validation_key           "acme-validator.pem"
+   chef_server_url          'https://chef.example.com/organizations/acme'
+   cache_type               'BasicFile'
+   cache_options( :path => "#{ENV['HOME']}/.chef/checksums" )
+   cookbook_path            ["#{current_dir}/../cookbooks"]
+   ```
    
    
