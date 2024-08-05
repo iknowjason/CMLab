@@ -337,11 +337,13 @@ In this section, you'll bootstrap a chef node or client.  The **linux2** system 
 
 In this section, you'll bootstrap the two Windows servers to be Chef nodes.  The **win1** and **win2** systems will be used as the node in this lab.  Look in the output from ```terraform output``` and access the system over SSH.  They have been bootstrapped with OpenSSH server so you can access a powershell session and make the necessary changes.   After remotely accessing both systems over SSH, set up the /etc/hosts file so the chef server IP address can be resolved.  
 
-1. On **win1:**  edit the /etc/hosts file so that the fqdn of Chef Server can be resolved.  Get the remote SSH IP address from ```terraform output```.  Use the local administrator and password credentials.
+1. On **win1:**  edit the /etc/hosts file so that the fqdn of Chef Server can be resolved.  Get the remote SSH IP address from ```terraform output```.  Use the local administrator and password credentials.  The output in ```terraform output``` will look similar to this:
    ```bash
-   sudo vi /etc/hosts
+   ssh Rremote
    ```
+   
    After you have the powershell session established, you can use this section of code to add a hosts entry so the Windows server can resolve chef.  Here is a copy and paste that should be adapted:
+   
    ```  
    $hostname = "chef.acme.com"
    $ipAddress = "10.100.20.143"
@@ -353,12 +355,12 @@ In this section, you'll bootstrap the two Windows servers to be Chef nodes.  The
    ```
    Verify hostname resolution by typing ```ping chef.acme.com``` from **win1** powershell session.
    
-2. Bootstrap command on the Chef Workstation.  Bootstrap win1:
+3. Bootstrap command on the Chef Workstation.  Bootstrap win1:
    ```bash
    knife bootstrap -o winrm 10.100.20.160 -U ansible -P Brave-monkey-2024! --node-name win1
    ```
 
-3. Bootstrap command on the Chef Workstation.  Bootstrap win2:
+4. Bootstrap command on the Chef Workstation.  Bootstrap win2:
    ```bash
    knife bootstrap -o winrm 10.100.20.161 -U ansible -P Brave-monkey-2024! --node-name win2
    ```
