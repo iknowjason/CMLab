@@ -23,6 +23,9 @@ Your lab environment consists of:
 
 ## Setup
 
+This lab guide was adapted from the Linode guide here:  https://www.linode.com/docs/guides/how-to-install-chef-on-ubuntu-20-04/
+For this implementation, we have combined the chef server and chef workstation onto the lin1 system.
+
 ### Chef Master Server
 
 In this section, you'll set up the Chef Server on your Linux master server.
@@ -31,7 +34,7 @@ In this section, you'll set up the Chef Server on your Linux master server.
    ```bash
    sudo dpkg -i chef-server-core_15.1.7-1_amd64.deb
    ``` 
-2. Start the Chef Server
+2. Start the Chef Server and accept yes when prompted:
    ```bash
    sudo chef-server-ctl reconfigure
    ```
