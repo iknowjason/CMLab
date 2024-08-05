@@ -28,7 +28,7 @@ For this implementation, we have combined the chef server and chef workstation o
 
 ### Chef Master Server
 
-In this section, you'll set up the Chef Server on your Linux master server.
+In this section, you'll set up the Chef Server on your Linux master server.  SSH into the linux master Ubuntu 22.04 by looking at the results from ```terraform output```.
 
 1. Install Chef Server on Linux Master (lin1):
    ```bash
@@ -37,4 +37,12 @@ In this section, you'll set up the Chef Server on your Linux master server.
 2. Start the Chef Server and accept yes when prompted:
    ```bash
    sudo chef-server-ctl reconfigure
+   ```
+3. Create a ```.chef``` directory to store the keys for authentication used for the administrator.
+   ```bash
+   mkdir ~/.chef
+   ```
+4. Add a user account for Chef administration using the ```chef-server-ctrl``` command.  In this example below, I'm adding a user of ```John Doe``` with a username of ```admin``` and email address of ```jdoe888@gmail.com```.  This command will create a private key pem file and store it as ```admin.pem``` in your ```.chef``` directory.
+   ```bash
+   sudo chef-server-ctl user-create admin john doe jdoe888@gmail.com 'mypassword888' --filename ~/.chef/admin.pem
    ```
