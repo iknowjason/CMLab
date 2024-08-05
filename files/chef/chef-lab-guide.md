@@ -317,3 +317,8 @@ In this section, you'll bootstrap a chef node or client.  The **linux2** system 
     ```bash
     knife bootstrap 10.100.20.180 -U ubuntu -P mypassword456 --sudo --use-sudo-password --node-name lin2
     ```
+    Finally, let's use the knife command to list and verify managed nodes or clients:
+    ```bash
+    knife client list
+    ```
+    If you see the new linux node listed, nice work.  You are now in business and ready to start applying cookbooks to the managed node.  In the next section, you will bootstrap the windows nodes so they can be managed.
