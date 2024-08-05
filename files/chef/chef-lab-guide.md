@@ -64,5 +64,6 @@ In this section, you'll set up the Chef Server on your Linux master server.  SSH
    ```
    My example shows:
    ```
-   10.100.20.143 chef.example.com
+   10.100.20.143 chef.acme.com
    ```
+   Verify hostname resolution by typing ```ping chef.acme.com```.  Nice work!  You are now ready to setup a self-signed TLS certificate and reconfigure Chef to bind and use the TLS certificate on its nginx port 443.
