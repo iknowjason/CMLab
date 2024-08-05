@@ -8,7 +8,7 @@ This lab guide will walk you through setting up a Chef environment and performin
 
 Your lab environment consists of:
 
-1. One Linux server (Chef Master)
+1. One Linux server (Chef Server and Chef Workstation)
 2. One Linux workstation (Chef Client)
 3. Two Windows servers (Chef Clients)
 
