@@ -185,5 +185,16 @@ In this section, you'll set up the Chef Workstation software on your Linux maste
    ```bash
    ssh-copy-id ubuntu@chef.acme.com
    ```
+
+7. Copy over the Chef admin user's keys used for authentication.  Normally you would use ```scp``` to copy them from the Chef server to the local Chef workstation.  But in this lab implementation, since you are running server and workstation on the same system, we can copy it locally.  Go ahead and copy the ```admin.pem``` and ```acme.pem``` from the server's directory to the workstation's ```~/chef-repo/.chef``` directory.
+   ```bash
+   cp ~/.chef/admin.pem ~/chef-repo/.chef/.
+   cp ~/.chef/acme.pem ~/chef-repo/.chef/.
+   ```
+
+   Verify that the files are in place:
+   ```bash
+   ls ~/chef-repo/.chef
+   ```
    
    
