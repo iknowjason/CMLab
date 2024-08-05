@@ -285,4 +285,21 @@ In this section, you'll bootstrap a chef node or client.  The **linux2** system 
    10.100.20.143 chef.acme.com
    ```
    Verify hostname resolution by typing ```ping chef.acme.com``` from **linux2**.
-2. 
+2. Setup a system password for the default ubuntu username and ensure that password authentication is enabled.  The Chef Workstation will be using password authentication to bootstrap this chef client node, linux2.
+   ```bash
+   sudo passwd ubuntu
+   ```
+   Edit the following file to ensure that password authentication is allowed:
+   ```bash
+   /etc/ssh/sshd_config.d/60-cloudimg-settings.conf
+   ```
+
+   Ensure that ```yes``` is allowed for the value:
+   ```
+   PasswordAuthentication yes
+   ```
+
+   Restart the SSH service if you made any changes to allow password authentication:
+   ```
+   sudo systemctl restart ssh
+   ```
