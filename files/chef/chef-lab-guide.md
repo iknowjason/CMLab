@@ -337,10 +337,14 @@ In this section, you'll bootstrap a chef node or client.  The **linux2** system 
 
 In this section, you'll bootstrap the two Windows servers to be Chef nodes.  The **win1** and **win2** systems will be used as the node in this lab.  Look in the output from ```terraform output``` and access the system over SSH.  They have been bootstrapped with OpenSSH server so you can access a powershell session and make the necessary changes.   After remotely accessing both systems over SSH, set up the /etc/hosts file so the chef server IP address can be resolved.  
 
-1. On **win1:**  edit the /etc/hosts file so that the fqdn of Chef Server can be resolved.  Get the remote SSH IP address from ```terraform output```.  Use the local administrator and password credentials.  The output in ```terraform output``` will look similar to this:
+1. On **win1:**  edit the Windows hosts file so that the fqdn of Chef Server can be resolved.  Get the remote SSH IP address from ```terraform output```.  Use the local administrator and password credentials.  The output in ```terraform output``` will look similar to this:
    ```bash
-   ssh Rremote
+   -------------
+   SSH to win1
+   -------------
+   ssh RTCAdmin@18.217.98.195
    ```
+   Verify the correct password shown in the output above, it should be the **local password** of ```Proud-lion-2024!```.  Type the correct local administrator password.
    
    After you have the powershell session established, you can use this section of code to add a hosts entry so the Windows server can resolve chef.  Here is a copy and paste that should be adapted:
    
@@ -354,13 +358,73 @@ In this section, you'll bootstrap the two Windows servers to be Chef nodes.  The
    Get-Content -Path $hostsPath | Select-String -Pattern $hostname
    ```
    Verify hostname resolution by typing ```ping chef.acme.com``` from **win1** powershell session.
-   
-3. Bootstrap command on the Chef Workstation.  Bootstrap win1:
+
+2. On **win2:**  edit the Windows hosts file so that the fqdn of Chef Server can be resolved.  Get the remote SSH IP address from ```terraform output```.  Use the local administrator and password credentials.  The output in ```terraform output``` will look similar to this:
    ```bash
+   -------------
+   SSH to win2
+   -------------
+   ssh RTCAdmin@3.138.141.137
+   ```
+   Verify the correct password shown in the output above, it should be the **local password** of ```Proud-lion-2024!```.  Type the correct local administrator password.
+   
+   After you have the powershell session established, you can use this section of code to add a hosts entry so the Windows server can resolve chef.  Here is a copy and paste that should be adapted:
+   
+   ```  
+   $hostname = "chef.acme.com"
+   $ipAddress = "10.100.20.143"
+   $entry = "$ipAddress `t $hostname"
+   $hostsPath = "$env:SystemRoot\System32\drivers\etc\hosts"
+   Add-Content -Path $hostsPath -Value $entry
+   # Verify that hosts file looks correct
+   Get-Content -Path $hostsPath | Select-String -Pattern $hostname
+   ```
+   Verify hostname resolution by typing ```ping chef.acme.com``` from **win2** powershell session.
+   
+3. On the Chef Workstation/Server linux system, bootstrap win1.  Replace the private IP address below with the correct private IP address of win1, as shown from terraform output.  These two windows systems have been bootstrapped to enable WinRM transport protocol for provisioning.  The command uses winrm protocol.
+   ```bash
+   cd ~/chef-repo/.chef
    knife bootstrap -o winrm 10.100.20.160 -U ansible -P Brave-monkey-2024! --node-name win1
    ```
 
-4. Bootstrap command on the Chef Workstation.  Bootstrap win2:
+4. On the Chef Workstation/Server linux system, bootstrap win2.  Replace the private IP address below with the correct private IP address of win2, as shown from terraform output.  These two windows systems have been bootstrapped to enable WinRM transport protocol for provisioning.  The command uses winrm protocol.
    ```bash
+   cd ~/chef-repo/.chef
    knife bootstrap -o winrm 10.100.20.161 -U ansible -P Brave-monkey-2024! --node-name win2
    ```
+
+5. Finally, let's use the knife command to list and verify managed nodes or clients:
+   ```bash
+   knife client list
+   ```
+
+   Nice work!  You should now see all three managed chef nodes listed, including lin2, win1, and win2!  Now you can update the /etc/hosts file on Chef workstation to include all three managed nodes.
+
+   Edit the workstation's etc/hosts to add the new bootstrap node's hostname and IP address:
+    ```bash
+    sudo vi /etc/hosts
+    ```
+    My example shows:
+    ```
+    10.100.20.180 lin2.acme.com
+    10.100.20.160 win1.acme.com
+    10.100.20.161 win2.acme.com
+    ```
+
+
+### Build and Apply Linux Cookbooks
+Some description here.
+1.
+2.
+3.
+
+### Build and Apply Windows Cookbooks
+Some description here.
+1.
+2.
+3.
+
+
+   
+
+
