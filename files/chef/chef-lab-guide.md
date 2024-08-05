@@ -32,6 +32,6 @@ In this section, you'll set up the Chef Server on your Linux master server.
    sudo dpkg -i chef-server-core_15.1.7-1_amd64.deb
    ``` 
 2. Start the Chef Server
-```bash
-sudo chef-server-ctl reconfigure
-```
+   ```bash
+   sudo chef-server-ctl reconfigure
+   ```
