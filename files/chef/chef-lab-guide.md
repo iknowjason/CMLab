@@ -105,7 +105,7 @@ In this section, you'll set up the Chef Server on your Linux master server.  SSH
    /etc/opscode/chef-server.rb
    ```
 
-   Add the following lines:
+   Add the following lines to **/etc/opscode/chef-server.rb**:
    ```bash
    nginx['ssl_certificate'] = '/var/opt/opscode/nginx/ca/chef-server.crt'
    nginx['ssl_certificate_key'] = '/var/opt/opscode/nginx/ca/chef-server.key'
