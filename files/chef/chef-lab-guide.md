@@ -272,4 +272,17 @@ In this section, you'll set up the Chef Workstation software on your Linux maste
     knife client list
     ```
    
-   
+ ### Bootstrapping a Chef Node
+
+In this section, you'll bootstrap a chef node or client.  The **linux2** system will be used as the node in this lab.  Look in the output from ```terraform output`` and access the system over SSH.   After remotely accessing **linux2** over SSH, set up the /etc/hosts file so the chef server IP address can be resolved.  
+
+1. Edit the /etc/hosts:
+   ```bash
+   sudo vi /etc/hosts
+   ```
+   My example shows:
+   ```
+   10.100.20.143 chef.acme.com
+   ```
+   Verify hostname resolution by typing ```ping chef.acme.com``` from **linux2**.
+2. 
