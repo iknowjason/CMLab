@@ -39,10 +39,15 @@ echo "export PATH=$PATH:/home/ubuntu/.local/bin" >> /home/ubuntu/.profile
 export PATH=$PATH:/home/ubuntu/.local/bin
 
 # Chef Install
-echo "Installing Chef workstation"
 cd /home/ubuntu
-wget https://packages.chef.io/files/stable/chef-workstation/21.10.640/ubuntu/20.04/chef-workstation_21.10.640-1_amd64.deb
-dpkg -i chef-workstation_21.10.640-1_amd64.deb
+
+echo "Downloading Chef Server"
+wget https://packages.chef.io/files/stable/chef-server/15.1.7/ubuntu/20.04/chef-server-core_15.1.7-1_amd64.deb
+echo "Installing Chef workstation"
+echo "Downloading Chef Workstation"
+wget https://packages.chef.io/files/stable/chef-workstation/22.10.1013/ubuntu/20.04/chef-workstation_22.10.1013-1_amd64.deb
+#wget https://packages.chef.io/files/stable/chef-workstation/21.10.640/ubuntu/20.04/chef-workstation_21.10.640-1_amd64.deb
+dpkg -i chef-workstation_*.deb
 
 # Puppet Install
 echo "Installing Puppet Server"
@@ -64,13 +69,13 @@ echo "Installing DSCv3"
 cd /home/ubuntu
 mkdir /home/ubuntu/dsc 
 cd /home/ubuntu/dsc
-wget https://github.com/PowerShell/DSC/releases/download/v3.0.0-alpha.5/DSC-3.0.0-alpha.5-x86_64-unknown-linux-gnu.tar.gz
-gzip -d DSC-3.0.0-alpha.5-x86_64-unknown-linux-gnu.tar.gz
-tar xvf DSC-3.0.0-alpha.5-x86_64-unknown-linux-gnu.tar
-wget http://nz2.archive.ubuntu.com/ubuntu/pool/main/o/openssl/libssl-dev_1.1.1f-1ubuntu2.22_amd64.deb
-sudo wget http://nz2.archive.ubuntu.com/ubuntu/pool/main/o/openssl/libssl1.1_1.1.1f-1ubuntu2.22_amd64.deb
-dpkg -i libssl1.1_1.1.1f-1ubuntu2.22_amd64.deb 
-dpkg -i libssl-dev_1.1.1f-1ubuntu2.22_amd64.deb
+wget https://github.com/PowerShell/DSC/releases/download/v3.0.0-preview.8/DSC-3.0.0-preview.8-x86_64-unknown-linux-gnu.tar.gz
+gzip -d DSC-3.0.0-preview.8-x86_64-unknown-linux-gnu.tar.gz 
+tar xvf DSC-3.0.0-preview.8-x86_64-unknown-linux-gnu.tar
+sudo wget http://nz2.archive.ubuntu.com/ubuntu/pool/main/o/openssl/libssl-dev_1.1.1f-1ubuntu2.23_amd64.deb
+sudo wget http://nz2.archive.ubuntu.com/ubuntu/pool/main/o/openssl/libssl1.1_1.1.1f-1ubuntu2.23_amd64.deb
+dpkg -i libssl1.1_1.1.1f-1ubuntu2.23_amd64.deb 
+dpkg -i libssl-dev_1.1.1f-1ubuntu2.23_amd64.deb
 echo "export PATH=$PATH:/home/ubuntu/dsc" >> /home/ubuntu/.profile
 
 # Download ansible linux zip file

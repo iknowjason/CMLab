@@ -35,8 +35,9 @@ echo "export PATH=$PATH:/home/ubuntu/.local/bin" >> /home/ubuntu/.profile
 # Chef Install
 echo "Installing Chef workstation"
 cd /home/ubuntu
-wget https://packages.chef.io/files/stable/chef-workstation/21.10.640/ubuntu/20.04/chef-workstation_21.10.640-1_amd64.deb
-dpkg -i chef-workstation_21.10.640-1_amd64.deb
+wget https://packages.chef.io/files/stable/chef-workstation/22.10.1013/ubuntu/20.04/chef-workstation_22.10.1013-1_amd64.deb
+#wget https://packages.chef.io/files/stable/chef-workstation/21.10.640/ubuntu/20.04/chef-workstation_21.10.640-1_amd64.deb
+dpkg -i chef-workstation_*.deb
 
 # Puppet Install
 echo "Installing Puppet Server"
