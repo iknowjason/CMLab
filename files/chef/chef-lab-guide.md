@@ -324,6 +324,15 @@ In this section, you'll bootstrap a chef node or client.  The **linux2** system 
     ```
     If you see the new linux node listed, nice work.  You are now in business and ready to start applying cookbooks to the managed node.  In the next section, you will bootstrap the windows nodes so they too can be managed.
 
+    Edit the workstation's etc/hosts to add the new bootstrap node's hostname and IP address:
+    ```bash
+    sudo vi /etc/hosts
+    ```
+    My example shows:
+    ```
+    10.100.20.180 lin2.acme.com
+    ```
+
  ### Bootstrapping the Chef Windows Nodes
 
 In this section, you'll bootstrap a chef node or client.  The **linux2** system will be used as the node in this lab.  Look in the output from ```terraform output``` and access the system over SSH.   After remotely accessing **linux2** over SSH, set up the /etc/hosts file so the chef server IP address can be resolved.  
