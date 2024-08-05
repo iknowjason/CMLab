@@ -196,5 +196,36 @@ In this section, you'll set up the Chef Workstation software on your Linux maste
    ```bash
    ls ~/chef-repo/.chef
    ```
+
+8. Setup a version control system repository for any Chef Workstation changes.  This is so we can track any changes to cookbook files and have versioning to restore earlier versions where necessary.  For this example, we will use git.  Configure Git client configuration, replacing username and email address parameters with your own:
+   ```bash
+   git config --global user.name username
+   git config --global user.email user@email.com
+   ```
+
+   Add the ```.chef``` directory to the ```.gitignore``` file.
+   ```bash
+   echo ".chef" > ~/chef-repo/.gitignore
+   ```
+
+   Add and commit the existing files using git add and git commit.
+   ```bash
+   cd ~/chef-repo
+   git add .
+   git commit -m "Initial commit"
+   ```
+
+   Run git status to ensure the files have been staged and commited locally.
+   ```bash
+   git status
+   ```
+
+9. Create a Chef Cookbook.  Use the ```chef generate``` command to generate a new chef cookbook.
+   ```bash
+   chef generate cookbook my_cookbook
+   ```
+
+10. 
+   
    
    
