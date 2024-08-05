@@ -90,7 +90,7 @@ In this section, you'll set up the Chef Server on your Linux master server.  SSH
    cat chef-server.crt chef-server.key > chef-server.pem
    ```
 
-10.  Configure the Chef Server to use the self-signed certificate and private keys.  Move the ```chef-server.pem``` file to the Chef server's ca configuration directory:
+10. Configure the Chef Server to use the self-signed certificate and private keys.  Move the ```chef-server.pem``` file to the Chef server's ca configuration directory:
    ```bash
    cp chef-server.pem /var/opt/opscode/nginx/ca/.
    ```
