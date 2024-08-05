@@ -26,7 +26,7 @@ Your lab environment consists of:
 This lab guide was adapted from the Linode guide here:  https://www.linode.com/docs/guides/how-to-install-chef-on-ubuntu-20-04/
 For this implementation, we have combined the chef server and chef workstation onto the lin1 system.
 
-### Chef Master Server
+### Chef Master:  Initial server core setup
 
 In this section, you'll set up the Chef Server on your Linux master server.  SSH into the linux master Ubuntu 22.04 by looking at the results from ```terraform output```.
 
