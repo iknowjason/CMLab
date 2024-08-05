@@ -62,7 +62,7 @@ In this section, you'll set up the Chef Server on your Linux master server.  SSH
    ```bash
    sudo vi /etc/hosts
    ```
-My example shows:
+   My example shows:
    ```
    10.100.20.143 chef.example.com
    ```
