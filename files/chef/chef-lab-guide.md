@@ -115,6 +115,11 @@ In this section, you'll set up the Chef Server on your Linux master server.  SSH
     ```bash
     sudo chef-server-ctl reconfigure
     ```
+    Nice job!  Now the server should be listening once again on TCP/443.  If you want to verify this you can verify the listening service and make a test connection using openssl:
+    ```bash
+    sudo netstat -tulpn | grep 443
+    openssl s_client -connect chef.example.com:443
+    ```
 
 
    
