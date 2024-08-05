@@ -225,7 +225,11 @@ In this section, you'll set up the Chef Workstation software on your Linux maste
    chef generate cookbook my_cookbook
    ```
 
-10. 
+10. Next you will set up the Chef **Knife** utility and its configuration.  Chef Knife helps Chef Workstation to communicate with the server by managing cookbooks and nodes.  Chef uses a **config.rb** file in the **.chef** subdirectory to store the knife configuration.  Create a ```config.rb``` file in the destination .chef directory:
+    ```bash
+    cd ~/chef-repo/.chef
+    vi config.rb
+    ```
    
    
    
