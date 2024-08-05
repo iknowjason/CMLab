@@ -121,7 +121,21 @@ In this section, you'll set up the Chef Server on your Linux master server.  SSH
     openssl s_client -connect chef.acme.com:443
     ```
 
+### Chef Master:  Chef Workstation Setup
 
+In this section, you'll set up the Chef Workstation software on your Linux master server.  SSH into the linux master Ubuntu 22.04 by looking at the results from ```terraform output```.  For this lab, the workstation is running on the same server as the server operating system.  
+
+1. The chef workstation software has already been installed through the terraform bootstrap script using ec2 agent with user-data.  Go ahead and verify that it is installed by typing ``chef -v```.  You should see this in the output:
+   ```bash
+   ubuntu@ip-10-100-20-143:~$ chef -v
+   Chef Workstation version: 22.10.1013
+   Chef Infra Client version: 17.10.0
+   Chef InSpec version: 4.56.20
+   Chef CLI version: 5.6.1
+   Chef Habitat version: 1.6.521
+   Test Kitchen version: 3.3.2
+   Cookstyle version: 7.32.1
+   ```
    
    
    
