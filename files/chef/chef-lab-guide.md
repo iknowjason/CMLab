@@ -70,4 +70,12 @@ In this section, you'll set up the Chef Server on your Linux master server.  SSH
    ```
    Verify hostname resolution by typing ```ping chef.acme.com```.  Nice work!  You are now ready to setup a self-signed TLS certificate and reconfigure Chef to bind and use the TLS certificate on its nginx port 443.
 
-9.  Generate a self-signed TLS certificate with the following commands.  
+9. Generate a self-signed TLS certificate with the following commands.  Generate a private key:
+   ```bash
+   openssl genrsa -out chef-server.key 2048
+   ```
+
+   Create a certificate signing request (CSR).  In this example, we are using a Common Name (CN) of ```chef.acme.com```.  Replace as appropriate for your environment:
+   ```bash
+   openssl req -new -key chef-server.key -out chef-server.csr -subj "/CN=chef.acme.com"
+   ```
