@@ -113,8 +113,8 @@ In this section, you'll set up the Chef Server on your Linux master server.  SSH
 
 11.  Reconfigure the Chef Server to apply the changes for the new certificates:
     ```bash
-   sudo chef-server-ctl reconfigure
-   ```
+    sudo chef-server-ctl reconfigure
+    ```
 
 
    
