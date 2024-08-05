@@ -154,5 +154,37 @@ In this section, you'll set up the Chef Workstation software on your Linux maste
    mkdir ~/chef-repo/.chef
    cd chef-repo
    ```
+5. In the next section,  we will setup RSA private keys on the simulated "workstation" and copy over the new public keys.  This will provide better security between the Chf Server and workstation by permitting public key authentication.
+
+   On the workstation (same system you should be on), generate an RSA key pair:
+   ```bash
+   ssh-keygen -b 4096
+   ```
+   Follow the prompts to enter a keyphrase, if applicable.
+
+6. Setup a system password for the default ubuntu username and ensure that password authentication is enabled.  You will then copy over the public key from the workstation to the server.  This is the same system, but you might have a use case in the future for deploying the workstation on a separate system.
+   ```bash
+   sudo passwd ubuntu
+   (Enter a new password twice and take note of this password)
+   ```
+   Edit the following file to ensure that password authentication is allowed:
+   ```bash
+   /etc/ssh/sshd_config.d/60-cloudimg-settings.conf
+   ```
+
+   Ensure that ```yes``` is allowed for the value:
+   ```
+   PasswordAuthentication yes
+   ```
+
+   Restart the SSH service if you made any changes to allow password authentication:
+   ```
+   sudo systemctl restart ssh
+   ```
+
+   Finally, copy the ssh public key you created at the beginning of this step to the authorized keys by typing the following command.  SSH to the private IP address of the same server:
+   ```bash
+   ssh-copy-id ubuntu@chef.acme.com
+   ```
    
    
