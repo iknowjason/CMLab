@@ -17,6 +17,11 @@ sudo apt-get install pipx -y
 sudo apt-get install python3-pip -y
 sudo apt-get install sshpass -y
 
+# Allow password authentication via ssh
+sed -i 's/^PasswordAuthentication no/PasswordAuthentication yes/' /etc/ssh/sshd_config.d/60-cloudimg-settings.conf
+systemctl restart ssh
+
+
 # Golang 1.22 install
 echo "export GOROOT=/usr/local/go" >> /home/ubuntu/.profile
 echo "export GOPATH=$HOME/go" >> /home/ubuntu/.profile 
@@ -46,7 +51,6 @@ wget https://packages.chef.io/files/stable/chef-server/15.1.7/ubuntu/20.04/chef-
 echo "Installing Chef workstation"
 echo "Downloading Chef Workstation"
 wget https://packages.chef.io/files/stable/chef-workstation/22.10.1013/ubuntu/20.04/chef-workstation_22.10.1013-1_amd64.deb
-#wget https://packages.chef.io/files/stable/chef-workstation/21.10.640/ubuntu/20.04/chef-workstation_21.10.640-1_amd64.deb
 dpkg -i chef-workstation_*.deb
 
 # Puppet Install

@@ -10,3 +10,4 @@ files/linux/ansible/linhosts
 files/linux/ansible/powershell-ssh.yml
 files/linux/ansible/winhosts
 files/linux/ansible/winhosts-ssh
+.terraform.tfstate.lock.info

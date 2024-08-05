@@ -16,6 +16,10 @@ sudo apt-get install unzip -y
 sudo apt-get install pipx -y
 sudo apt-get install sshpass -y
 
+# Allow password authentication via ssh
+sed -i 's/^PasswordAuthentication no/PasswordAuthentication yes/' /etc/ssh/sshd_config.d/60-cloudimg-settings.conf
+systemctl restart ssh
+
 # Golang 1.22 install
 echo "export GOROOT=/usr/local/go" >> /home/ubuntu/.profile
 echo "export GOPATH=$HOME/go" >> /home/ubuntu/.profile 
