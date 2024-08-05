@@ -111,6 +111,11 @@ In this section, you'll set up the Chef Server on your Linux master server.  SSH
    nginx['ssl_certificate_key'] = '/var/opt/opscode/nginx/ca/chef-server.key'
    ```
 
+11.  Reconfigure the Chef Server to apply the changes for the new certificates:
+    ```bash
+   sudo chef-server-ctl reconfigure
+   ```
+
 
    
    
