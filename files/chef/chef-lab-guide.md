@@ -27,8 +27,12 @@ Your lab environment consists of:
 
 In this section, you'll set up the Chef Server on your Linux master server.
 
-1. Install Chef Server:
+1. Install Chef Server on Linux Master (lin1):
    ```bash
-   wget https://packages.chef.io/files/stable/chef-server/14.0.65/ubuntu/20.04/chef-server-core_14.0.65-1_amd64.deb
-   sudo dpkg -i chef-server-core_14.0.65-1_amd64.deb
-   sudo chef-server-ctl reconfigure
+   sudo dpkg -i chef-server-core_15.1.7-1_amd64.deb
+   ``` 
+2. 
+Start the Chef Server
+```bash
+sudo chef-server-ctl reconfigure
+```
