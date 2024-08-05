@@ -46,3 +46,11 @@ In this section, you'll set up the Chef Server on your Linux master server.  SSH
    ```bash
    sudo chef-server-ctl user-create admin john doe jdoe888@gmail.com 'mypassword888' --filename ~/.chef/admin.pem
    ```
+5. Review the user list and confirm that this account exists:
+   ```bash
+   sudo chef-server-ctl user-list
+   ```
+6. Create a new organizatin using the ```chef-server-ctl``` command.  For this example the organization is ```acme```.  The organization certificate will be associated with the ```admin``` user and stored in the ```.chef``` directory.
+   ```bash
+   sudo chef-server-ctl org-create acme "acme_corporation" --association_user admin --filename ~/.chef/acme.pem
+   ```
