@@ -54,3 +54,15 @@ In this section, you'll set up the Chef Server on your Linux master server.  SSH
    ```bash
    sudo chef-server-ctl org-create acme "acme_corporation" --association_user admin --filename ~/.chef/acme.pem
    ```
+7. List out the organizations, confirming that it was created:
+   ```bash
+   sudo chef-server-ctl org-list
+   ```
+8. Next, you will need to generate a new self-signed TLS certificate that can be used to simulate proper DNS and certificate based authentication.  We will **cheat** here by using the /etc/hosts for DNS.  Get the private IP address of this system by typing ```ifconfig```.  Add an entry in the ```/etc/hosts``` file so that the chef workstation knife utility can manage the server.  This would show how a chef workstation administrator would be managing the chef installation to push changes from a secondary system.  For this lab, we are combining chef server and workstation into a single system.  In my example, my private IP address is ```10.100.20.143``` as determined by ```ifconfig``` or you can run ```terraform output``` to grab it.  Edit /etc/hosts to point an internal hosts entry for ```chef.acme.com``` pointing to this internal IP address, or replace it with whatever fqdn you desire.  For this example, we are using ```chef.acme.com``` to represent the chef server.
+```bash
+sudo vi /etc/hosts
+```
+My example shows:
+```
+10.100.20.143 chef.example.com
+```
