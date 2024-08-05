@@ -344,14 +344,14 @@ In this section, you'll bootstrap the two Windows servers to be Chef nodes.  The
    After you have the powershell session established, you can use this section of code to add a hosts entry so the Windows server can resolve chef.  Here is a copy and paste that should be adapted:
    ```  
    $hostname = "chef.acme.com"
-   $ipAddress = "10.100.20.145"
+   $ipAddress = "10.100.20.143"
    $entry = "$ipAddress `t $hostname"
    $hostsPath = "$env:SystemRoot\System32\drivers\etc\hosts"
    Add-Content -Path $hostsPath -Value $entry
    # Verify that hosts file looks correct
    Get-Content -Path $hostsPath | Select-String -Pattern $hostname
    ```
-   Verify hostname resolution by typing ```ping chef.acme.com``` from **linux2**.
+   Verify hostname resolution by typing ```ping chef.acme.com``` from **win1** powershell session.
    
 2. Bootstrap command on the Chef Workstation.  Bootstrap win1:
    ```bash
