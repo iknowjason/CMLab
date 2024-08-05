@@ -142,6 +142,17 @@ In this section, you'll set up the Chef Workstation software on your Linux maste
    wget https://packages.chef.io/files/stable/chef-workstation/22.10.1013/ubuntu/20.04/chef-workstation_22.10.1013-1_amd64.deb
    dpkg -i chef-workstation_*.deb
    ```
-   
+
+3. Create a ```chef-repo``` repository where we will store Chef cookbook and recipes for Configuration Management.  Enter yes when prompted:
+   ```bash
+   cd ~
+   chef generate repo chef-repo
+   ```
+
+4. Create a ```.chef``` subdirectory inside of the created ```chef-repo``` directory.  This is where the knife configuration file is stored in addition to the authentication keys used by the admin to push changes.
+   ```bash
+   mkdir ~/chef-repo/.chef
+   cd chef-repo
+   ```
    
    
