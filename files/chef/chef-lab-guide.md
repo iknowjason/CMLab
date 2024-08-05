@@ -260,5 +260,16 @@ In this section, you'll set up the Chef Workstation software on your Linux maste
     cache_options( :path => "#{ENV['HOME']}/.chef/checksums" )
     cookbook_path            ["#{current_dir}/../cookbooks"]
     ```
+
+11. Now that you're update the knife configuration file, config.rb, we can now test communication to the Chef Server!
+    ```bash
+    cd ..
+    knife ssl fetch
+    ```
+
+    Now run the knife client list command to show the acme-validator.  If this shows the company name followed by validator, nice work!
+    ```bash
+    knife client list
+    ```
    
    
