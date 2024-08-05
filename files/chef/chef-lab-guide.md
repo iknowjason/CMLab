@@ -276,7 +276,7 @@ In this section, you'll set up the Chef Workstation software on your Linux maste
 
 In this section, you'll bootstrap a chef node or client.  The **linux2** system will be used as the node in this lab.  Look in the output from ```terraform output`` and access the system over SSH.   After remotely accessing **linux2** over SSH, set up the /etc/hosts file so the chef server IP address can be resolved.  
 
-1. Edit the /etc/hosts:
+1. On linux2:  edit the /etc/hosts file so that the fqdn of Chef Server can be resolved:
    ```bash
    sudo vi /etc/hosts
    ```
@@ -285,7 +285,7 @@ In this section, you'll bootstrap a chef node or client.  The **linux2** system 
    10.100.20.143 chef.acme.com
    ```
    Verify hostname resolution by typing ```ping chef.acme.com``` from **linux2**.
-2. Setup a system password for the default ubuntu username and ensure that password authentication is enabled.  The Chef Workstation will be using password authentication to bootstrap this chef client node, linux2.
+2. On linux2:  setup a system password for the default ubuntu username and ensure that password authentication is enabled.  The Chef Workstation will be using password authentication to bootstrap this chef client node, linux2.
    ```bash
    sudo passwd ubuntu
    ```
