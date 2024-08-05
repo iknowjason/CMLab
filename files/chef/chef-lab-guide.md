@@ -162,10 +162,9 @@ In this section, you'll set up the Chef Workstation software on your Linux maste
    ```
    Follow the prompts to enter a keyphrase, if applicable.
 
-6. Setup a system password for the default ubuntu username and ensure that password authentication is enabled.  You will then copy over the public key from the workstation to the server.  This is the same system, but you might have a use case in the future for deploying the workstation on a separate system.
+6. Setup a system password for the default ubuntu username and ensure that password authentication is enabled.  You will then copy over the public key from the workstation to the server.  This is the same system, but you might have a use case in the future for deploying the workstation on a separate system.  When prompted, enter a new password twice for ubuntu and take note of this password.
    ```bash
    sudo passwd ubuntu
-   (Enter a new password twice and take note of this password)
    ```
    Edit the following file to ensure that password authentication is allowed:
    ```bash
