@@ -443,7 +443,7 @@ In this next section, we will practice applying a cookbook to a target linux nod
    lin2:
      run_list: recipe[auditd::default]
    ```
-5.  Upload the cookbook and its recipes to the Chef server:
+5. Upload the cookbook and its recipes to the Chef server:
    ```bash
    knife cookbook upload auditd
    ```
