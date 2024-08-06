@@ -100,15 +100,12 @@ In this section, you'll set up the Chef Server on your Linux master server.  SSH
     sudo cp chef-server.key /var/opt/opscode/nginx/ca/.
     ```
 
-    Edit the Chef Server configuration file to use the new certificate and private key.  Edit the following file:
+    Edit the Chef Server configuration file to use the new certificate and private key.  Copy and paste the following into your bash session:
     ```bash
-    /etc/opscode/chef-server.rb
-    ```
-
-    Add the following lines to **/etc/opscode/chef-server.rb**:
-    ```bash
-    nginx['ssl_certificate'] = '/var/opt/opscode/nginx/ca/chef-server.crt'
-    nginx['ssl_certificate_key'] = '/var/opt/opscode/nginx/ca/chef-server.key'
+    sudo bash -c 'cat <<EOF > /etc/opscode/chef-server.rb
+    nginx["ssl_certificate"] = "/var/opt/opscode/nginx/ca/chef-server.crt"
+    nginx["ssl_certificate_key"] = "/var/opt/opscode/nginx/ca/chef-server.key"
+    EOF'
     ```
 
 11. Reconfigure the Chef Server to apply the changes for the new certificates:
