@@ -428,11 +428,11 @@ In this next section, we will practice applying a cookbook to a target linux nod
 2. Use tar to extract the tarball and move the extracted directory to the cookbooks directory you previously created:
    ```bash
    tar xf auditd-2.4.0.tar.gz
-   cp -r auditd ~/chef-repo/my_cookbook/
+   cp -r auditd ~/chef-repo/cookbooks/
    ```
 3. Review the cookbook's **default.rb** file to see the recipe written in ruby.
    ```bash
-   more ~/chef-repo/my_cookbook/auditd/recipes/default.rb
+   more ~/chef-repo/cookbooks/auditd/recipes/default.rb
    ```
 4. Add the recipe to the run list for the ```lin2``` node.
    ```bash
