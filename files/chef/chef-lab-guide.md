@@ -28,7 +28,7 @@ For this implementation, we have combined the chef server and chef workstation o
 
 ### Chef Master:  Initial Server Core Setup
 
-In this section, you'll set up the Chef Server on your Linux master server.  SSH into the linux master Ubuntu 22.04 by looking at the results from ```terraform output```.
+In this section, you'll set up the Chef Server on your Linux master server.  SSH into the linux master Ubuntu 22.04 by looking at the results from ```terraform output```.  You might need to wait until all of the packages have installed (bootstrap complete) before starting this process.  You can ```tail -f /var/log/user-data.log``` and watch the logfile in realtime.  When bootstrap is complete, you should see **End of bootstrap script**.
 
 1. Install Chef Server on Linux Master (lin1):
    ```bash
@@ -116,8 +116,13 @@ In this section, you'll set up the Chef Server on your Linux master server.  SSH
     sudo chef-server-ctl reconfigure
     ```
     Nice job!  Now the server should be listening once again on TCP/443.  If you want to verify this you can verify the listening service and make a test connection using openssl:
+    
     ```bash
     sudo netstat -tulpn | grep 443
+    ```
+    Test the connection using openssl.  You should see the TLS handshake and the self-signed certificate:
+    
+    ```bash
     openssl s_client -connect chef.acme.local:443
     ```
 
