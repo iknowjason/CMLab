@@ -382,13 +382,13 @@ In this section, you'll bootstrap the two Windows servers to be Chef nodes.  The
 3. On the Chef Workstation/Server linux system, bootstrap win1.  Replace the private IP address below with the correct private IP address of win1, as shown from terraform output.  These two windows systems have been bootstrapped to enable WinRM transport protocol for provisioning.  The command uses winrm protocol.
    ```bash
    cd ~/chef-repo/.chef
-   knife bootstrap -o winrm 10.100.20.160 -U ansible -P Brave-monkey-2024! --node-name win1
+   knife bootstrap -o winrm 10.100.20.160 -U RTCAdmin -P Proud-lion-2024! --node-name win1
    ```
 
 4. On the Chef Workstation/Server linux system, bootstrap win2.  Replace the private IP address below with the correct private IP address of win2, as shown from terraform output.  These two windows systems have been bootstrapped to enable WinRM transport protocol for provisioning.  The command uses winrm protocol.
    ```bash
    cd ~/chef-repo/.chef
-   knife bootstrap -o winrm 10.100.20.161 -U ansible -P Brave-monkey-2024! --node-name win2
+   knife bootstrap -o winrm 10.100.20.161 -U RTCAdmin -P Proud-lion-2024! --node-name win2
    ```
 
 5. Finally, let's use the knife command to list and verify managed nodes or clients:
