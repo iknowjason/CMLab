@@ -452,7 +452,34 @@ In this next section, we will practice applying a cookbook to a target linux nod
    Uploading auditd         [2.4.0]
    Uploaded 1 cookbook.
    ```
-6.
+6. Run the chef-client command on the ```lin2``` node using the knife ssh utility.  This will apply the auditd recipe that you previously added to the run list of that node.  This uses SSH and will prompt for the password.
+   ```bash
+   knife ssh 'name:lin2' 'sudo chef-client' -x ubuntu
+   ```
+   You should see similar to the following in the output.  This example shows an extra cookbook (cron-delvalidate) being applied, which you will not see:
+   ```bash
+   nodename Chef Infra Client, version 17.10.0
+   nodename Patents: https://www.chef.io/patents
+   nodename Infra Phase starting
+   nodename Resolving cookbooks for run list: ["auditd::default", "cron-delvalidate::default"]
+   nodename Synchronizing cookbooks:
+   nodename   - cron-delvalidate (0.1.3)
+   nodename   - auditd (2.4.0)
+   nodename Installing cookbook gem dependencies:
+   nodename Compiling cookbooks...
+   nodename Loading Chef InSpec profile files:
+   nodename Loading Chef InSpec input files:
+   nodename Loading Chef InSpec waiver files:
+   nodename Converging 4 resources
+   nodename Recipe: auditd::default
+   nodename   * apt_package[auditd] action install
+   nodename     - install version 1:3.0.7-1build1 of package auditd
+   nodename   * service[auditd] action enable (up to date)
+   nodename Recipe: cron-delvalidate::default
+   ```
+
+   
+   
 
 ### Build and Apply Windows Cookbooks
 Some description here.
