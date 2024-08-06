@@ -477,9 +477,8 @@ In this next section, we will practice applying a cookbook to a target linux nod
    nodename   * service[auditd] action enable (up to date)
    nodename Recipe: cron-delvalidate::default
    ```
+   If you see the output listed above, nice job!  There are a lot of cookbooks already created and shared that you can use via the Chef Supermarket.  You can also create your own cookbooks and apply them to your fleet of managed nodes.  In the next example, perhaps we will look at doing this for Windows.
 
-   
-   
 
 ### Build and Apply Windows Cookbooks
 Some description here.
