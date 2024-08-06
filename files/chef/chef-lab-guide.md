@@ -255,7 +255,7 @@ In this section, you'll set up the Chef Workstation software on your Linux maste
     client_key               "admin.pem"
     validation_client_name   'acme-validator'
     validation_key           "acme-validator.pem"
-    chef_server_url          'https://chef.example.com/organizations/acme'
+    chef_server_url          'https://chef.acme.com/organizations/acme'
     cache_type               'BasicFile'
     cache_options( :path => "#{ENV['HOME']}/.chef/checksums" )
     cookbook_path            ["#{current_dir}/../cookbooks"]
