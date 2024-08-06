@@ -447,7 +447,12 @@ In this next section, we will practice applying a cookbook to a target linux nod
    ```bash
    knife cookbook upload auditd
    ```
-7.
+   You should see that the cookbook has been uploaded to the Chef server, as shown below:
+   ```bash
+   Uploading auditd         [2.4.0]
+   Uploaded 1 cookbook.
+   ```
+6.
 
 ### Build and Apply Windows Cookbooks
 Some description here.
