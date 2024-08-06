@@ -452,7 +452,7 @@ In this next section, we will practice applying a cookbook to a target linux nod
    Uploading auditd         [2.4.0]
    Uploaded 1 cookbook.
    ```
-6. Run the chef-client command on the ```lin2``` node using the knife ssh utility.  This will apply the auditd recipe that you previously added to the run list of that node.  This uses SSH and will prompt for the password.
+6. Run the chef-client command on the ```lin2``` node using the knife ssh utility.  It uses SSH and will prompt for a password for the ubuntu user.  This will apply the auditd recipe that you previously added to the run list of that node by causing the node to pull the recipes in its run list from the Chef Server.  The Chef Server transmits the recipes to the target node.  It also checks for any required updates and applies them, if applicable. 
    ```bash
    knife ssh 'name:lin2' 'sudo chef-client' -x ubuntu
    ```
