@@ -414,11 +414,40 @@ In this section, you'll bootstrap the two Windows servers to be Chef nodes.  The
     ```
 
 
-### Build and Apply Linux Cookbooks
-Some description here.
-1.
-2.
-3.
+### Build and Apply a Linux Cookbook
+In this next section, we will practice applying a cookbook to a target linux node.  Cookbooks are an efficient way to package configuration changes and update target nodes.
+1. Change into the .chef directory and use the knife utility to download the an auditd cookbook from Chef supermarket.  Chef supermarket is a website where Chef users can share cookbooks.
+   ```bash
+   cd ~/chef-repo/.chef
+   knife supermarket download auditd
+   ```
+   You should see in the output that the auditd package was downloaded to the following location:
+   ```bash
+   Cookbook saved: /home/ubuntu/chef-repo/.chef/auditd-2.4.0.tar.gz
+   ```
+2. Use tar to extract the tarball and move the extracted directory to the cookbooks directory you previously created:
+   ```bash
+   tar xf auditd-2.4.0.tar.gz
+   cp -r auditd ~/chef-repo/my_cookbook/
+   ```
+3. Review the cookbook's **default.rb** file to see the recipe written in ruby.
+   ```bash
+   more ~/chef-repo/my_cookbook/auditd/recipes/default.rb
+   ```
+4. Add the recipe to the run list for the ```lin2``` node.
+   ```bash
+   knife node run_list add lin2 'recipe[auditd::default]'
+   ```
+   This will add the default recipe we looked at in ```default.rb``` to the run list for the ```lin2``` node.  You should see this in the output:
+   ```bash
+   lin2:
+     run_list: recipe[auditd::default]
+   ```
+5.  Upload the cookbook and its recipes to the Chef server:
+   ```bash
+   knife cookbook upload auditd
+   ```
+7.
 
 ### Build and Apply Windows Cookbooks
 Some description here.
