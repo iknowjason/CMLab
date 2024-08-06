@@ -60,24 +60,24 @@ In this section, you'll set up the Chef Server on your Linux master server.  SSH
    ```
 ### Chef Master:  Reconfigure for self-signed TLS certificate
 
-8. You will need to generate a new self-signed TLS certificate that can be used to simulate proper DNS and certificate based authentication.  We will **cheat** here by using the /etc/hosts for DNS.  Get the private IP address of this system by typing ```ifconfig```.  Add an entry in the ```/etc/hosts``` file so that the chef workstation knife utility can manage the server.  This would show how a chef workstation administrator would be managing the chef installation to push changes from a secondary system.  For this lab, we are combining chef server and workstation into a single system.  In my example, my private IP address is ```10.100.20.143``` as determined by ```ifconfig``` or you can run ```terraform output``` to grab it.  Edit /etc/hosts to point an internal hosts entry for ```chef.acme.com``` pointing to this internal IP address, or replace it with whatever fqdn you desire.  For this example, we are using ```chef.acme.com``` to represent the chef server.
+8. You will need to generate a new self-signed TLS certificate that can be used to simulate proper DNS and certificate based authentication.  We will **cheat** here by using the /etc/hosts for DNS.  Get the private IP address of this system by typing ```ifconfig```.  Add an entry in the ```/etc/hosts``` file so that the chef workstation knife utility can manage the server.  This would show how a chef workstation administrator would be managing the chef installation to push changes from a secondary system.  For this lab, we are combining chef server and workstation into a single system.  In my example, my private IP address is ```10.100.20.143``` as determined by ```ifconfig``` or you can run ```terraform output``` to grab it.  Edit /etc/hosts to point an internal hosts entry for ```chef.acme.local``` pointing to this internal IP address, or replace it with whatever fqdn you desire.  For this example, we are using ```chef.acme.local``` to represent the chef server.
    ```bash
    sudo vi /etc/hosts
    ```
    My example shows:
    ```
-   10.100.20.143 chef.acme.com
+   10.100.20.143 chef.acme.local
    ```
-   Verify hostname resolution by typing ```ping chef.acme.com```.  Nice work!  You are now ready to setup a self-signed TLS certificate and reconfigure Chef to bind and use the TLS certificate on its nginx port 443.
+   Verify hostname resolution by typing ```ping chef.acme.local```.  Nice work!  You are now ready to setup a self-signed TLS certificate and reconfigure Chef to bind and use the TLS certificate on its nginx port 443.
 
 9. Generate a self-signed TLS certificate with the following commands.  First, generate a private key:
    ```bash
    openssl genrsa -out chef-server.key 2048
    ```
 
-   Next, create a certificate signing request (CSR).  In this example, we are using a Common Name (CN) of ```chef.acme.com```.  Replace as appropriate for your environment:
+   Next, create a certificate signing request (CSR).  In this example, we are using a Common Name (CN) of ```chef.acme.local```.  Replace as appropriate for your environment:
    ```bash
-   openssl req -new -key chef-server.key -out chef-server.csr -subj "/CN=chef.acme.com"
+   openssl req -new -key chef-server.key -out chef-server.csr -subj "/CN=chef.acme.local"
    ```
 
    Third, generate the self-signed certificate using the csr and private key:
@@ -118,7 +118,7 @@ In this section, you'll set up the Chef Server on your Linux master server.  SSH
     Nice job!  Now the server should be listening once again on TCP/443.  If you want to verify this you can verify the listening service and make a test connection using openssl:
     ```bash
     sudo netstat -tulpn | grep 443
-    openssl s_client -connect chef.acme.com:443
+    openssl s_client -connect chef.acme.local:443
     ```
 
 ### Chef Master:  Chef Workstation Setup
@@ -183,7 +183,7 @@ In this section, you'll set up the Chef Workstation software on your Linux maste
 
    Finally, copy the ssh public key you created at the beginning of this step to the authorized keys by typing the following command.  SSH to the private IP address of the same server:
    ```bash
-   ssh-copy-id ubuntu@chef.acme.com
+   ssh-copy-id ubuntu@chef.acme.local
    ```
 
 7. Copy over the Chef admin user's keys used for authentication.  Normally you would use ```scp``` to copy them from the Chef server to the local Chef workstation.  But in this lab implementation, since you are running server and workstation on the same system, we can copy it locally.  Go ahead and copy the **admin.pem** and **acme.pem** from the server's directory to the workstation's ```~/chef-repo/.chef``` directory.
@@ -255,7 +255,7 @@ In this section, you'll set up the Chef Workstation software on your Linux maste
     client_key               "admin.pem"
     validation_client_name   'acme-validator'
     validation_key           "acme-validator.pem"
-    chef_server_url          'https://chef.acme.com/organizations/acme'
+    chef_server_url          'https://chef.acme.local/organizations/acme'
     cache_type               'BasicFile'
     cache_options( :path => "#{ENV['HOME']}/.chef/checksums" )
     cookbook_path            ["#{current_dir}/../cookbooks"]
@@ -282,9 +282,9 @@ In this section, you'll bootstrap a chef node or client.  The **linux2** system 
    ```
    My example shows:
    ```
-   10.100.20.143 chef.acme.com
+   10.100.20.143 chef.acme.local
    ```
-   Verify hostname resolution by typing ```ping chef.acme.com``` from **linux2**.
+   Verify hostname resolution by typing ```ping chef.acme.local``` from **linux2**.
 
 2. On **linux2:**  setup a system password for the default ubuntu username and ensure that password authentication is enabled.  The Chef Workstation will be using password authentication to bootstrap this chef client node, linux2.
    ```bash
@@ -330,7 +330,7 @@ In this section, you'll bootstrap a chef node or client.  The **linux2** system 
     ```
     My example shows:
     ```
-    10.100.20.180 lin2.acme.com
+    10.100.20.180 lin2.acme.local
     ```
 
  ### Bootstrapping the Chef Windows Nodes
@@ -349,7 +349,7 @@ In this section, you'll bootstrap the two Windows servers to be Chef nodes.  The
    After you have the powershell session established, you can use this section of code to add a hosts entry so the Windows server can resolve chef.  Here is a copy and paste that should be adapted:
    
    ```  
-   $hostname = "chef.acme.com"
+   $hostname = "chef.acme.local"
    $ipAddress = "10.100.20.143"
    $entry = "$ipAddress `t $hostname"
    $hostsPath = "$env:SystemRoot\System32\drivers\etc\hosts"
@@ -357,7 +357,7 @@ In this section, you'll bootstrap the two Windows servers to be Chef nodes.  The
    # Verify that hosts file looks correct
    Get-Content -Path $hostsPath | Select-String -Pattern $hostname
    ```
-   Verify hostname resolution by typing ```ping chef.acme.com``` from **win1** powershell session.
+   Verify hostname resolution by typing ```ping chef.acme.local``` from **win1** powershell session.
 
 2. On **win2:**  edit the Windows hosts file so that the fqdn of Chef Server can be resolved.  Get the remote SSH IP address from ```terraform output```.  Use the local administrator and password credentials.  The output in ```terraform output``` will look similar to this:
    ```bash
@@ -371,7 +371,7 @@ In this section, you'll bootstrap the two Windows servers to be Chef nodes.  The
    After you have the powershell session established, you can use this section of code to add a hosts entry so the Windows server can resolve chef.  Here is a copy and paste that should be adapted:
    
    ```  
-   $hostname = "chef.acme.com"
+   $hostname = "chef.acme.local"
    $ipAddress = "10.100.20.143"
    $entry = "$ipAddress `t $hostname"
    $hostsPath = "$env:SystemRoot\System32\drivers\etc\hosts"
@@ -379,7 +379,7 @@ In this section, you'll bootstrap the two Windows servers to be Chef nodes.  The
    # Verify that hosts file looks correct
    Get-Content -Path $hostsPath | Select-String -Pattern $hostname
    ```
-   Verify hostname resolution by typing ```ping chef.acme.com``` from **win2** powershell session.
+   Verify hostname resolution by typing ```ping chef.acme.local``` from **win2** powershell session.
    
 3. On the Chef Workstation/Server linux system, bootstrap win1.  Replace the private IP address below with the correct private IP address of win1, as shown from terraform output.  These two windows systems have been bootstrapped to enable WinRM transport protocol for provisioning.  The command uses winrm protocol.
    ```bash
@@ -406,9 +406,9 @@ In this section, you'll bootstrap the two Windows servers to be Chef nodes.  The
     ```
     My example shows:
     ```
-    10.100.20.180 lin2.acme.com
-    10.100.20.160 win1.acme.com
-    10.100.20.161 win2.acme.com
+    10.100.20.180 lin2.acme.local
+    10.100.20.160 win1.acme.local
+    10.100.20.161 win2.acme.local
     ```
 
 
