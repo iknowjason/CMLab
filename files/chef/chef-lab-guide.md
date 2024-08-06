@@ -85,10 +85,6 @@ In this section, you'll set up the Chef Server on your Linux master server.  SSH
    openssl x509 -req -in chef-server.csr -signkey chef-server.key -out chef-server.crt -days 36
    ```
 
-   Finally, create a combined PEM file that we can copy into the ca directory used by Chef's nginx service:
-   ```bash
-   cat chef-server.crt chef-server.key > chef-server.pem
-   ```
 
 10. Configure the Chef Server to use the self-signed certificate and private keys.  Move the ```chef-server.pem``` file to the Chef server's ca configuration directory:
     ```bash
