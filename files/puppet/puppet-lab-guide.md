@@ -1,4 +1,4 @@
-# Chef Configuration Management Lab Guide
+# Puppet Configuration Management Lab Guide
 
 ## Introduction
 
