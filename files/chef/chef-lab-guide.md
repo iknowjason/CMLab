@@ -552,12 +552,20 @@ Some description here.
     win2:
       run_list: recipe[windows_audit_policy]
     ```
-6. Push the cookbook changes to win1:
+6. Push the cookbook changes to win1 using ```knife winrm``` command:
    ```bash
    knife winrm 'win1.acme.local' 'chef-client' --winrm-user RTCAdmin --winrm-password 'Proud-lion-2024!' --manual-list
    ```
 
-7. Push the cookbook changes to win2:
+   You should see in the output a verification that the powershell script in default.rb recipe has run:
+   ```bash
+   win1.acme.local Recipe: windows_audit_policy::default
+   win1.acme.local   * powershell_script[Configure Audit Policy and Process Creation Auditing] action run
+   win1.acme.local
+   win1.acme.local     - execute "C:\Windows\system32\WindowsPowerShell\v1.0\powershell.exe" -NoLogo -NonInteractive -NoProfile -ExecutionPolicy Bypass -InputFormat None  -File "C:/Users/rtcadmin/AppData/Local/Temp/chef-script20240807-2852-ha25zd.ps1"
+   ```
+
+8. Push the cookbook changes to win2:
    ```bash
    knife winrm 'win2.acme.local' 'chef-client' --winrm-user RTCAdmin --winrm-password 'Proud-lion-2024!' --manual-list
    ```
