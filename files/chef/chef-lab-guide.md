@@ -519,7 +519,7 @@ powershell_script 'Configure Audit Policy and Process Creation Auditing' do
   EOH
 end
 ```
-4.  Cd into ```cookbooks``` directory and run:
+4.  Change into ```cookbooks``` directory and upload this new cookbook, ```windows_audit_policy```, to the Chef Server:
     ```bash
     cd ~/chef-repo/cookbooks
     knife cookbook upload windows_audit_policy
@@ -541,7 +541,7 @@ end
     ```
 6. Push changes to windows1:
    ```bash
-   knife winrm 'name:win1' 'chef-client' --winrm-user Administrator --winrm-password 'your_password'
+   knife winrm 'win1.acme.com' 'chef-client' --winrm-user RTCAdmin --winrm-password 'Proud-lion-2024!' --manual-list
    ```
 
 
