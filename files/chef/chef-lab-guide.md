@@ -534,13 +534,22 @@ Some description here.
     Uploading windows_audit_policy [0.1.0]
     Uploaded 1 cookbook.
     ```
-5.  Add to the run list of win1:
+5.  Add to the run list of win1 and win2 nodes:
     ```bash
-    knife node run_list add win1 'recipe[windows_audit_policy]'
+    knife node run_list add win1.acme.local 'recipe[windows_audit_policy]'
     ```
     You should see:
     ```bash
     win1:
+      run_list: recipe[windows_audit_policy]
+    ```
+
+    ```bash
+    knife node run_list add win2.acme.local 'recipe[windows_audit_policy]'
+    ```
+    You should see:
+    ```bash
+    win2:
       run_list: recipe[windows_audit_policy]
     ```
 6. Push changes to windows1:
