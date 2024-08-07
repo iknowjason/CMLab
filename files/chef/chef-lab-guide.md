@@ -303,7 +303,7 @@ In this section, you'll bootstrap a chef node or client.  The **linux2** system 
    sudo systemctl restart ssh
    ```
 
-3.  Now are ready to bootstrap the node using Chef Workstation!  Return back to the linux1 Chef Workstation system and run the following knife command, first ensuring you are in the workstation directory:
+3.  Now you are ready to bootstrap the node using Chef Workstation!  Return back to the linux1 Chef Workstation system and run the following knife command, first ensuring you are in the workstation directory:
     ```bash
     cd ~/chef-repo/.chef
     ```
