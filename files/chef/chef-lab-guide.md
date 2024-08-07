@@ -565,10 +565,20 @@ Some description here.
    win1.acme.local     - execute "C:\Windows\system32\WindowsPowerShell\v1.0\powershell.exe" -NoLogo -NonInteractive -NoProfile -ExecutionPolicy Bypass -InputFormat None  -File "C:/Users/rtcadmin/AppData/Local/Temp/chef-script20240807-2852-ha25zd.ps1"
    ```
 
-8. Push the cookbook changes to win2:
+8. Push the cookbook changes to win2 using ```knife winrm``` command:
    ```bash
    knife winrm 'win2.acme.local' 'chef-client' --winrm-user RTCAdmin --winrm-password 'Proud-lion-2024!' --manual-list
    ```
+
+   You should see in the output a verification that the powershell script in default.rb recipe has run:
+   ```bash
+   win2.acme.local Recipe: windows_audit_policy::default
+   win2.acme.local   * powershell_script[Configure Audit Policy and Process Creation Auditing] action run
+   win2.acme.local
+   win2.acme.local     - execute "C:\Windows\system32\WindowsPowerShell\v1.0\powershell.exe" -NoLogo -NonInteractive -NoProfile -ExecutionPolicy Bypass -InputFormat None  -File "C:/Users/rtcadmin/AppData/Local/Temp/chef-script20240807-4912-fnu1g.ps1"
+   ```
+
+   Excellent work!  You have successfully applied a cookbook recipe to two windows managed nodes using Chef!
 
 
    
