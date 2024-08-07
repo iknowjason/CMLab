@@ -543,7 +543,7 @@ Some description here.
     win1:
       run_list: recipe[windows_audit_policy]
     ```
-
+    Add to the run list of win2:
     ```bash
     knife node run_list add win2.acme.local 'recipe[windows_audit_policy]'
     ```
