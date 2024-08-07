@@ -481,8 +481,12 @@ Some description here.
    cd ~/chef-repo/cookbooks
    chef generate cookbook windows_audit_policy
    ```
-2. Edit the ~/chef-repo/cookbooks/windows_audit_policy/recipes/default.rb to the following:
+2. Edit the ~/chef-repo/cookbooks/windows_audit_policy/recipes/default.rb file.  You will be adding a new default recipe which will include a powershell script that adds Audit Policy configuration systems:
+   ```bash
+   vi ~/chef-repo/cookbooks/windows_audit_policy/recipes/default.rb
+   ```
 
+   Copy and paste the following and save the file after you are done:
    ```bash
    # recipes/default.rb
    powershell_script 'Configure Audit Policy and Process Creation Auditing' do
