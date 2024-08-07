@@ -519,8 +519,25 @@ powershell_script 'Configure Audit Policy and Process Creation Auditing' do
   EOH
 end
 ```
-4.
-5.
+4.  Cd into ```~/chef-repo/cookbooks``` and run:
+    ```bash
+    knife cookbook upload windows_audit_policy
+    ```
+
+    you will see:
+    ```bash
+    Uploading windows_audit_policy [0.1.0]
+    Uploaded 1 cookbook.
+    ```
+5.  Add to the run list of win1:
+    ```bash
+    knife node run_list add win1 'recipe[windows_audit_policy]'
+    ```
+    You should see:
+    ```bash
+    win1:
+      run_list: recipe[windows_audit_policy]
+    ```
 
 
    
