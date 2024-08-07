@@ -519,8 +519,9 @@ powershell_script 'Configure Audit Policy and Process Creation Auditing' do
   EOH
 end
 ```
-4.  Cd into ```~/chef-repo/cookbooks``` and run:
+4.  Cd into ```cookbooks``` directory and run:
     ```bash
+    cd ~/chef-repo/cookbooks
     knife cookbook upload windows_audit_policy
     ```
 
@@ -538,6 +539,10 @@ end
     win1:
       run_list: recipe[windows_audit_policy]
     ```
+6. Push changes to windows1:
+   ```bash
+   knife winrm 'name:win1' 'chef-client' --winrm-user Administrator --winrm-password 'your_password'
+   ```
 
 
    
