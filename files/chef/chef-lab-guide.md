@@ -552,9 +552,14 @@ Some description here.
     win2:
       run_list: recipe[windows_audit_policy]
     ```
-6. Push changes to windows1:
+6. Push the cookbook changes to win1:
    ```bash
-   knife winrm 'win1.acme.com' 'chef-client' --winrm-user RTCAdmin --winrm-password 'Proud-lion-2024!' --manual-list
+   knife winrm 'win1.acme.local' 'chef-client' --winrm-user RTCAdmin --winrm-password 'Proud-lion-2024!' --manual-list
+   ```
+
+7. Push the cookbook changes to win2:
+   ```bash
+   knife winrm 'win2.acme.local' 'chef-client' --winrm-user RTCAdmin --winrm-password 'Proud-lion-2024!' --manual-list
    ```
 
 
