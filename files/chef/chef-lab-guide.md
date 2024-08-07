@@ -483,42 +483,42 @@ Some description here.
    ```
 2. Edit the ~/chef-repo/cookbooks/windows_audit_policy/recipes/default.rb to the following:
 
-```bash
-# recipes/default.rb
-powershell_script 'Configure Audit Policy and Process Creation Auditing' do
-  code <<-EOH
-    # Enable advanced audit policy
-    auditpol /set /subcategory:"Security System Extension" /success:enable /failure:enable
-    auditpol /set /subcategory:"System Integrity" /success:enable /failure:enable
-    auditpol /set /subcategory:"Logon" /success:enable /failure:enable
-    auditpol /set /subcategory:"Logoff" /success:enable /failure:enable
-    auditpol /set /subcategory:"Account Lockout" /success:enable /failure:enable
-    auditpol /set /subcategory:"Special Logon" /success:enable /failure:enable
-    auditpol /set /subcategory:"Process Creation" /success:enable /failure:enable
+   ```bash
+   # recipes/default.rb
+   powershell_script 'Configure Audit Policy and Process Creation Auditing' do
+     code <<-EOH
+       # Enable advanced audit policy
+       auditpol /set /subcategory:"Security System Extension" /success:enable /failure:enable
+       auditpol /set /subcategory:"System Integrity" /success:enable /failure:enable
+       auditpol /set /subcategory:"Logon" /success:enable /failure:enable
+       auditpol /set /subcategory:"Logoff" /success:enable /failure:enable
+       auditpol /set /subcategory:"Account Lockout" /success:enable /failure:enable
+       auditpol /set /subcategory:"Special Logon" /success:enable /failure:enable
+       auditpol /set /subcategory:"Process Creation" /success:enable /failure:enable
 
-    # Enable command line process auditing
-    $regPath = "HKLM:\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System\\Audit"
-    if (-not (Test-Path $regPath)) {
-      New-Item -Path $regPath -Force | Out-Null
-    }
-    Set-ItemProperty -Path $regPath -Name "ProcessCreationIncludeCmdLine_Enabled" -Value 1 -Type DWord
+       # Enable command line process auditing
+       $regPath = "HKLM:\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System\\Audit"
+       if (-not (Test-Path $regPath)) {
+         New-Item -Path $regPath -Force | Out-Null
+       }
+       Set-ItemProperty -Path $regPath -Name "ProcessCreationIncludeCmdLine_Enabled" -Value 1 -Type DWord
 
-    # Enable PowerShell script block logging
-    $regPath = "HKLM:\\SOFTWARE\\Policies\\Microsoft\\Windows\\PowerShell\\ScriptBlockLogging"
-    if (-not (Test-Path $regPath)) {
-      New-Item -Path $regPath -Force | Out-Null
-    }
-    Set-ItemProperty -Path $regPath -Name "EnableScriptBlockLogging" -Value 1 -Type DWord
+       # Enable PowerShell script block logging
+       $regPath = "HKLM:\\SOFTWARE\\Policies\\Microsoft\\Windows\\PowerShell\\ScriptBlockLogging"
+       if (-not (Test-Path $regPath)) {
+         New-Item -Path $regPath -Force | Out-Null
+       }
+       Set-ItemProperty -Path $regPath -Name "EnableScriptBlockLogging" -Value 1 -Type DWord
 
-    # Configure Windows Event Log sizes
-    Limit-EventLog -LogName Application -MaximumSize 1GB
-    Limit-EventLog -LogName Security -MaximumSize 1GB
-    Limit-EventLog -LogName System -MaximumSize 1GB
+       # Configure Windows Event Log sizes
+       Limit-EventLog -LogName Application -MaximumSize 1GB
+       Limit-EventLog -LogName Security -MaximumSize 1GB
+       Limit-EventLog -LogName System -MaximumSize 1GB
 
-    Write-Host "Audit policies and logging have been configured."
-  EOH
-end
-```
+       Write-Host "Audit policies and logging have been configured."
+     EOH
+   end
+   ```
 4.  Change into ```cookbooks``` directory and upload this new cookbook, ```windows_audit_policy```, to the Chef Server:
     ```bash
     cd ~/chef-repo/cookbooks
