@@ -529,7 +529,7 @@ Some description here.
     knife cookbook upload windows_audit_policy
     ```
 
-    you will see:
+    You should see in the output:
     ```bash
     Uploading windows_audit_policy [0.1.0]
     Uploaded 1 cookbook.
