@@ -125,31 +125,7 @@ In this section, you'll set up the Chef Server on your Linux master server.  SSH
 
    Nice job!  You are now all set after configuring your Puppet server to use the self-signed certificate.  If you run into any issues, just do a ```sudo reboot```.
    
-   
-5. Start the Chef Server and accept yes when prompted:
-   ```bash
-   sudo chef-server-ctl reconfigure
-   ```
-6. Create a ```.chef``` directory to store the keys for authentication used for the administrator.
-   ```bash
-   mkdir ~/.chef
-   ```
-7. Add a user account for Chef administration using the ```chef-server-ctrl``` command.  In this example below, I'm adding a user of ```John Doe``` with a username of ```admin``` and email address of ```jdoe888@gmail.com```.  This command will create a private key pem file and store it as ```admin.pem``` in your ```.chef``` directory.
-   ```bash
-   sudo chef-server-ctl user-create admin john doe jdoe888@gmail.com 'mypassword888' --filename ~/.chef/admin.pem
-   ```
-8. Review the user list and confirm that this account exists:
-   ```bash
-   sudo chef-server-ctl user-list
-   ```
-9. Create a new organizatin using the ```chef-server-ctl``` command.  For this example the organization is ```acme```.  The organization certificate will be associated with the ```admin``` user and stored in the ```.chef``` directory.
-   ```bash
-   sudo chef-server-ctl org-create acme "acme_corporation" --association_user admin --filename ~/.chef/acme.pem
-   ```
-10. List out the organizations, confirming that it was created:
-   ```bash
-   sudo chef-server-ctl org-list
-   ```
+
 ### Chef Master:  Reconfigure for self-signed TLS certificate
 
 8. You will need to generate a new self-signed TLS certificate that can be used to simulate proper DNS and certificate based authentication.  We will **cheat** here by using the /etc/hosts for DNS.  Get the private IP address of this system by typing ```ifconfig```.  Add an entry in the ```/etc/hosts``` file so that the chef workstation knife utility can manage the server.  This would show how a chef workstation administrator would be managing the chef installation to push changes from a secondary system.  For this lab, we are combining chef server and workstation into a single system.  In my example, my private IP address is ```10.100.20.143``` as determined by ```ifconfig``` or you can run ```terraform output``` to grab it.  Edit /etc/hosts to point an internal hosts entry for ```chef.acme.local``` pointing to this internal IP address, or replace it with whatever fqdn you desire.  For this example, we are using ```chef.acme.local``` to represent the chef server.
