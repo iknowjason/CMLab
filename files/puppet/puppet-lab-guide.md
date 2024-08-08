@@ -183,11 +183,56 @@ We are going to set up the Puppet agent system for mutual TLS authentication, so
 
    Nice job!  You are now ready for Configuration Management as Code:  That is, creating a manifest / module to pull configuration changes to the puppet agent!
 
-### Chef Master:  Chef Workstation Setup
+### Puppet Master:  Create a Linux Manifest Module
 
-In this section, you'll set up the Chef Workstation software on your Linux master server.  SSH into the linux master Ubuntu 22.04 by looking at the results from ```terraform output```.  For this lab, the workstation is running on the same server as the Chef Server core software.  
+In this section, you'll set up a Manifest Module for configuration changes you can push to the puppet agents.  SSH into the linux master Ubuntu 22.04 by looking at the results from ```terraform output```.  For this manifest, we will create an auditd linux configuration.
 
-1. The chef workstation software has already been installed through the terraform bootstrap script using ec2 agent with user-data.  Go ahead and verify that it is installed by typing ```chef -v```.  You should see this in the output:
+1. On the Puppet master, create a new module directory structure:
+```bash
+sudo mkdir -p /etc/puppetlabs/code/environments/production/modules/auditd/{manifests,files}
+```
+
+2. Create the main manifest file for the auditd module:
+```bash
+sudo vi /etc/puppetlabs/code/environments/production/modules/auditd/manifests/init.pp
+```
+Add the following into the init.pp file by copying and pasting:
+```bash
+class auditd {
+  package { 'auditd':
+    ensure => installed,
+  }
+
+  service { 'auditd':
+    ensure  => running,
+    enable  => true,
+    require => Package['auditd'],
+  }
+
+  file { '/etc/audit/auditd.conf':
+    ensure  => file,
+    owner   => 'root',
+    group   => 'root',
+    mode    => '0640',
+    source  => 'puppet:///modules/auditd/auditd.conf',
+    require => Package['auditd'],
+    notify  => Service['auditd'],
+  }
+
+  file { '/etc/audit/audit.rules':
+    ensure  => file,
+    owner   => 'root',
+    group   => 'root',
+    mode    => '0640',
+    source  => 'puppet:///modules/auditd/audit.rules',
+    require => Package['auditd'],
+    notify  => Service['auditd'],
+  }
+}
+```
+4.
+5.
+6. The chef workstation software has already been installed through the terraform bootstrap script using ec2 agent with user-data.  Go ahead and verify that it is installed by typing ```chef -v```.  You should see this in the output:
    ```bash
    ubuntu@ip-10-100-20-143:~$ chef -v
    Chef Workstation version: 22.10.1013
@@ -199,24 +244,24 @@ In this section, you'll set up the Chef Workstation software on your Linux maste
    Cookstyle version: 7.32.1
    ```
    
-2. Just in case it is not installed, you can type the following to download and install chef workstation software:
+7. Just in case it is not installed, you can type the following to download and install chef workstation software:
    ```bash
    wget https://packages.chef.io/files/stable/chef-workstation/22.10.1013/ubuntu/20.04/chef-workstation_22.10.1013-1_amd64.deb
    dpkg -i chef-workstation_*.deb
    ```
 
-3. Create a ```chef-repo``` repository where we will store Chef cookbook and recipes for Configuration Management.  Enter yes when prompted:
+8. Create a ```chef-repo``` repository where we will store Chef cookbook and recipes for Configuration Management.  Enter yes when prompted:
    ```bash
    cd ~
    chef generate repo chef-repo
    ```
 
-4. Create a ```.chef``` subdirectory inside of the created ```chef-repo``` directory.  This is where the knife configuration file is stored in addition to the authentication keys used by the admin to push changes.
+9. Create a ```.chef``` subdirectory inside of the created ```chef-repo``` directory.  This is where the knife configuration file is stored in addition to the authentication keys used by the admin to push changes.
    ```bash
    mkdir ~/chef-repo/.chef
    cd chef-repo
    ```
-5. In the next section,  we will setup RSA private keys on the simulated "workstation" and copy over the new public keys.  This will provide better security between the Chf Server and workstation by permitting public key authentication.
+10. In the next section,  we will setup RSA private keys on the simulated "workstation" and copy over the new public keys.  This will provide better security between the Chf Server and workstation by permitting public key authentication.
 
    On the workstation (same system you should be on), generate an RSA key pair:
    ```bash
@@ -224,7 +269,7 @@ In this section, you'll set up the Chef Workstation software on your Linux maste
    ```
    Follow the prompts to enter a keyphrase, if applicable.
 
-6. Setup a system password for the default ubuntu username and ensure that password authentication is enabled.  You will then copy over the public key from the workstation to the server.  This is the same system, but you might have a use case in the future for deploying the workstation on a separate system.  When prompted, enter a new password twice for ubuntu and take note of this password.
+11. Setup a system password for the default ubuntu username and ensure that password authentication is enabled.  You will then copy over the public key from the workstation to the server.  This is the same system, but you might have a use case in the future for deploying the workstation on a separate system.  When prompted, enter a new password twice for ubuntu and take note of this password.
    ```bash
    sudo passwd ubuntu
    ```
@@ -248,7 +293,7 @@ In this section, you'll set up the Chef Workstation software on your Linux maste
    ssh-copy-id ubuntu@chef.acme.local
    ```
 
-7. Copy over the Chef admin user's keys used for authentication.  Normally you would use ```scp``` to copy them from the Chef server to the local Chef workstation.  But in this lab implementation, since you are running server and workstation on the same system, we can copy it locally.  Go ahead and copy the **admin.pem** and **acme.pem** from the server's directory to the workstation's ```~/chef-repo/.chef``` directory.
+11. Copy over the Chef admin user's keys used for authentication.  Normally you would use ```scp``` to copy them from the Chef server to the local Chef workstation.  But in this lab implementation, since you are running server and workstation on the same system, we can copy it locally.  Go ahead and copy the **admin.pem** and **acme.pem** from the server's directory to the workstation's ```~/chef-repo/.chef``` directory.
    ```bash
    cp ~/.chef/admin.pem ~/chef-repo/.chef/.
    cp ~/.chef/acme.pem ~/chef-repo/.chef/.
@@ -259,7 +304,7 @@ In this section, you'll set up the Chef Workstation software on your Linux maste
    ls ~/chef-repo/.chef
    ```
 
-8. Setup a version control system repository for any Chef Workstation changes.  This is so we can track any changes to cookbook files and have versioning to restore earlier versions where necessary.  For this example, we will use git.  Configure Git client configuration, replacing username and email address parameters with your own:
+11. Setup a version control system repository for any Chef Workstation changes.  This is so we can track any changes to cookbook files and have versioning to restore earlier versions where necessary.  For this example, we will use git.  Configure Git client configuration, replacing username and email address parameters with your own:
    ```bash
    git config --global user.name username
    git config --global user.email user@email.com
@@ -282,12 +327,12 @@ In this section, you'll set up the Chef Workstation software on your Linux maste
    git status
    ```
 
-9. Create a Chef Cookbook.  Use the ```chef generate``` command to generate a new chef cookbook.
+11. Create a Chef Cookbook.  Use the ```chef generate``` command to generate a new chef cookbook.
    ```bash
    chef generate cookbook my_cookbook
    ```
 
-10. Next you will set up the Chef **Knife** utility and its configuration.  Chef Knife helps Chef Workstation to communicate with the server by managing cookbooks and nodes.  Chef uses a **config.rb** file in the **.chef** subdirectory to store the knife configuration.  Create a ```config.rb``` file in the destination .chef directory:
+11. Next you will set up the Chef **Knife** utility and its configuration.  Chef Knife helps Chef Workstation to communicate with the server by managing cookbooks and nodes.  Chef uses a **config.rb** file in the **.chef** subdirectory to store the knife configuration.  Create a ```config.rb``` file in the destination .chef directory:
     ```bash
     cd ~/chef-repo/.chef
     vi config.rb
@@ -323,7 +368,7 @@ In this section, you'll set up the Chef Workstation software on your Linux maste
     cookbook_path            ["#{current_dir}/../cookbooks"]
     ```
 
-11. Now that you're update the knife configuration file, config.rb, we can now test communication to the Chef Server!
+12. Now that you're update the knife configuration file, config.rb, we can now test communication to the Chef Server!
     ```bash
     cd ..
     knife ssl fetch
