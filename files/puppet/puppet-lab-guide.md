@@ -116,7 +116,11 @@ We are going to set up the Puppet agent system for mutual TLS authentication, so
 
    Reboot your lin2 Puppet agent system by typing **sudo reboot**.  This will ensure all changes take effect.
 
-2. SSH back into your lin2 chef agent system.  We will now update the Puppet configuration file to point to our puppet server.  Edit the following file:
+   ```bash
+   sudo reboot
+   ```
+
+3. SSH back into your lin2 chef agent system.  We will now update the Puppet configuration file to point to our puppet server.  Edit the following file:
    ```bash
    sudo vi /etc/puppetlabs/puppet/puppet.conf
    ```
@@ -129,7 +133,7 @@ We are going to set up the Puppet agent system for mutual TLS authentication, so
    ```
    This tells the puppet agent the local certificate that will be used as well as the puppet server to communicate with.
 
-3. Now we are ready to generate a new certificate request with the correct hostname and send this to the puppet server.  Let's first remove any existing Puppet SSL certificates.  On **lin2**, run the following commands:
+4. Now we are ready to generate a new certificate request with the correct hostname and send this to the puppet server.  Let's first remove any existing Puppet SSL certificates.  On **lin2**, run the following commands:
    ```bash
    sudo rm -rf /etc/puppetlabs/puppet/ssl
    ```
