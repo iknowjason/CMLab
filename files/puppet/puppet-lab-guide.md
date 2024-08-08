@@ -27,6 +27,17 @@ Your lab environment consists of:
 
 In this section, you'll set up the Chef Server on your Linux master server.  This server is the **linux1** .  SSH into the linux master Ubuntu 22.04 by looking at the results from ```terraform output```.  You might need to wait until all of the packages have installed (bootstrap complete) before starting this process.  You can ```tail -f /var/log/user-data.log``` and watch the logfile in realtime.  When bootstrap is complete, you should see **End of bootstrap script**.
 
+1. The Puppet software has already been installed on the lin1 master through the terraform bootstrap script and processes with user-data and ec2-agent.  Go ahead and start/enable the service and verify that it is now running:
+   ```bash
+   sudo systemctl start puppetserver
+   sudo systemctl enable puppetserver
+   ```
+
+   Verify that the Puppet Server is running:
+   ```bash
+   sudo systemctl status puppetserver
+   ```
+
 1. On **linux1** system:  Set up a hostname on the linux system for puppet server.
    ```bash
    sudo hostnamectl set-hostname puppet.acme.local
@@ -43,17 +54,6 @@ In this section, you'll set up the Chef Server on your Linux master server.  Thi
    ```
 
    Reboot your lin1 Puppet master server by typing **sudo reboot**.
-
-2. The Puppet software has already been installed on the lin1 master through the terraform bootstrap script and processes with user-data and ec2-agent.  Go ahead and start/enable the service and verify that it is now running:
-   ```bash
-   sudo systemctl start puppetserver
-   sudo systemctl enable puppetserver
-   ```
-
-   Verify that the Puppet Server is running:
-   ```bash
-   sudo systemctl status puppetserver
-   ```
 
 3. Generate a self-signed certificate for the Puppet Master with the FQDN ```puppet.acme.local``` and restart the Puppet Master service telling it to use the new certificate.  Let's walk through the process.
 
