@@ -120,7 +120,7 @@ In this section, you'll set up the Chef Server on your Linux master server.  Thi
    sudo vi /etc/puppetlabs/puppet/puppet.conf
    ```
 
-   Add this content into the file:
+   Add this content into the end of the file:
    ```bash
    [main]
    certname = puppet.acme.local
