@@ -154,7 +154,7 @@ We are going to set up the Puppet agent system for mutual TLS authentication, so
    For my example, I am adding the line with private IP address of ```10.100.20.204```:
    ```bash
    10.100.20.204 puppet.acme.local puppet
-   10.100.20.170 lin2.acme.local puppet
+   10.100.20.170 lin2.acme.local lin2
    ```
 
    Now you should be able to successfully ping **puppet.acme.local**!
