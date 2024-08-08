@@ -161,9 +161,14 @@ We are going to set up the Puppet agent system for mutual TLS authentication, so
     lin2.acme.local
    ```
 
-   Sign all p[ending requests:
+   Sign all pending requests:
    ```bash
    sudo /opt/puppetlabs/bin/puppetserver ca sign --all
+   ```
+
+   You should see this response:
+   ```bash
+   Successfully signed certificate request for lin2.acme.local
    ```
 
 ### Chef Master:  Chef Workstation Setup
