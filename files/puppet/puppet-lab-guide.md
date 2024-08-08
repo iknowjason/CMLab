@@ -171,6 +171,18 @@ We are going to set up the Puppet agent system for mutual TLS authentication, so
    Successfully signed certificate request for lin2.acme.local
    ```
 
+   Back on **lin2** chef agent, run the puppet agent command again to fetch a certificate from the server:
+   ```bash
+   sudo /opt/puppetlabs/bin/puppet agent -t
+   ```
+
+   You should see a line with the response of:
+   ```bash
+   Info: Downloaded certificate for lin2.acme.local from https://puppet.acme.local:8140/puppet-ca/v1
+   ```
+
+   Nice job!  You are now ready for Configuration Management as Code:  That is, creating a manifest / module to pull configuration changes to the puppet agent!
+
 ### Chef Master:  Chef Workstation Setup
 
 In this section, you'll set up the Chef Workstation software on your Linux master server.  SSH into the linux master Ubuntu 22.04 by looking at the results from ```terraform output```.  For this lab, the workstation is running on the same server as the Chef Server core software.  
