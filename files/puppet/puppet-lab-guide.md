@@ -196,6 +196,7 @@ sudo mkdir -p /etc/puppetlabs/code/environments/production/modules/auditd/{manif
 ```bash
 sudo vi /etc/puppetlabs/code/environments/production/modules/auditd/manifests/init.pp
 ```
+
 Add the following into the init.pp file by copying and pasting:
 ```bash
 class auditd {
@@ -233,7 +234,7 @@ class auditd {
 
 3. Create a sample ```auditd.conf``` file:
    ```bash
-   sudo nano /etc/puppetlabs/code/environments/production/modules/auditd/files/auditd.conf
+   sudo vi /etc/puppetlabs/code/environments/production/modules/auditd/files/auditd.conf
    ```
 
    Copy and paste the following into the file:
