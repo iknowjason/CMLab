@@ -188,9 +188,9 @@ We are going to set up the Puppet agent system for mutual TLS authentication, so
 In this section, you'll set up a Manifest Module for configuration changes you can push to the puppet agents.  SSH into the linux master Ubuntu 22.04 by looking at the results from ```terraform output```.  For this manifest, we will create an auditd linux configuration.
 
 1. On the Puppet master, create a new module directory structure:
-```bash
-sudo mkdir -p /etc/puppetlabs/code/environments/production/modules/auditd/{manifests,files}
-```
+   ```bash
+   sudo mkdir -p /etc/puppetlabs/code/environments/production/modules/auditd/{manifests,files}
+   ```
 
 2. Create the main manifest file for the auditd module:
    ```bash
