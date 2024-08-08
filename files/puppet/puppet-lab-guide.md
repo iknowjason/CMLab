@@ -27,7 +27,7 @@ Your lab environment consists of:
 
 In this section, you'll set up the Chef Server on your Linux master server.  This server is the **linux1** .  SSH into the linux master Ubuntu 22.04 by looking at the results from ```terraform output```.  You might need to wait until all of the packages have installed (bootstrap complete) before starting this process.  You can ```tail -f /var/log/user-data.log``` and watch the logfile in realtime.  When bootstrap is complete, you should see **End of bootstrap script**.
 
-1. The Puppet software has already been installed on the lin1 master through the terraform bootstrap script and processes with user-data and ec2-agent.  Go ahead and start/enable the service and verify that it is now running:
+1. SSH into **linux1** master system.  The Puppet software has already been installed on the linux1 master through the terraform bootstrap script and processes with user-data and ec2-agent.  Go ahead and start/enable the service and verify that it is now running:
    ```bash
    sudo systemctl start puppetserver
    sudo systemctl enable puppetserver
