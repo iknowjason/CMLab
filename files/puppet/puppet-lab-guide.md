@@ -38,7 +38,18 @@ In this section, you'll set up the Chef Server on your Linux master server.  Thi
    sudo systemctl status puppetserver
    ```
 
-1. On **linux1** system:  Set up a hostname on the linux system for puppet server.
+   We will now generate a default SSL certificate.  First, we'll delete the default certificate path:
+   ```bash
+   sudo rm -rf /etc/puppetlabs/puppet/ssl
+   sudo rm -rf /etc/puppetlabs/puppetserver/ca
+   ```
+
+   Generate a ca with default certificates:
+   ```bash
+   sudo /opt/puppetlabs/bin/puppetserver ca setup
+   ```
+
+2. On **linux1** system:  Set up a hostname on the linux system for puppet server.
    ```bash
    sudo hostnamectl set-hostname puppet.acme.local
    ```
