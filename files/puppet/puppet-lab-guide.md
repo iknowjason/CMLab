@@ -184,65 +184,6 @@ We are going to set up the Puppet agent system for mutual TLS authentication, so
    sudo /opt/puppetlabs/bin/puppet agent -t
    ```
 
-9. 
-   ```bash
-   sudo vi /etc/hosts
-   ```
-   My example shows:
-   ```
-   10.100.20.143 chef.acme.local
-   ```
-   Verify hostname resolution by typing ```ping chef.acme.local```.  Nice work!  You are now ready to setup a self-signed TLS certificate and reconfigure Chef to bind and use the TLS certificate on its nginx port 443.
-
-10. Generate a self-signed TLS certificate with the following commands.  First, generate a private key:
-   ```bash
-   openssl genrsa -out chef-server.key 2048
-   ```
-
-   Next, create a certificate signing request (CSR).  In this example, we are using a Common Name (CN) of ```chef.acme.local```.  Replace as appropriate for your environment:
-   ```bash
-   openssl req -new -key chef-server.key -out chef-server.csr -subj "/CN=chef.acme.local"
-   ```
-
-   Third, generate the self-signed certificate using the csr and private key:
-   ```bash
-   openssl x509 -req -in chef-server.csr -signkey chef-server.key -out chef-server.crt -days 36
-   ```
-
-
-11. Configure the Chef Server to use the self-signed certificate and private keys.  Move the ```chef-server.pem``` file to the Chef server's ca configuration directory:
-    ```bash
-    sudo cp chef-server.crt /var/opt/opscode/nginx/ca/.
-    ```
-
-    Copy the private key file to the configuration directory:
-    ```bash
-    sudo cp chef-server.key /var/opt/opscode/nginx/ca/.
-    ```
-
-    Edit the Chef Server configuration file to use the new certificate and private key.  Copy and paste the following into your bash session:
-    ```bash
-    sudo bash -c 'cat <<EOF > /etc/opscode/chef-server.rb
-    nginx["ssl_certificate"] = "/var/opt/opscode/nginx/ca/chef-server.crt"
-    nginx["ssl_certificate_key"] = "/var/opt/opscode/nginx/ca/chef-server.key"
-    EOF'
-    ```
-
-12. Reconfigure the Chef Server to apply the changes for the new certificates:
-    ```bash
-    sudo chef-server-ctl reconfigure
-    ```
-    Nice job!  Now the server should be listening once again on TCP/443.  If you want to verify this you can verify the listening service and make a test connection using openssl:
-    
-    ```bash
-    sudo netstat -tulpn | grep 443
-    ```
-    Test the connection using openssl.  You should see the TLS handshake and the self-signed certificate:
-    
-    ```bash
-    openssl s_client -connect chef.acme.local:443
-    ```
-
 ### Chef Master:  Chef Workstation Setup
 
 In this section, you'll set up the Chef Workstation software on your Linux master server.  SSH into the linux master Ubuntu 22.04 by looking at the results from ```terraform output```.  For this lab, the workstation is running on the same server as the Chef Server core software.  
