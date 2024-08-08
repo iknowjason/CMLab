@@ -150,7 +150,7 @@ We are going to set up the Puppet agent system for mutual TLS authentication, so
    Exiting now because the waitforcert setting is set to 0.
    ```
 
-   Now we need to approve the pending certificate request on the puppet master.  Back on the **puppet** chef master linux system, list the pending certificate requests:
+   On **puppet** server:  Now we need to approve the pending certificate request on the puppet master.  Back on the **puppet** chef master linux system, list the pending certificate requests:
    ```bash
    sudo /opt/puppetlabs/bin/puppetserver ca list
    ```
