@@ -54,8 +54,11 @@ In this section, you'll set up the Chef Server on your Linux master server.  Thi
    ```
 
    Reboot your lin1 Puppet master server by typing **sudo reboot**.
+   ```bash
+   sudo reboot
+   ```
 
-3. Generate a self-signed certificate for the Puppet Master with the FQDN ```puppet.acme.local``` and restart the Puppet Master service telling it to use the new certificate.  Let's walk through the process.
+4. Generate a self-signed certificate for the Puppet Master with the FQDN ```puppet.acme.local``` and restart the Puppet Master service telling it to use the new certificate.  Let's walk through the process.
 
    We will now generate a default SSL certificate.  First, we'll delete the default certificate path:
    ```bash
