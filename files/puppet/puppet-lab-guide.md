@@ -123,7 +123,7 @@ In this section, you'll set up the Chef Server on your Linux master server.  SSH
    sudo systemctl restart puppetserver
    ```
 
-   Nice job!  You are now all set after configuring your Puppet server to use the self-signed certificate.
+   Nice job!  You are now all set after configuring your Puppet server to use the self-signed certificate.  If you run into any issues, just do a ```sudo reboot```.
    
    
 5. Start the Chef Server and accept yes when prompted:
