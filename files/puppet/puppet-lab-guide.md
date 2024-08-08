@@ -25,9 +25,9 @@ Your lab environment consists of:
 
 ### Puppet Master: Initial Server Setup
 
-In this section, you'll set up the Chef Server on your Linux master server.  SSH into the linux master Ubuntu 22.04 by looking at the results from ```terraform output```.  You might need to wait until all of the packages have installed (bootstrap complete) before starting this process.  You can ```tail -f /var/log/user-data.log``` and watch the logfile in realtime.  When bootstrap is complete, you should see **End of bootstrap script**.
+In this section, you'll set up the Chef Server on your Linux master server.  This server is the **linux1** .  SSH into the linux master Ubuntu 22.04 by looking at the results from ```terraform output```.  You might need to wait until all of the packages have installed (bootstrap complete) before starting this process.  You can ```tail -f /var/log/user-data.log``` and watch the logfile in realtime.  When bootstrap is complete, you should see **End of bootstrap script**.
 
-1. Set up a hostname on the linux system for puppet server.
+1. On **linux1** system:  Set up a hostname on the linux system for puppet server.
    ```bash
    sudo hostnamectl set-hostname puppet.acme.local
    ```
@@ -44,7 +44,7 @@ In this section, you'll set up the Chef Server on your Linux master server.  SSH
 
    Reboot your lin1 Puppet master server by typing **sudo reboot**.
 
-2. THe Puppet software has already been installed on the lin1 master through the terraform bootstrap script and processes with user-data and ec2-agent.  Go ahead and start/enable the service and verify that it is now running:
+2. The Puppet software has already been installed on the lin1 master through the terraform bootstrap script and processes with user-data and ec2-agent.  Go ahead and start/enable the service and verify that it is now running:
    ```bash
    sudo systemctl start puppetserver
    sudo systemctl enable puppetserver
@@ -126,9 +126,54 @@ In this section, you'll set up the Chef Server on your Linux master server.  SSH
    Nice job!  You are now all set after configuring your Puppet server to use the self-signed certificate.  If you run into any issues, just do a ```sudo reboot```.
    
 
-### Chef Master:  Reconfigure for self-signed TLS certificate
+### Puppet Linux Agent:  Reconfigure for self-signed TLS certificate
 
-8. You will need to generate a new self-signed TLS certificate that can be used to simulate proper DNS and certificate based authentication.  We will **cheat** here by using the /etc/hosts for DNS.  Get the private IP address of this system by typing ```ifconfig```.  Add an entry in the ```/etc/hosts``` file so that the chef workstation knife utility can manage the server.  This would show how a chef workstation administrator would be managing the chef installation to push changes from a secondary system.  For this lab, we are combining chef server and workstation into a single system.  In my example, my private IP address is ```10.100.20.143``` as determined by ```ifconfig``` or you can run ```terraform output``` to grab it.  Edit /etc/hosts to point an internal hosts entry for ```chef.acme.local``` pointing to this internal IP address, or replace it with whatever fqdn you desire.  For this example, we are using ```chef.acme.local``` to represent the chef server.
+We are going to set up the Puppet agent system for mutual TLS authentication, so it can communicate to Pupper master and receive configuration changes.  On **linux2**, you will need to generate a new self-signed TLS certificate that can be used to simulate proper DNS and certificate based authentication.  We will **cheat** here by using the /etc/hosts for DNS.
+
+1. On **linux2** system:  Set up a hostname on the linux system for the puppet agent to have a FQDN for certificates.
+   ```bash
+   sudo hostnamectl set-hostname lin2.acme.local
+   ```
+
+   Set up the /etc/hosts file to include the fqdn and private IP address for both **puppet** (lin1) and pupper agent (lin2).  You can get the private IP address for lin12 via ifconfig or terraform outputs:
+   ```bash
+   sudo vi /etc/hosts
+   ```
+
+   For my example, I am adding the line with private IP address of ```10.100.20.204```:
+   ```bash
+   10.100.20.204 puppet.acme.local puppet
+   10.100.20.170 lin2.acme.local puppet
+   ```
+
+   Now you should be able to successfully ping **puppet.acme.local**!
+
+   Reboot your lin2 Puppet agent system by typing **sudo reboot**.  This will ensure all changes take effect.
+
+2. SSH back into your lin2 chef agent system.  We will now update the Puppet configuration file to point to our puppet server.  Edit the following file:
+   ```bash
+   sudo vi /etc/puppetlabs/puppet/puppet.conf
+   ```
+
+   Add or modify the lines in the **[main]** section:
+   ```bash
+   [main]
+   certname = lin2.acme.local
+   server = puppet.acme.local
+   ```
+   This tells the puppet agent the local certificate that will be used as well as the puppet server to communicate with.
+
+3. Now we are ready to generate a new certificate request with the correct hostname and send this to the puppet server.  Let's first remove any existing Puppet SSL certificates:
+   ```bash
+   sudo rm -rf /etc/puppetlabs/puppet/ssl
+   ```
+
+   Run the Puppet agent to generate a new certificate request:
+   ```bash
+   sudo /opt/puppetlabs/bin/puppet agent -t
+   ```
+
+9. 
    ```bash
    sudo vi /etc/hosts
    ```
@@ -138,7 +183,7 @@ In this section, you'll set up the Chef Server on your Linux master server.  SSH
    ```
    Verify hostname resolution by typing ```ping chef.acme.local```.  Nice work!  You are now ready to setup a self-signed TLS certificate and reconfigure Chef to bind and use the TLS certificate on its nginx port 443.
 
-9. Generate a self-signed TLS certificate with the following commands.  First, generate a private key:
+10. Generate a self-signed TLS certificate with the following commands.  First, generate a private key:
    ```bash
    openssl genrsa -out chef-server.key 2048
    ```
@@ -154,7 +199,7 @@ In this section, you'll set up the Chef Server on your Linux master server.  SSH
    ```
 
 
-10. Configure the Chef Server to use the self-signed certificate and private keys.  Move the ```chef-server.pem``` file to the Chef server's ca configuration directory:
+11. Configure the Chef Server to use the self-signed certificate and private keys.  Move the ```chef-server.pem``` file to the Chef server's ca configuration directory:
     ```bash
     sudo cp chef-server.crt /var/opt/opscode/nginx/ca/.
     ```
@@ -172,7 +217,7 @@ In this section, you'll set up the Chef Server on your Linux master server.  SSH
     EOF'
     ```
 
-11. Reconfigure the Chef Server to apply the changes for the new certificates:
+12. Reconfigure the Chef Server to apply the changes for the new certificates:
     ```bash
     sudo chef-server-ctl reconfigure
     ```
