@@ -27,31 +27,126 @@ Your lab environment consists of:
 
 In this section, you'll set up the Chef Server on your Linux master server.  SSH into the linux master Ubuntu 22.04 by looking at the results from ```terraform output```.  You might need to wait until all of the packages have installed (bootstrap complete) before starting this process.  You can ```tail -f /var/log/user-data.log``` and watch the logfile in realtime.  When bootstrap is complete, you should see **End of bootstrap script**.
 
-1. Install Chef Server on Linux Master (lin1):
+1. Set up a hostname on the linux system for puppet server.
    ```bash
-   sudo dpkg -i chef-server-core_15.1.7-1_amd64.deb
-   ``` 
-2. Start the Chef Server and accept yes when prompted:
+   sudo hostnamectl set-hostname puppet.acme.local
+   ```
+
+   Set up the /etc/hosts file to include the fqdn and private IP address.  You can get the private IP address for lin1 via ifconfig or terraform outputs:
+   ```bash
+   sudo vi /etc/hosts
+   ```
+
+   For my example, I am adding the line with private IP address of ```10.100.20.204```:
+   ```bash
+   10.100.20.204 puppet.acme.local puppet
+   ```
+
+   Reboot your lin1 Puppet master server by typing **sudo reboot**.
+
+2. THe Puppet software has already been installed on the lin1 master through the terraform bootstrap script and processes with user-data and ec2-agent.  Go ahead and start/enable the service and verify that it is now running:
+   ```bash
+   sudo systemctl start puppetserver
+   sudo systemctl enable puppetserver
+   ```
+
+   Verify that the Puppet Server is running:
+   ```bash
+   sudo systemctl status puppetserver
+   ```
+
+3. Generate a self-signed certificate for the Puppet Master with the FQDN ```puppet.acme.local``` and restart the Puppet Master service telling it to use the new certificate.  Let's walk through the process.
+
+   Create a directory to store the certificates and change into the directory:
+   ```bash
+   sudo mkdir -p /etc/puppetlabs/puppet/ssl/certs
+   cd /etc/puppetlabs/puppet/ssl/certs
+   ```
+
+   Generate a private key:
+   ```bash
+   sudo openssl genrsa -out puppet.acme.local.key 2048
+   ```
+
+   Create a configuration file for the certificate. Create a file named puppet_cert.cnf:
+   ```bash
+   sudo vi puppet_cert.cnf
+   ```
+
+   Copy and paste the following content into the file and save it:
+   ```bash
+   [req]
+   distinguished_name = req_distinguished_name
+   x509_extensions = v3_req
+   prompt = no
+   [req_distinguished_name]
+   CN = puppet.acme.local
+   [v3_req]
+   subjectAltName = DNS:puppet.acme.local
+   keyUsage = critical, digitalSignature, keyEncipherment
+   extendedKeyUsage = serverAuth
+   ```
+
+   Generate the certificate signing request (CSR):
+   ```bash
+   sudo openssl req -new -key puppet.acme.local.key -out puppet.acme.local.csr -config puppet_cert.cnf
+   ```
+
+   Generate the self-signed certificate:
+   ```bash
+   sudo openssl x509 -req -in puppet.acme.local.csr -signkey puppet.acme.local.key -out puppet.acme.local.crt -days 825 -sha256 -extfile puppet_cert.cnf -extensions v3_req
+   ```
+
+   Set the corret permissions on these certificate files:
+   ```bash
+   sudo chown puppet:puppet puppet.acme.local.key puppet.acme.local.crt
+   sudo chmod 600 puppet.acme.local.key
+   sudo chmod 644 puppet.acme.local.crt
+   ```
+
+   Configure Puppet server to use these certificates.  Edit the puppet.conf file:
+   ```bash
+   sudo vi /etc/puppetlabs/puppet/puppet.conf
+   ```
+
+   Add this content into the file:
+   ```bash
+   [main]
+   certname = puppet.acme.local
+   server = puppet.acme.local
+   ssl_client_header = SSL_CLIENT_S_DN
+   ssl_client_verify_header = SSL_CLIENT_VERIFY
+   ```
+
+   Restart the Puppet server to apply these changes:
+   ```bash
+   sudo systemctl restart puppetserver
+   ```
+
+   Nice job!  You are now all set after configuring your Puppet server to use the self-signed certificate.
+   
+   
+5. Start the Chef Server and accept yes when prompted:
    ```bash
    sudo chef-server-ctl reconfigure
    ```
-3. Create a ```.chef``` directory to store the keys for authentication used for the administrator.
+6. Create a ```.chef``` directory to store the keys for authentication used for the administrator.
    ```bash
    mkdir ~/.chef
    ```
-4. Add a user account for Chef administration using the ```chef-server-ctrl``` command.  In this example below, I'm adding a user of ```John Doe``` with a username of ```admin``` and email address of ```jdoe888@gmail.com```.  This command will create a private key pem file and store it as ```admin.pem``` in your ```.chef``` directory.
+7. Add a user account for Chef administration using the ```chef-server-ctrl``` command.  In this example below, I'm adding a user of ```John Doe``` with a username of ```admin``` and email address of ```jdoe888@gmail.com```.  This command will create a private key pem file and store it as ```admin.pem``` in your ```.chef``` directory.
    ```bash
    sudo chef-server-ctl user-create admin john doe jdoe888@gmail.com 'mypassword888' --filename ~/.chef/admin.pem
    ```
-5. Review the user list and confirm that this account exists:
+8. Review the user list and confirm that this account exists:
    ```bash
    sudo chef-server-ctl user-list
    ```
-6. Create a new organizatin using the ```chef-server-ctl``` command.  For this example the organization is ```acme```.  The organization certificate will be associated with the ```admin``` user and stored in the ```.chef``` directory.
+9. Create a new organizatin using the ```chef-server-ctl``` command.  For this example the organization is ```acme```.  The organization certificate will be associated with the ```admin``` user and stored in the ```.chef``` directory.
    ```bash
    sudo chef-server-ctl org-create acme "acme_corporation" --association_user admin --filename ~/.chef/acme.pem
    ```
-7. List out the organizations, confirming that it was created:
+10. List out the organizations, confirming that it was created:
    ```bash
    sudo chef-server-ctl org-list
    ```
