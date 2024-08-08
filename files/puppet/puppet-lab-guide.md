@@ -125,7 +125,7 @@ We are going to set up the Puppet agent system for mutual TLS authentication, so
    sudo vi /etc/puppetlabs/puppet/puppet.conf
    ```
 
-   Add or modify the lines in the **[main]** section:
+   Add the **[main]** section to the end of the file:
    ```bash
    [main]
    certname = lin2.acme.local
