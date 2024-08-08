@@ -193,44 +193,44 @@ sudo mkdir -p /etc/puppetlabs/code/environments/production/modules/auditd/{manif
 ```
 
 2. Create the main manifest file for the auditd module:
-```bash
-sudo vi /etc/puppetlabs/code/environments/production/modules/auditd/manifests/init.pp
-```
+   ```bash
+   sudo vi /etc/puppetlabs/code/environments/production/modules/auditd/manifests/init.pp
+   ```
 
-Add the following into the init.pp file by copying and pasting:
-```bash
-class auditd {
-  package { 'auditd':
-    ensure => installed,
-  }
+   Add the following into the init.pp file by copying and pasting:
+   ```bash
+   class auditd {
+     package { 'auditd':
+       ensure => installed,
+     }
 
-  service { 'auditd':
-    ensure  => running,
-    enable  => true,
-    require => Package['auditd'],
-  }
+     service { 'auditd':
+       ensure  => running,
+       enable  => true,
+       require => Package['auditd'],
+     }
 
-  file { '/etc/audit/auditd.conf':
-    ensure  => file,
-    owner   => 'root',
-    group   => 'root',
-    mode    => '0640',
-    source  => 'puppet:///modules/auditd/auditd.conf',
-    require => Package['auditd'],
-    notify  => Service['auditd'],
-  }
+     file { '/etc/audit/auditd.conf':
+       ensure  => file,
+       owner   => 'root',
+       group   => 'root',
+       mode    => '0640',
+       source  => 'puppet:///modules/auditd/auditd.conf',
+       require => Package['auditd'],
+       notify  => Service['auditd'],
+     }
 
-  file { '/etc/audit/audit.rules':
-    ensure  => file,
-    owner   => 'root',
-    group   => 'root',
-    mode    => '0640',
-    source  => 'puppet:///modules/auditd/audit.rules',
-    require => Package['auditd'],
-    notify  => Service['auditd'],
-  }
-}
-```
+     file { '/etc/audit/audit.rules':
+       ensure  => file,
+       owner   => 'root',
+       group   => 'root',
+       mode    => '0640',
+       source  => 'puppet:///modules/auditd/audit.rules',
+       require => Package['auditd'],
+       notify  => Service['auditd'],
+     }
+   }
+   ```
 
 3. Create a sample ```auditd.conf``` file:
    ```bash
@@ -315,7 +315,7 @@ class auditd {
 
    Modify the node definition for your linux client named **lin2**:
    ```bash
-   node 'lin2' {
+   node 'lin2.acme.local' {
      include auditd
    }
    ```
@@ -324,4 +324,12 @@ class auditd {
    ```bash
    sudo /opt/puppetlabs/bin/puppet agent -t
    ```
-   
+
+   You should see a lot of output showing the system requesting its catalog and applying configuration.  The following lines should be visible:
+   ```bash
+   Info: /Stage[main]/Auditd/File[/etc/audit/audit.rules]: Scheduling refresh of Service[auditd]
+   Notice: /Stage[main]/Auditd/Service[auditd]: Triggered 'refresh' from 2 events
+   Notice: Applied catalog in 10.27 seconds
+   ```
+
+   Congrats and well done!  You have successfully created and applied a manifest via Chef.
