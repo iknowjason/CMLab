@@ -38,17 +38,6 @@ In this section, you'll set up the Chef Server on your Linux master server.  Thi
    sudo systemctl status puppetserver
    ```
 
-   We will now generate a default SSL certificate.  First, we'll delete the default certificate path:
-   ```bash
-   sudo rm -rf /etc/puppetlabs/puppet/ssl
-   sudo rm -rf /etc/puppetlabs/puppetserver/ca
-   ```
-
-   Generate a ca with default certificates:
-   ```bash
-   sudo /opt/puppetlabs/bin/puppetserver ca setup
-   ```
-
 2. On **linux1** system:  Set up a hostname on the linux system for puppet server.
    ```bash
    sudo hostnamectl set-hostname puppet.acme.local
@@ -67,6 +56,39 @@ In this section, you'll set up the Chef Server on your Linux master server.  Thi
    Reboot your lin1 Puppet master server by typing **sudo reboot**.
 
 3. Generate a self-signed certificate for the Puppet Master with the FQDN ```puppet.acme.local``` and restart the Puppet Master service telling it to use the new certificate.  Let's walk through the process.
+
+   We will now generate a default SSL certificate.  First, we'll delete the default certificate path:
+   ```bash
+   sudo rm -rf /etc/puppetlabs/puppet/ssl
+   sudo rm -rf /etc/puppetlabs/puppetserver/ca
+   ```
+
+   Configure Puppet server to use these certificates.  Edit the puppet.conf file:
+   ```bash
+   sudo vi /etc/puppetlabs/puppet/puppet.conf
+   ```
+
+   Add this content into the end of the file:
+   ```bash
+   [main]
+   certname = puppet.acme.local
+   server = puppet.acme.local
+   ```
+
+   Generate a CA with the following commands.  This will create a default certificate with the certname listed from **puppet.conf**.
+   ```bash
+   sudo /opt/puppetlabs/bin/puppetserver ca setup
+   ```
+
+   Restart the Puppet server to apply these changes:
+   ```bash
+   sudo systemctl restart puppetserver
+   ```
+
+   Generate a ca with default certificates:
+   ```bash
+   sudo /opt/puppetlabs/bin/puppetserver ca setup
+   ```
 
    Create a directory to store the certificates and change into the directory:
    ```bash
