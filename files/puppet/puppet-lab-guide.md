@@ -174,7 +174,7 @@ We are going to set up the Puppet agent system for mutual TLS authentication, so
    ```
    This tells the puppet agent the local certificate that will be used as well as the puppet server to communicate with.
 
-3. Now we are ready to generate a new certificate request with the correct hostname and send this to the puppet server.  Let's first remove any existing Puppet SSL certificates:
+3. Now we are ready to generate a new certificate request with the correct hostname and send this to the puppet server.  Let's first remove any existing Puppet SSL certificates.  On **lin2**, run the following commands:
    ```bash
    sudo rm -rf /etc/puppetlabs/puppet/ssl
    ```
@@ -182,6 +182,29 @@ We are going to set up the Puppet agent system for mutual TLS authentication, so
    Run the Puppet agent to generate a new certificate request:
    ```bash
    sudo /opt/puppetlabs/bin/puppet agent -t
+   ```
+
+   It is normal to see the following response, since the server is not automatically signing certificate requests:
+   ```bash
+   Info: Certificate for lin2.acme.local has not been signed yet
+   Couldn't fetch certificate from CA server; you might still need to sign this agent's certificate (lin2.acme.local).
+   Exiting now because the waitforcert setting is set to 0.
+   ```
+
+   Now we need to approve the pending certificate request on the puppet master.  Back on the **puppet** chef master linux system, list the pending certificate requests:
+   ```bash
+   sudo /opt/puppetlabs/bin/puppetserver ca list
+   ```
+
+   You should see the pending certificate from lin2:
+   ```bash
+   Requested Certificates:
+    lin2.acme.local
+   ```
+
+   Sign all p[ending requests:
+   ```bash
+   sudo /opt/puppetlabs/bin/puppetserver ca sign --all
    ```
 
 ### Chef Master:  Chef Workstation Setup
