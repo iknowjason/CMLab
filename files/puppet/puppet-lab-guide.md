@@ -539,7 +539,7 @@ In this section, you'll create a Windows manifest that can add windows audit log
 
 ### Puppet Windows Agent:  Apply the Manifest Changes
 
-1. On the Windows1 or Windows2 client, ensure that you have a Windows Powershell session that is **Run as Administrator**.  Run the puppet agent:
+1. On the Windows1 or Windows2 client, ensure that you have a Windows Powershell session that is **Run as Administrator**.  Run the puppet agent to apply the new configuration:
    ```
    & 'C:\Program Files\Puppet Labs\Puppet\bin\puppet.bat' agent -t
    ```
