@@ -1,13 +1,14 @@
-# Lab Guide: Setting Up Salt Stack Master and Minion with Configuration Management
-Lab Overview
+# Salt Stack Configuration Management
+## Introduction
 
-In this lab, you will install and configure a Salt Stack master on a Linux server and a Salt minion on another Linux server. You will then apply a configuration change using Salt to install and configure auditd on the minion.
-Prerequisites
+This lab guide will walk you through setting up a Saltstack environment and performing configuration management tasks between a Linux Salt master and a salt minion running on linux.  You will install and configure a Salt Stack master on a Linux server and a Salt minion on another Linux server. You will then apply a configuration change using Salt to install and configure auditd on the minion.
 
-    Two Linux servers: one for the Salt master and one for the Salt minion.
-    Basic knowledge of Linux commands and access to the terminal.
-    Root or sudo privileges on both servers.
-    Internet access for downloading and installing packages.
+
+## Lab Environment
+Your lab environment consists of:
+Two Linux servers: one for the Salt master and one for the Salt minion.
+
+## Setup
 
 Step 1: Installing Salt Stack Master
 
