@@ -86,6 +86,8 @@ Your lab environment consists of two Linux systems:
       True
    ```
 
+   Nice job!  You can see the power and simplicity of using Salt stack and how easy it is to register a minion to master.  Now we can start to create a salt state to push this configuration for Auditd!
+
 ### Create a Salt State to Install Auditd
 
 Step 4: Creating a Salt State to Install auditd
