@@ -12,7 +12,7 @@ Your lab environment consists of two Linux systems:
 
 ## Lab Steps
 
-### Verify Salt Stack Master
+### Verify Salt Master
 
 1. SSH into the **linux1** master by looking at output from ```terraform output```.  The Salt Stack master software is already installed when the linux1 system bootstraps through the user-data script and ec2-agent.  Verify that the service is running:
    
@@ -20,23 +20,15 @@ Your lab environment consists of two Linux systems:
    sudo systemctl status salt-master
    ``` 
 
-### Install Salt Minion
+### Salt Minion Setup
 
-Step 2: Installing Salt Minion
+1. SSH into the **linux2** minion by looking at output from ```terraform output```.  The Salt Stack minion software is already installed when the linux2 system bootstraps through the user-data script and ec2-agent.  Verify that the service is running:
 
-    Update the package list on the minion server:
-
-    bash
-
-sudo apt-get update
-
-Install the Salt minion package:
-
-bash
-
-sudo apt-get install salt-minion -y
-
-Configure the Salt minion to connect to the Salt master:
+   ```bash
+   sudo systemctl status salt-minion
+   ``` 
+   
+3. Configure the Salt minion to connect to the Salt master:
 
 Edit the /etc/salt/minion configuration file:
 
