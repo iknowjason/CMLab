@@ -190,6 +190,19 @@ Your lab environment consists of two Linux systems:
    sudo salt ip-10-100-20-170.us-east-2.compute.internal state.apply auditd
    ```
 
+   You should see the following successful results:
+   ```bash
+   Summary for ip-10-100-20-170.us-east-2.compute.internal
+   ------------
+   Succeeded: 5 (changed=3)
+   Failed:    0
+   ------------
+   Total states run:     5
+   Total run time: 169.547 ms
+   ```
+
+   Nice job applying salt state to a minion!
+
 ### Verify the Configuration
 
 Verify the installation and status of auditd:
