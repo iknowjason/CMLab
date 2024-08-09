@@ -256,3 +256,11 @@ Your lab environment consists of two Linux systems:
 4. On master, verify that the ```audit.rules``` are correctly applied:
    
    ```bash
+   sudo salt ip-10-100-20-170.us-east-2.compute.internal cmd.run 'auditctl -l'
+   ```
+
+5. On master, verify the ```auditd.conf``` configuration:
+   
+   ```bash
+   sudo salt ip-10-100-20-170.us-east-2.compute.internal cmd.run 'cat /etc/audit/auditd.conf'
+   ```
