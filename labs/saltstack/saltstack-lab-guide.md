@@ -118,13 +118,10 @@ Your lab environment consists of two Linux systems:
 
 ### Apply the Configuration to the Minion
 
-Step 5: Applying the Configuration to the Minion
-
-    Apply the auditd configuration to the minion:
-
-    bash
-
-sudo salt '<minion_hostname>' state.apply auditd
+1. From Salt Master, apply the auditd configuration to the minion:
+2. 
+   ```bash sudo salt '<minion_hostname>' state.apply auditd
+   ```
 
 ### Verify the Configuration
 
