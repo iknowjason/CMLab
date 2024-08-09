@@ -320,7 +320,9 @@ In this section, you'll set up a Manifest Module for configuration changes you c
    }
    ```
 
-6. On the Linux client, run the Puppet agent to apply the new configuration:
+### Puppet Agent:  Apply the Manifest Changes
+
+1. On the Linux client, run the Puppet agent to apply the new configuration:
    ```bash
    sudo /opt/puppetlabs/bin/puppet agent -t
    ```
