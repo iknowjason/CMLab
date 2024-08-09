@@ -34,24 +34,18 @@ Your lab environment consists of two Linux systems:
    sudo vi /etc/salt/minion
    ```
 
-   Uncomment and set the master parameter to the IP address or hostname of your Salt master:
+   Uncomment and set the master parameter to the IP address or hostname of your Salt master.  Grab the private IP address of your Salt Master by typing ```ifconfig``` from the ssh session or ```terraform output```.  In my example shown below, the master IP address is ```10.100.20.125```.
 
-master: <Salt_Master_IP_or_Hostname>
+   ```bash
+   master: 10.100.20.125
+   ```
 
-Save and close the file.
+   Save and close the file.
 
-Start and enable the Salt minion service:
-
-bash
-
-sudo systemctl start salt-minion
-sudo systemctl enable salt-minion
-
-Verify that the Salt minion service is running:
-
-bash
-
-    sudo systemctl status salt-minion
+   Restart the Salt minion service:
+   ```bash
+   sudo systemctl restart salt-minion
+   ```
 
 ### Accept the Minion's Key on the Master
 
