@@ -49,19 +49,21 @@ Your lab environment consists of two Linux systems:
 
 ### Accept the Minion's Key on the Master
 
-Step 3: Accepting the Minion's Key on the Master
+1. Back on the Salt Master linux system, list the pending keys:
+   ```bash
+   sudo salt-key -L
+   ```
 
-    List the pending keys on the Salt master:
+   Under ```Unaccepted Keys```, you should see the request from the minion.  Example shown below:
+   ```
+   Unaccepted Keys:
+   ip-10-100-20-170.us-east-2.compute.internal
+   ```
 
-    bash
-
-sudo salt-key -L
-
-Accept the minion's key:
-
-bash
-
-sudo salt-key -a <minion_hostname>
+   Accept the minion's key by copying and pasting the FQDN shown for the key.  My example shows an unaccepted key for the fqdn of ```ip-10-100-20-170.us-east-2.compute.internal``` which I will use below:
+   ```bash
+   sudo salt-key -a ip-10-100-20-170.us-east-2.compute.internal
+   ```
 
 Confirm the key acceptance when prompted.
 
