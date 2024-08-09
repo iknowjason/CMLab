@@ -339,7 +339,7 @@ In this section, you'll set up a Manifest Module for configuration changes you c
    Notice: Applied catalog in 10.27 seconds
    ```
 
-   Congrats and well done!  You have successfully created and applied a manifest via Puppet.
+   Congrats and well done!  You have successfully created and applied a manifest to a linux agent via Puppet.
 
 
 ### Puppet Windows Agent Setup
@@ -543,6 +543,8 @@ In this section, you'll create a Windows manifest that can add windows audit log
    ```
    & 'C:\Program Files\Puppet Labs\Puppet\bin\puppet.bat' agent -t
    ```
+
+Congrats and well done!  You have successfully created and applied a manifest to a linux agent via Puppet.
 
    
 
