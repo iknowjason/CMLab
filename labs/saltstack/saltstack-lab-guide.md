@@ -15,6 +15,7 @@ Your lab environment consists of two Linux systems:
 ### Verify Salt Stack Master
 
 1. SSH into the **linux1** master by looking at output from ```terraform output```.  The Salt Stack master software is already installed when the linux1 system bootstraps through the user-data script and ec2-agent.  Verify that the service is running:
+   
    ```bash
    sudo systemctl status salt-master
    ``` 
