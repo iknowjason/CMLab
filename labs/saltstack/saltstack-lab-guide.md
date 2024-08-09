@@ -100,7 +100,7 @@ Your lab environment consists of two Linux systems:
    sudo vi /srv/salt/auditd.sls
    ```
 
-   Add the following content into the file.  This will install auditd:
+   Add the following content into the file.  This will install auditd and configure ```audit.rules```:
    ```bash
    install_auditd:
      pkg.installed:
@@ -112,6 +112,22 @@ Your lab environment consists of two Linux systems:
        - enable: True
        - require:
          - pkg: install_auditd
+
+   audit_rules:
+     file.managed:
+       - name: /etc/audit/audit.rules
+       - source: salt://audit.rules
+       - user: root
+       - group: root
+       - mode: 0640
+       - require:
+         - pkg: install_auditd
+
+   reload_auditd:
+     cmd.run:
+       - name: 'augenrules --load'
+       - require:
+         - file: audit_rules
    ```
    
    Save and close the file.
