@@ -65,15 +65,26 @@ Your lab environment consists of two Linux systems:
    sudo salt-key -a ip-10-100-20-170.us-east-2.compute.internal
    ```
 
-Confirm the key acceptance when prompted.
+   Confirm the key acceptance when prompted.
+   ```bash
+   The following keys are going to be accepted:
+   Unaccepted Keys:
+   ip-10-100-20-170.us-east-2.compute.internal
+   Proceed? [n/Y] y
+   Key for minion ip-10-100-20-170.us-east-2.compute.internal accepted.
+   ```
 
-Verify that the minion is communicating with the master:
+   Verify that the minion is communicating with the master:
+   ```bash
+   sudo salt '*' test.ping
+   ```
 
-bash
-
-    sudo salt '*' test.ping
-
-    The minion should respond with True.
+   The minion should respond with ```True``` as the example shows below:
+   ```bash
+   sudo salt '*' test.ping
+   ip-10-100-20-170.us-east-2.compute.internal:
+      True
+   ```
 
 ### Create a Salt State to Install Auditd
 
