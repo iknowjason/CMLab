@@ -142,6 +142,21 @@ Your lab environment consists of two Linux systems:
    
    Save and close the file.
 
+2. Create the audit.rules file on the Salt master:
+   ```bash
+   sudo vi /srv/salt/audit.rules
+   ```
+
+   Add the following content and save the file:
+   ```bash
+   # Sample Audit Rules
+   -w /etc/passwd -p wa -k passwd_changes
+   -w /etc/group -p wa -k group_changes
+   -w /var/log/ -p wa -k log_access
+   -a always,exit -F arch=b64 -S execve -k exec_log
+   ```
+
+
 ### Apply the Configuration to the Minion
 
 1. From Salt Master, apply the auditd configuration to the minion:
