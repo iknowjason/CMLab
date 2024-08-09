@@ -83,6 +83,11 @@ In this section, you'll set up the Chef Server on your Linux master server.  Thi
    sudo /opt/puppetlabs/bin/puppetserver ca setup
    ```
 
+   You should see a positive response:
+   ```
+   Generation succeeded. Find your files in /etc/puppetlabs/puppetserver/ca
+   ```
+
    Restart the Puppet server to apply these changes:
    ```bash
    sudo systemctl restart puppetserver
