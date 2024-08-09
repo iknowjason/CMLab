@@ -5,8 +5,10 @@ This lab guide will walk you through setting up a Saltstack environment and perf
 
 
 ## Lab Environment
-Your lab environment consists of:
-Two Linux servers: one for the Salt master and one for the Salt minion.
+Your lab environment consists of two Linux systems:
+
+- Salt master (linux1)
+- Salt minion (linux2)
 
 ## Lab Steps
 
