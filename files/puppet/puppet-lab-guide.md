@@ -43,7 +43,7 @@ In this section, you'll set up the Chef Server on your Linux master server.  Thi
    sudo hostnamectl set-hostname puppet.acme.local
    ```
 
-   Set up the /etc/hosts file to include the fqdn and private IP address.  You can get the private IP address for lin1 via ifconfig or terraform outputs:
+   Set up the ```/etc/hosts``` file to include the fqdn and private IP address.  You can get the private IP address for lin1 via ifconfig or terraform outputs:
    ```bash
    sudo vi /etc/hosts
    ```
