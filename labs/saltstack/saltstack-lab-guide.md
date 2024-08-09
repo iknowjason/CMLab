@@ -149,11 +149,43 @@ Your lab environment consists of two Linux systems:
 
    Add the following content and save the file:
    ```bash
-   # Sample Audit Rules
+   # First rule - delete all
+   -D
+
+   # Increase the buffers to survive stress events.
+   # Make this bigger for busy systems
+   -b 8192
+
+   # Audit the audit logs
+   -w /var/log/audit/ -k auditlog
+
+   # Auditd configuration
+   -w /etc/audit/ -p wa -k auditconfig
+   -w /etc/libaudit.conf -p wa -k auditconfig
+   -w /etc/audisp/ -p wa -k audispconfig
+
+   # Monitor for use of audit management tools
+   -w /sbin/auditctl -p x -k audittools
+   -w /sbin/auditd -p x -k audittools
+
+   # Monitor AppArmor configuration changes
+   -w /etc/apparmor/ -p wa -k apparmor
+   -w /etc/apparmor.d/ -p wa -k apparmor
+
+   # Monitor usage of passwd command
+   -w /usr/bin/passwd -p x -k passwd_modification
+
+   # Monitor user/group tools
+   -w /usr/sbin/groupadd -p x -k group_modification
+   -w /usr/sbin/groupmod -p x -k group_modification
+   -w /usr/sbin/addgroup -p x -k group_modification
+   -w /usr/sbin/useradd -p x -k user_modification
+   -w /usr/sbin/usermod -p x -k user_modification
+   -w /usr/sbin/adduser -p x -k user_modification
+
+   # Monitor changes to /etc/passwd and /etc/shadow
    -w /etc/passwd -p wa -k passwd_changes
-   -w /etc/group -p wa -k group_changes
-   -w /var/log/ -p wa -k log_access
-   -a always,exit -F arch=b64 -S execve -k exec_log
+   -w /etc/shadow -p wa -k shadow_changes
    ```
 
 3. Creat the ```auditd.conf``` file on the Salt master:
