@@ -90,36 +90,31 @@ Your lab environment consists of two Linux systems:
 
 ### Create a Salt State to Install Auditd
 
-Step 4: Creating a Salt State to Install auditd
+1. On Master: Let's create a Salt State that will install install auditd on minion.  Create a directory for your Salt state files on the master:
+   ```bash
+   sudo mkdir -p /srv/salt
+   ```
 
-    Create a directory for your Salt state files on the master:
+   Next, create a Salt state file to install and configure auditd:
+   ```bash
+   sudo vi /srv/salt/auditd.sls
+   ```
 
-    bash
+   Add the following content into the file.  This will install auditd:
+   ```bash
+   install_auditd:
+     pkg.installed:
+       - name: auditd
 
-sudo mkdir -p /srv/salt
-
-Create a Salt state file to install and configure auditd:
-
-bash
-
-sudo nano /srv/salt/auditd.sls
-
-Add the following content to install auditd:
-
-yaml
-
-    install_auditd:
-      pkg.installed:
-        - name: auditd
-
-    start_auditd:
-      service.running:
-        - name: auditd
-        - enable: True
-        - require:
-          - pkg: install_auditd
-
-    Save and close the file.
+   start_auditd:
+     service.running:
+       - name: auditd
+       - enable: True
+       - require:
+         - pkg: install_auditd
+   ```
+   
+   Save and close the file.
 
 ### Apply the Configuration to the Minion
 
