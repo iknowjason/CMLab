@@ -332,4 +332,103 @@ In this section, you'll set up a Manifest Module for configuration changes you c
    Notice: Applied catalog in 10.27 seconds
    ```
 
-   Congrats and well done!  You have successfully created and applied a manifest via Chef.
+   Congrats and well done!  You have successfully created and applied a manifest via Puppet.
+
+
+### Puppet Windows Agents
+
+In this section, you'll set up the two Windows systems with the puppet agent so they can be configured with manifests.  Let' dig into this and get the Windows systems setup with TLS authentication to the Puppet master server.
+
+1. RDP into the windows1 system.  Get the credentials and ```Public IP``` address from the output from ```terraform output``.  It will be included in this section.  Ensure that you use the local Admin and password:
+   ```bash
+   -------------------------
+   Virtual Machine win1
+   -------------------------
+   Instance ID: i-0e5a34a20ebac69e1
+   Computer Name:  win1
+   Private IP: 10.100.20.104
+   Public IP:  <your_public_ip>
+   local Admin:  RTCAdmin
+   local password: Proud-lion-2024!
+   Ansible User:  ansible
+   Ansible Pass:  Brave-monkey-2024!
+   ```
+
+2. Open up Notepad as an Administrator user and edit the following Puppet configuration file:
+   ```bash
+   C:\ProgramData\PuppetLabs\puppet\etc\puppet.conf
+   ```
+
+   Edit the main section already included to allow the correct server for the puppet master server:
+   ```
+   [main]
+   server = puppet.acme.local
+   ```
+   Save when you are done.  This will ensure that the puppet agent will attempt TLS authentication with your server.
+
+3. Next, we need to add an entry to the hosts file on windows  so the system can reach the puppet master server.  Get the  IP address of the puppet linux master ready, and edit the following file with notepad and run it as Administrator:
+   ```bash
+   C:\Windows\System32\drivers\etc\hosts
+   ```
+
+   Add the following line, adapting to the correct puppet linux master server.  For my example, it is 10.100.20.37.  Yours will be different.
+   ```bash
+   10.100.20.37 puppet.chef.local
+   ```
+   Save the file when you are done.  From a cmd prompt in Windows, you should be able to resolve and ping **puppet.acme.local**
+
+4. Open up a new Powershell session as Administrator and start the puppet service:
+   ```bash
+   Start-Service -Name puppet
+   ```
+
+   Run the Puppet agent to generate a certificate request:
+   ```
+   & 'C:\Program Files\Puppet Labs\Puppet\bin\puppet.bat' agent -t
+   ```
+
+   You should see a response in green indicating that a request for a certificate was made.
+
+5. Return to the Linux puppet master.  You will need to sign the certificate request from windows1.  Type the following to show the pending certificate requests:
+   ```bash
+   sudo /opt/puppetlabs/bin/puppetserver ca list --all
+   ```
+   You should see a pending request from **win1.us-east-2.compute.internal**
+
+   Sign the certificate by typing:
+   ```
+   sudo /opt/puppetlabs/bin/puppetserver ca sign --all
+   ```
+
+6. Returning to the Windows system, run the Puppet agent once again in the same  Powershell session:
+   ```
+   & 'C:\Program Files\Puppet Labs\Puppet\bin\puppet.bat' agent -t
+   ```
+
+   You might see some certificate errors in red.  To resolve for this lab, we need to manually copy over the public certificate on the puppet master and paste it into the local trusted certificate file on the windows system.
+
+   On the puppet master linux, copy the contents of this file by typing:
+   ```
+   sudo cat /etc/puppetlabs/puppet/ssl/certs/ca.pem
+   ```
+
+   On the Windows system, using Notepad as Administrator, manually edit the following file:
+   ```bash
+   C:\ProgramData\PuppetLabs\puppet\etc\ssl\certs\ca.pem
+   ```
+
+   Paste the entire contents of the **ca.pem** on the master server into this file and save.
+
+   Run the Puppet agent once again in the same  Powershell session and now you should see that you make it past this area with some green in which the manifest files are checked on the server for your system.  It is normal at this point that nothing is returned, since we haven't yet set up a manifest for this windows host:
+   ```
+   & 'C:\Program Files\Puppet Labs\Puppet\bin\puppet.bat' agent -t
+   ```
+
+   
+   
+   
+
+
+
+
+   
