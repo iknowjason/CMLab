@@ -41,6 +41,8 @@ bash
 
     sudo systemctl status salt-master
 
+### Install Salt Minion
+
 Step 2: Installing Salt Minion
 
     Update the package list on the minion server:
@@ -84,6 +86,8 @@ bash
 
     sudo systemctl status salt-minion
 
+### Accept the Minion's Key on the Master
+
 Step 3: Accepting the Minion's Key on the Master
 
     List the pending keys on the Salt master:
@@ -107,6 +111,8 @@ bash
     sudo salt '*' test.ping
 
     The minion should respond with True.
+
+### Create a Salt State to Install Auditd
 
 Step 4: Creating a Salt State to Install auditd
 
@@ -139,6 +145,8 @@ yaml
 
     Save and close the file.
 
+### Apply the Configuration to the Minion
+
 Step 5: Applying the Configuration to the Minion
 
     Apply the auditd configuration to the minion:
@@ -146,6 +154,8 @@ Step 5: Applying the Configuration to the Minion
     bash
 
 sudo salt '<minion_hostname>' state.apply auditd
+
+### Verify the Configuration
 
 Verify the installation and status of auditd:
 
