@@ -157,20 +157,19 @@ locals {
 ## Customizing Ansible Playbooks
 To add any Ansible playbooks, add any files to the ```files/linux/ansible/``` directory.  This directory is used to create a zip archive by terraform, uploaded to an S3 bucket, and then the Linux1 Master host downloads it from the S3 staging bucket.  This is a good location to update files into.  There is also a templatefiles directory in ```files/linux/templatefiles```. It stores all of the ansible template files that need rendered terraform variables for configuration dynamically built, such as host IP addresses or ansible credentials.
 
+# Labs
+
 ## Ansible Lab
 
-All lab example commands can be found in ```labs/ansible/ansible-examples.md```
+All lab example commands can be found in ```labs/ansible/ansible-examples.md```.
 
 ﻿## Chef Lab
 
-The Chef Lab Guide can be found in ```labs/chef/chef-lab-guide.md```
+The Chef Lab Guide can be found in ```labs/chef/chef-lab-guide.md```.
 
 ## Puppet Lab
 
-The Puppet Lab Guide can be found in ```labs/puppet/chef-lab-guide.md```
-
-
-
+The Puppet Lab Guide can be found in ```labs/puppet/chef-lab-guide.md```.
 
 
 # Author
