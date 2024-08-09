@@ -346,7 +346,7 @@ In this section, you'll set up a Manifest Module for configuration changes you c
 
 In this section, you'll set up the two Windows systems with the puppet agent so they can be configured with manifests.  Let' dig into this and get the Windows systems setup with TLS authentication to the Puppet master server.
 
-1. RDP into the windows1 system.  Get the credentials and ```Public IP``` address from the output from ```terraform output``.  It will be included in this section.  Ensure that you use the local Admin and password:
+1. RDP into the windows1 system.  Get the credentials and ```Public IP``` address from the output from ```terraform output```.  It will be included in this section.  Ensure that you use the local Admin and password:
    ```bash
    -------------------------
    Virtual Machine win1
