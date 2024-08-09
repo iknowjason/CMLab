@@ -457,7 +457,12 @@ In this section, you'll set up the two Windows systems with the puppet agent so 
 
 7.  Repeat the same steps for Windows2 system.  Get the public IP address from ```terraform output``` as you did before.
 
-8.  
+### Puppet Master:  Create a Windows Manifest
+
+In this section, you'll create a Windows manifest that can add windows audit logging best practices.  Let's dive in.
+
+1. On puppet master, create a manifest for Windows logging and auditing.  Run this command to generate a new module:
+   ```bash
 
    
 
