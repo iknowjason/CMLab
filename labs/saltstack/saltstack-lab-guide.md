@@ -205,30 +205,22 @@ Your lab environment consists of two Linux systems:
 
 ### Verify the Configuration
 
-Verify the installation and status of auditd:
+1. On master, check that ```auditd``` was successfully installed on the minion:
 
-On the minion server, run:
+   ```bash
+   sudo salt ip-10-100-20-170.us-east-2.compute.internal pkg.version auditd
+   ```
 
-bash
+   This should return the installed version of auditd.
 
-    systemctl status auditd
+2. On master, confirm that the ```auditd``` service is running.  Change your minion hostname to match your environment:
+
+    ```bash
+    sudo salt ip-10-100-20-170.us-east-2.compute.internal service.status auditd
+    ```
 
     You should see that the auditd service is active and running.
-
-Step 6: Verifying the Configuration
-
-    Check that auditd was successfully installed on the minion:
-
-    bash
-
-sudo salt '<minion_hostname>' pkg.version auditd
-
-This should return the installed version of auditd.
-
-Confirm that the auditd service is running:
-
-bash
-
-sudo salt '<minion_hostname>' service.status auditd
-
-The response should indicate that the service is running.
+   
+4. On master, verify that the ```audit.rules``` are correctly applied:
+   
+   ```bash
