@@ -156,12 +156,38 @@ Your lab environment consists of two Linux systems:
    -a always,exit -F arch=b64 -S execve -k exec_log
    ```
 
+3. Creat the ```auditd.conf``` file on the Salt master:
+   ```bash
+   sudo vi /srv/salt/auditd.conf
+   ```
+
+   Add the following content and save the file:
+   ```bash
+   # Sample Auditd Configuration
+   log_file = /var/log/audit/audit.log
+   log_format = ENRICHED
+   priority_boost = 4
+   flush = INCREMENTAL_ASYNC
+   freq = 50
+   num_logs = 5
+   max_log_file = 8
+   max_log_file_action = ROTATE
+   space_left = 75
+   space_left_action = SYSLOG
+   admin_space_left = 50
+   admin_space_left_action = SUSPEND
+   disk_full_action = SUSPEND
+   disk_error_action = SUSPEND
+   ```
+
+   Nice job.  We are now ready to push the salt state file to the minion.
+
 
 ### Apply the Configuration to the Minion
 
-1. From Salt Master, apply the auditd configuration to the minion:
-2. 
-   ```bash sudo salt '<minion_hostname>' state.apply auditd
+1. From Salt Master, apply the ```auditd```, ```audit.rules```, and ```auditd.conf``` configuration to the minion by using the salt minion host.  In this example, the salt minion was listed with ** sudo salt-key -L** and discovered as ```ip-10-100-20-170.us-east-2.compute.internal```.
+   ```bash
+   sudo salt ip-10-100-20-170.us-east-2.compute.internal state.apply auditd
    ```
 
 ### Verify the Configuration
