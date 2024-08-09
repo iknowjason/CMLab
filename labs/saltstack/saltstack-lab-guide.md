@@ -12,34 +12,12 @@ Your lab environment consists of two Linux systems:
 
 ## Lab Steps
 
-### Installing Salt Stack Master
+### Verify Salt Stack Master
 
-1. SSH into the **linux1** master by looking at output from ```terraform output```.  Installing Salt Stack Master
-
-    Update the package list:
-
-    bash
-
-sudo apt-get update
-
-Install the Salt master package:
-
-bash
-
-sudo apt-get install salt-master -y
-
-Start and enable the Salt master service:
-
-bash
-
-sudo systemctl start salt-master
-sudo systemctl enable salt-master
-
-Verify that the Salt master service is running:
-
-bash
-
-    sudo systemctl status salt-master
+1. SSH into the **linux1** master by looking at output from ```terraform output```.  The Salt Stack master software is already installed when the linux1 system bootstraps through the user-data script and ec2-agent.  Verify that the service is running:
+   ```bash
+   sudo systemctl status salt-master
+   ``` 
 
 ### Install Salt Minion
 
