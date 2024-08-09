@@ -361,7 +361,7 @@ In this section, you'll set up the two Windows systems with the puppet agent so 
    Ansible Pass:  Brave-monkey-2024!
    ```
 
-2. Open up Notepad as an Administrator user and edit the following Puppet configuration file:
+2. Open up Notepad and **Run as Administrator**.  Open and edit the following Puppet configuration file:
    ```bash
    C:\ProgramData\PuppetLabs\puppet\etc\puppet.conf
    ```
@@ -371,20 +371,20 @@ In this section, you'll set up the two Windows systems with the puppet agent so 
    [main]
    server = puppet.acme.local
    ```
-   Save when you are done.  This will ensure that the puppet agent will attempt TLS authentication with your server.
+   Save when you are done but keep Notepad open (you'll be using it again in the next step).  This will ensure that the puppet agent will attempt TLS authentication with your server.
 
-3. Next, we need to add an entry to the hosts file on windows  so the system can reach the puppet master server.  Get the  IP address of the puppet linux master ready, and edit the following file with notepad and run it as Administrator:
+3. Next, we need to add an entry to the hosts file on windows  so the system can reach the puppet master server.  Get the  IP address of the puppet linux master ready, and edit the following file with notepad and **Run as Administrator**:
    ```bash
    C:\Windows\System32\drivers\etc\hosts
    ```
 
    Add the following line, adapting to the correct puppet linux master server.  For my example, it is 10.100.20.37.  Yours will be different.
    ```bash
-   10.100.20.37 puppet.chef.local
+   10.100.20.37 puppet.acme.local
    ```
    Save the file when you are done.  From a cmd prompt in Windows, you should be able to resolve and ping **puppet.acme.local**
 
-4. Open up a new Powershell session as Administrator and start the puppet service:
+4. Open up a new ```Windows Powershell``` session and *Run as Administrator**.  Start the puppet service:
    ```bash
    Start-Service -Name puppet
    ```
@@ -395,8 +395,11 @@ In this section, you'll set up the two Windows systems with the puppet agent so 
    ```
 
    You should see a response in green indicating that a request for a certificate was made.
+   ```
+   Info: Creating a new SSL certificate request for win1.us-east-2.compute.internal
+   ```
 
-5. Return to the Linux puppet master.  You will need to sign the certificate request from windows1.  Type the following to show the pending certificate requests:
+5. Return to the Linux puppet master.  You will need to sign the certificate request from windows1.  Type the following to show the pending certificate requests (**Requested Certificates**):
    ```bash
    sudo /opt/puppetlabs/bin/puppetserver ca list --all
    ```
@@ -407,12 +410,23 @@ In this section, you'll set up the two Windows systems with the puppet agent so 
    sudo /opt/puppetlabs/bin/puppetserver ca sign --all
    ```
 
+   You should see a response similar to:
+   ```bash
+   Successfully signed certificate request for win1.us-east-2.compute.internal
+   ```
+
 6. Returning to the Windows system, run the Puppet agent once again in the same  Powershell session:
    ```
    & 'C:\Program Files\Puppet Labs\Puppet\bin\puppet.bat' agent -t
    ```
 
-   You might see some certificate errors in red.  To resolve for this lab, we need to manually copy over the public certificate on the puppet master and paste it into the local trusted certificate file on the windows system.
+   You might see some certificate errors in red.  This is expected for this lab setup:
+   ```
+   Error: request https://puppet.acme.local:8140//puppet-ca/v1/certificate_revocation_list/ca failed: SSL_connect returned=1 errno=0    state=error: certificate verify failed
+   Error: Could not request certificate: SSL_connect returned=1 errno=0 state=error: certificate verify failed: [unable to get issuer certificate for /CN=Puppet CA: puppet.acme.local]
+   ```
+
+   To resolve for this lab, we need to manually copy over the public certificate on the puppet master and paste it into the local trusted certificate file on the windows system.
 
    On the puppet master linux, copy the contents of this file by typing:
    ```
@@ -426,10 +440,26 @@ In this section, you'll set up the two Windows systems with the puppet agent so 
 
    Paste the entire contents of the **ca.pem** on the master server into this file and save.
 
-   Run the Puppet agent once again in the same  Powershell session and now you should see that you make it past this area with some green in which the manifest files are checked on the server for your system.  It is normal at this point that nothing is returned, since we haven't yet set up a manifest for this windows host:
+   Run the Puppet agent once again in the same  Powershell session and now you should see that you make it past this area with some green in which the catalog of changes are checked on the server for your system.  It is normal at this point that nothing is returned, since we haven't yet set up a manifest for this windows host:
    ```
    & 'C:\Program Files\Puppet Labs\Puppet\bin\puppet.bat' agent -t
    ```
+
+   You will see this:
+   ```bash
+   Info: Retrieving pluginfacts
+   Info: Retrieving plugin
+   Info: Retrieving locales
+   Error: Could not retrieve catalog from remote server: Error 500 on SERVER: Server Error: Could not find node statement with name 'default' or 'win1.us-east-2.compute.internal' on node win1.us-east-2.compute.internal
+   ```
+
+   Excellent work!  We are now ready to create a manifest on puppet master for some changes we will push.
+
+7.  Repeat the same steps for Windows2 system.  Get the public IP address from ```terraform output``` as you did before.
+
+8.  
+
+   
 
    
    
