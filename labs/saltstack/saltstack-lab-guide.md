@@ -26,19 +26,15 @@ Your lab environment consists of two Linux systems:
 
    ```bash
    sudo systemctl status salt-minion
-   ``` 
-   
-3. Configure the Salt minion to connect to the Salt master:
+   ```
 
-Edit the /etc/salt/minion configuration file:
+2. Configure the Salt minion to connect to the Salt master.  Edit the /etc/salt/minion configuration file:
 
-bash
+   ```bash
+   sudo vi /etc/salt/minion
+   ```
 
-sudo nano /etc/salt/minion
-
-Uncomment and set the master parameter to the IP address or hostname of your Salt master:
-
-bash
+   Uncomment and set the master parameter to the IP address or hostname of your Salt master:
 
 master: <Salt_Master_IP_or_Hostname>
 
