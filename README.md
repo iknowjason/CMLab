@@ -159,7 +159,17 @@ To add any Ansible playbooks, add any files to the ```files/linux/ansible/``` di
 
 ## Ansible Lab
 
-All lab commands can be found in ```files/linux/ansible/EXAMPLES.README```
+All lab example commands can be found in ```labs/ansible/ansible-examples.md```
+
+﻿## Chef Lab
+
+The Chef Lab Guide can be found in ```labs/chef/chef-lab-guide.md```
+
+## Puppet Lab
+
+The Puppet Lab Guide can be found in ```labs/puppet/chef-lab-guide.md```
+
+
 
 
 
