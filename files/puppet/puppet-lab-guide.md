@@ -325,7 +325,7 @@ In this section, you'll set up a Manifest Module for configuration changes you c
    }
    ```
 
-### Puppet Agent:  Apply the Manifest Changes
+### Puppet Linux Agent:  Apply the Manifest Changes
 
 1. On the Linux client, run the Puppet agent to apply the new configuration:
    ```bash
@@ -342,7 +342,7 @@ In this section, you'll set up a Manifest Module for configuration changes you c
    Congrats and well done!  You have successfully created and applied a manifest via Puppet.
 
 
-### Puppet Windows Agents
+### Puppet Windows Agent Setup
 
 In this section, you'll set up the two Windows systems with the puppet agent so they can be configured with manifests.  Let' dig into this and get the Windows systems setup with TLS authentication to the Puppet master server.
 
@@ -461,8 +461,88 @@ In this section, you'll set up the two Windows systems with the puppet agent so 
 
 In this section, you'll create a Windows manifest that can add windows audit logging best practices.  Let's dive in.
 
-1. On puppet master, create a manifest for Windows logging and auditing.  Run this command to generate a new module:
+1. On the Puppet master, create a new module directory structure for Windows logging and auditing:
    ```bash
+   sudo mkdir -p /etc/puppetlabs/code/environments/production/modules/windows_audit_policy/{manifests,files}
+   ```
+
+2. Create the main manifest file for the windows_audit_policy module:
+   ```bash
+   cd /etc/puppetlabs/code/environments/production/modules/windows_audit_policy
+   sudo vi manifests/init.pp
+   ```
+
+   Add the following into the init.pp file by copying and pasting:
+   ```bash
+   class windows_audit_policy {
+     exec { 'Configure Audit Policy and Process Creation Auditing':
+       command  => template('windows_audit_policy/configure_audit.ps1'),
+       provider => 'powershell',
+     }
+   }
+   ```
+
+3. Create a template for the powershell script that will be applied.  The powershell script is **configure_audit.ps1** and will be placed into the templates directory.
+   ```bash
+   sudo mkdir templates
+   ```
+
+4. Now let's edit the powershell script.
+   ```bash
+   sudo vi templates/configure_audit.ps1.erb
+   ```
+
+   Copy and paste the following into the file:
+   ```bash
+   # Enable advanced audit policy
+   auditpol /set /subcategory:"Security System Extension" /success:enable /failure:enable
+   auditpol /set /subcategory:"System Integrity" /success:enable /failure:enable
+   auditpol /set /subcategory:"Logon" /success:enable /failure:enable
+   auditpol /set /subcategory:"Logoff" /success:enable /failure:enable
+   auditpol /set /subcategory:"Account Lockout" /success:enable /failure:enable
+   auditpol /set /subcategory:"Special Logon" /success:enable /failure:enable
+   auditpol /set /subcategory:"Process Creation" /success:enable /failure:enable
+
+   # Enable command line process auditing
+   $regPath = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System\Audit"
+   if (-not (Test-Path $regPath)) {
+     New-Item -Path $regPath -Force | Out-Null
+   }
+   Set-ItemProperty -Path $regPath -Name "ProcessCreationIncludeCmdLine_Enabled" -Value 1 -Type DWord
+
+   # Enable PowerShell script block logging
+   $regPath = "HKLM:\SOFTWARE\Policies\Microsoft\Windows\PowerShell\ScriptBlockLogging"
+   if (-not (Test-Path $regPath)) {
+     New-Item -Path $regPath -Force | Out-Null
+   }
+   Set-ItemProperty -Path $regPath -Name "EnableScriptBlockLogging" -Value 1 -Type DWord
+
+   # Configure Windows Event Log sizes
+   Limit-EventLog -LogName Application -MaximumSize 1GB
+   Limit-EventLog -LogName Security -MaximumSize 1GB
+   Limit-EventLog -LogName System -MaximumSize 1GB
+
+   Write-Host "Audit policies and logging have been configured."
+   ```
+
+5. Edit the ```site.pp``` to include the new module for your Windows nodes:
+   ```bash
+   sudo vi /etc/puppetlabs/code/environments/production/manifests/site.pp
+   ```
+
+   Add the following to the file.  This will add a regular expression so that every windows host system has the following policy applied:
+   ```bash
+   node /^win\d+\.acme\.local$/ {
+     include windows_audit_policy
+   }
+   ```
+
+### Puppet Windows Agent:  Apply the Manifest Changes
+
+1. On the Windows1 or Windows2 client, ensure that you have a Windows Powershell session that is **Run as Administrator**.  Run the puppet agent:
+   ```
+   & 'C:\Program Files\Puppet Labs\Puppet\bin\puppet.bat' agent -t
+   ```
 
    
 
