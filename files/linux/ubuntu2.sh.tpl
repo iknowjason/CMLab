@@ -61,15 +61,16 @@ echo "Installing both master and minion services"
 # Install DSCv3
 echo "Installing DSCv3"
 cd /home/ubuntu
-mkdir /home/ubuntu/dsc 
+mkdir /home/ubuntu/dsc
 cd /home/ubuntu/dsc
-wget https://github.com/PowerShell/DSC/releases/download/v3.0.0-alpha.5/DSC-3.0.0-alpha.5-x86_64-unknown-linux-gnu.tar.gz
-gzip -d DSC-3.0.0-alpha.5-x86_64-unknown-linux-gnu.tar.gz
-tar xvf DSC-3.0.0-alpha.5-x86_64-unknown-linux-gnu.tar
-wget http://nz2.archive.ubuntu.com/ubuntu/pool/main/o/openssl/libssl-dev_1.1.1f-1ubuntu2.22_amd64.deb
-sudo wget http://nz2.archive.ubuntu.com/ubuntu/pool/main/o/openssl/libssl1.1_1.1.1f-1ubuntu2.22_amd64.deb
-dpkg -i libssl1.1_1.1.1f-1ubuntu2.22_amd64.deb 
-dpkg -i libssl-dev_1.1.1f-1ubuntu2.22_amd64.deb
+wget https://github.com/PowerShell/DSC/releases/download/v3.0.0-preview.8/DSC-3.0.0-preview.8-x86_64-unknown-linux-gnu.tar.gz
+gzip -d DSC-3.0.0-preview.8-x86_64-unknown-linux-gnu.tar.gz
+tar xvf DSC-3.0.0-preview.8-x86_64-unknown-linux-gnu.tar
+sudo wget http://nz2.archive.ubuntu.com/ubuntu/pool/main/o/openssl/libssl-dev_1.1.1f-1ubuntu2.23_amd64.deb
+sudo wget http://nz2.archive.ubuntu.com/ubuntu/pool/main/o/openssl/libssl1.1_1.1.1f-1ubuntu2.23_amd64.deb
+dpkg -i libssl1.1_1.1.1f-1ubuntu2.23_amd64.deb
+dpkg -i libssl-dev_1.1.1f-1ubuntu2.23_amd64.deb
+echo "export PATH=$PATH:/home/ubuntu/dsc" >> /home/ubuntu/.profile
 
 # Add an ansible user
 echo "Adding ansible user and setting password"
