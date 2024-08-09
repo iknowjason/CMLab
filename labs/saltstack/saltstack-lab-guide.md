@@ -123,6 +123,16 @@ Your lab environment consists of two Linux systems:
        - require:
          - pkg: install_auditd
 
+   audit_conf:
+     file.managed:
+       - name: /etc/audit/auditd.conf
+       - source: salt://auditd.conf
+       - user: root
+       - group: root
+       - mode: 0640
+       - require:
+         - pkg: install_auditd
+
    reload_auditd:
      cmd.run:
        - name: 'augenrules --load'
