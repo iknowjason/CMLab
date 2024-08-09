@@ -8,9 +8,11 @@ This lab guide will walk you through setting up a Saltstack environment and perf
 Your lab environment consists of:
 Two Linux servers: one for the Salt master and one for the Salt minion.
 
-## Setup
+## Lab Steps
 
-Step 1: Installing Salt Stack Master
+### Installing Salt Stack Master
+
+1. SSH into the **linux1** master by looking at output from ```terraform output```.  Installing Salt Stack Master
 
     Update the package list:
 
