@@ -58,6 +58,25 @@ In this quick lab, we will build a desired state configuration on one system  (w
    AuditPolicyConfig -OutPath "C:\DSC"
    ```
 
+   Save the file using Powershell ISE as:
+   ```bash
+   AuditPolicyConfig.ps1
+   ```
+
+3. Generate the MOF file.  Run the configuration script you just created to generate the MOF file.  You can run this using Powershell ISE by the blue powershell session that is below.  You might need to change into the default directory where the file was saved to by typing:
+
+   ```bash
+   cd Documents
+   ```
+   
+   Run the script:
+   ```bash
+   .\AuditPolicyConfig.ps1
+   ```
+
+   This will create a ```win1.mof``` file in the ```C:\DSC``` directory.
+   
+
 
 
 ## Lab 2:  DSC push between systems
