@@ -63,11 +63,7 @@ In this quick lab, we will build a desired state configuration on one system  (w
    AuditPolicyConfig.ps1
    ```
 
-3. Generate the MOF file.  Run the configuration script you just created to generate the MOF file.  You can run this using Powershell ISE by the blue powershell session that is below.  You might need to change into the default directory where the file was saved to by typing:
-
-   ```bash
-   cd Documents
-   ```
+3. Generate the MOF file.  Run the configuration script you just created to generate the MOF file.  You can run this using Powershell ISE by the blue powershell session that is below.  You might need to change into the default directory where the file was saved.
    
    Run the script:
    ```bash
@@ -81,6 +77,22 @@ In this quick lab, we will build a desired state configuration on one system  (w
    ```bash
    Start-DscConfiguration -Path "C:\DSC" -Wait -Verbose
    ```
+
+   If you receive an error of **Access Denied**, this means you didnt' start Powershell with **Run as Administrator**.  If so, open up a new Powershell session and **Run as Administrator**.  Change into the directory where you saved the file and run the script again.
+
+   YOu should see this output in the beginning and be able to track each of the three changes being applied by the Local Configuration Manager in the script:
+   ```
+   VERBOSE: Perform operation 'Invoke CimMethod' with following parameters, ''methodName' =                                SendConfigurationApply,'className' =    MSFT_DSCLocalConfigurationManager,'namespaceName' =                                root/Microsoft/Windows/DesiredStateConfiguration'.
+   ```
+
+   At the end of the run, you should  see similar to:
+   ```
+   VERBOSE: Operation 'Invoke CimMethod' complete.
+   VERBOSE: Time taken for configuration job to complete is 4.007 seconds
+   ```
+
+   Nice work!  You have successfully created and applied a local DSC configuration to win1.
+   
    
 
 
