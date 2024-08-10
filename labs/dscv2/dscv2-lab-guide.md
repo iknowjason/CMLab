@@ -28,30 +28,31 @@ In this quick lab, we will build a desired state configuration on one system  (w
 2. Write the configuration script in Powershell.  Open up **Windows Powershell ISE**.  Once the application has opened, select **File** in the menu followed by **New**.
 
    Copy and paste the following powershell into the top code editor area:
+   
    ```bash
    Configuration AuditPolicyConfig {
-      Node "win1" {
-         Registry LogonAudit {
-            Key = "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Audit\AuditPolicy\Subsystem"
-            ValueName = "Logon"
-            ValueType = "Dword"
-            ValueData = "3"
-            Ensure = "Present"
-         }
-         Registry ObjectAccessAudit {
-            Key = "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Audit\AuditPolicy\Subsystem"
-            ValueName = "File System"
-            ValueType = "Dword"
-            ValueData = "3" 
-            Ensure = "Present"
-         }
-         Registry ProcessCreationAudit {
-            ValueName = "AuditProcessCreation"
-            ValueType = "Dword"
-            ValueData = "1" 
-            Ensure = "Present"
-         }
+     Node "win1" {
+       Registry LogonAudit {
+         Key = "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Audit\AuditPolicy\Subsystem"
+         ValueName = "Logon"
+         ValueType = "Dword"
+         ValueData = "3"
+         Ensure = "Present"
       }
+      Registry ObjectAccessAudit {
+         Key = "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Audit\AuditPolicy\Subsystem"
+         ValueName = "File System"
+         ValueType = "Dword"
+         ValueData = "3" 
+         Ensure = "Present"
+      }
+      Registry ProcessCreationAudit {
+         ValueName = "AuditProcessCreation"
+         ValueType = "Dword"
+         ValueData = "1" 
+         Ensure = "Present"
+      }
+     }
    }
    AuditPolicyConfig -OutputPath "C:\DSC"
    ```
