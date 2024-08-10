@@ -28,7 +28,7 @@ In this quick lab, we will build a desired state configuration on one system  (w
    ping win2
    ```
 
-   You should see success.  This is important, because the DNS entries are added to the Windows hosts file that are important to all of the labs, allowing name resolution between win1 and win2 systems.
+   You should see name resolution working, but firewall will block ping.  This is important, because the host entries are added to the Windows hosts file that are important to all of the labs, allowing name resolution between win1 and win2 systems.
 
 1. Write the configuration script in Powershell.  Open up **Windows Powershell ISE** and **Run as Administrator** by right clicking on the GUI.  Once the application has opened, select **File** in the menu followed by **New**.
 
