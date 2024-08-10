@@ -135,7 +135,7 @@ In this quick lab, you will push DSC changes from **win1** to **win2**.  This is
    Start-DscConfiguration -Path "C:\DSC" -ComputerName "Win2" -Wait -Verbose
    ```
 
-   You are able to track the output and see the configuration changes applied to the remote system with the ```-Verbose``` flag.  You now should have gained some knowledge on how to push DSC configurations to remote systems.  Nice job.  In the next section, we will setup a pull configuration and practice a lab.
+   You are able to track the output and see the configuration changes applied to the remote system with the ```-Verbose``` flag.  You now should have gained some knowledge on how to push DSC configurations to remote systems.  Nice job.  In the next section, we will setup a pull configuration and practice a lab with a more common production use case.
    
 
 ## Lab 3:  DSC pull between systems
