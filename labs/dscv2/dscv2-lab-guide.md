@@ -23,9 +23,14 @@ In this quick lab, we will build a desired state configuration on one system  (w
    End of bootstrap powershell script
    ```
 
-   This is important, because the DNS entries are added to the Windows hosts file that are important to all of the labs, allowing name resolution between win1 and win2 systems.
+   Do a quick ping test from win1 to win2.  Open up a cmd or pwsh prompt and type:
+   ```
+   ping win2
+   ```
 
-2. Write the configuration script in Powershell.  Open up **Windows Powershell ISE** and **Run as Administrator** by right clicking on the GUI.  Once the application has opened, select **File** in the menu followed by **New**.
+   You should see success.  This is important, because the DNS entries are added to the Windows hosts file that are important to all of the labs, allowing name resolution between win1 and win2 systems.
+
+1. Write the configuration script in Powershell.  Open up **Windows Powershell ISE** and **Run as Administrator** by right clicking on the GUI.  Once the application has opened, select **File** in the menu followed by **New**.
 
    Copy and paste the following powershell into the top code editor area:
    
@@ -63,7 +68,7 @@ In this quick lab, we will build a desired state configuration on one system  (w
    AuditPolicyConfig.ps1
    ```
 
-3. Generate the MOF file.  Run the configuration script you just created to generate the MOF file.  You can run this using Powershell ISE by the blue powershell session that is below.  You might need to change into the default directory where the file was saved.
+2. Generate the MOF file.  Run the configuration script you just created to generate the MOF file.  You can run this using Powershell ISE by the blue powershell session that is below.  You might need to change into the default directory where the file was saved.
    
    Run the script:
    ```bash
@@ -72,7 +77,7 @@ In this quick lab, we will build a desired state configuration on one system  (w
 
    This will create a ```win1.mof``` file in the ```C:\DSC``` directory and you should see output showing this artifact.  Nice job.  In the script you should see that the targetNode is listed as "win1".  When you use DSC, the target node name must match in order for DSC to apply the changes.
 
-4. Apply the MOF file on the Target Node (win1).  You can now apply the MOF file to the target node using the powershell command:
+3. Apply the MOF file on the Target Node (win1).  You can now apply the MOF file to the target node using the powershell command:
 
    ```bash
    Start-DscConfiguration -Path "C:\DSC" -Wait -Verbose
@@ -93,9 +98,12 @@ In this quick lab, we will build a desired state configuration on one system  (w
 
    Nice work!  You have successfully created and applied a local DSC configuration to win1.
    
-   
-
 
 ## Lab 2:  DSC push between systems
+In this quick lab, you will push DSC changes from **win1** to **win2**.  This is a more common use case for development and debugging.  Not production, where you will use a DSC pull from a DSC server in the next lab.  Let's dive in.
+
+1. On **win1**, ensure that you have already successfully completed lab 1.
+
+2. RDP into **win2** which will be the DSC client receiving the push from **win1**.  Follow the previous instructions for RDP by looking at the output from ```terraform output``` and ensure that you  
 
 ## Lab 3:  DSC pull between systems
