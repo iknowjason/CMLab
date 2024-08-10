@@ -19,7 +19,7 @@ In this quick lab, we will build a desired state configuration on one system  (w
    ```
 
    When the system has finished bootstrapping, you will see this line:
-   ```
+   ```bash
    End of bootstrap powershell script
    ```
 
@@ -32,6 +32,7 @@ In this quick lab, we will build a desired state configuration on one system  (w
    ```bash
    Configuration AuditPolicyConfig {
      Node "win1" {
+   ```
        Registry LogonAudit {
          Key = "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Audit\AuditPolicy\Subsystem"
          ValueName = "Logon"
@@ -55,7 +56,7 @@ In this quick lab, we will build a desired state configuration on one system  (w
      }
    }
    AuditPolicyConfig -OutputPath "C:\DSC"
-   ```
+   
 
 ## Lab 2:  DSC push between systems
 
