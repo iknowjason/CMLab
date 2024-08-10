@@ -55,7 +55,7 @@ In this quick lab, we will build a desired state configuration on one system  (w
          }
       }
    }
-   AuditPolicyConfig -OutPath "C:\DSC"
+   AuditPolicyConfig -OutputPath "C:\DSC"
    ```
 
    Save the file using Powershell ISE as:
