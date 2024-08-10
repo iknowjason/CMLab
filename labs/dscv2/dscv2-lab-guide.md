@@ -1,13 +1,14 @@
 # DSCv2 Configuration Management
 
 ## Introduction
-This lab guide will walk you through setting up a Saltstack environment and performing configuration management tasks between a Linux Salt master and a salt minion running on linux.  You will install and configure a Salt Stack master on a Linux server and a Salt minion on another Linux server. You will then apply a configuration change using Salt to install and configure auditd on the minion.
+Desired State Configuration (DSC) is a PowerShell-based configuration management system developed by Microsoft. It allows you to define and enforce the desired state of a system by declaring the configuration as code. DSC version 2 (DSCv2) is an enhanced version of the original DSC that provides improved performance, scalability, and additional features.
+This lab guide will walk you through three DSC labs using two Windows systems.  
 
 ## Lab Environment
 Your lab environment consists of two Linux systems:
 
-- Salt master (linux1)
-- Salt minion (linux2)
+- DSC server (win1)
+- DSC client (win2)
 
 ## Lab 1:  DSC on single system
 
