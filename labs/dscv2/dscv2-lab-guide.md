@@ -121,12 +121,19 @@ In this quick lab, you will push DSC changes from **win1** to **win2**.  This is
    Set-DscLocalConfigurationManager -Path "C:\DSC\LCMConfig"
    ```
 
-   In the output area, you will see a directory of ``` Directory: C:\DSC\LCMConfig``` with a filename created of ```win2.meta.mof```.  Nice job.  The LCM on win2 is now ready to accept DSC configurations as **Push** from remote, authenticated systems.
+   In the output area, you will see a directory of ``` Directory: C:\DSC\LCMConfig``` with a filename created of ```win2.meta.mof```.  Nice job.  The LCM on win2 is now ready to accept DSC configurations as **Push** from remote, authenticated sessions.
 
-4. Generate and prepare the MOF file on **win1**.  Back on the **win1** RDP session, look at the previous lab file you had created, named ```win1.mof```.  YOu need to have a file in the ```C:\DSC``` directory called ```win2.mof``` that will be pushed to the remote system.  To do this, you have two options.  You can simply rename the previous file from ```win1.mof``` to ```win2.mof```.  Or you can change the Targetnode parameter in the script to be ```win2``` and run ```.`AuditPolicyConfig.ps1``` once again.  It will generate ```win2.mof```.  To make this easy, let's just rename ```win1.mof``` to be ```win2.mof```:
+4. Generate and prepare the MOF file on **win1**.  Back on the **win1** RDP session, look at the previous lab file you had created, named ```win1.mof```.  YOu need to have a file in the ```C:\DSC``` directory called ```win2.mof``` that will be pushed to the remote system.  To do this, you have two options.  You can simply rename the previous file from ```win1.mof``` to ```win2.mof```.  Or you can change the Targetnode parameter in the script to be ```win2``` and run ```.\AuditPolicyConfig.ps1``` once again.  It will generate ```win2.mof```.  To make this easy, let's just rename ```win1.mof``` to be ```win2.mof```:
    
    ```bash
    Rename-Item -Path "C:\DSC\win1.mof" -NewName "Win2.mof"
    ```
+
+5. PUsh the configuration from **win1** to **win2**.  Use the ```Start-DscConfiguration``` powershell cmdlet on **win1** to push the configuration to **win2**.  In the command, you pass a **ComputerName** parameter to specify that the configuration should be applied to the remote computer ```win2```.
+
+   ```bash
+   Start-DscConfiguration -Path "C:\DSC" -ComputerName "Win2" -Wait -Verbose
+   ```
+   
 
 ## Lab 3:  DSC pull between systems
