@@ -74,9 +74,8 @@ In this quick lab, we will build a desired state configuration on one system  (w
    .\AuditPolicyConfig.ps1
    ```
 
-   This will create a ```win1.mof``` file in the ```C:\DSC``` directory.
+   This will create a ```win1.mof``` file in the ```C:\DSC``` directory and you should see output showing this artifact.  Nice job.  In the script you should see that the targetNode is listed as "win1".  When you use DSC, the target node name must match in order for DSC to apply the changes.
    
-
 
 
 ## Lab 2:  DSC push between systems
