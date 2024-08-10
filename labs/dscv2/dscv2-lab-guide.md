@@ -75,6 +75,12 @@ In this quick lab, we will build a desired state configuration on one system  (w
    ```
 
    This will create a ```win1.mof``` file in the ```C:\DSC``` directory and you should see output showing this artifact.  Nice job.  In the script you should see that the targetNode is listed as "win1".  When you use DSC, the target node name must match in order for DSC to apply the changes.
+
+4. Apply the MOF file on the Target Node (win1).  You can now apply the MOF file to the target node using the powershell command:
+
+   ```bash
+   Start-DscConfiguration -Path "C:\DSC" -Wait -Verbose
+   ```
    
 
 
