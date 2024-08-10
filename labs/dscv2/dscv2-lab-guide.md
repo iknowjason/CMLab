@@ -1,4 +1,4 @@
-# DSCv2 Configuration Management Lab Guide
+# DSCv2 Configuration Management
 Lab Overview
 
 In this lab, you will install and configure a Salt Stack master on a Linux server and a Salt minion on another Linux server. You will then apply a configuration change using Salt to install and configure auditd on the minion.
