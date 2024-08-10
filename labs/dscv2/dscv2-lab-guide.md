@@ -13,17 +13,54 @@ Your lab environment consists of two Linux systems:
 ## Lab 1:  DSC on single system
 In this quick lab, we will build a desired state configuration on one system  (win1) and make the DSC changes locally.
 
-1.  RDP into the **win1** system using the credentials and public IP address from ```terraform output```.  Use the local Administrator username and password.  After you RDP in, navigate the following file and make sure that the system has finished bootstrapping:
-    ```bash
-    C:\terraform\user_data.log
-    ```
+1. RDP into the **win1** system using the credentials and public IP address from ```terraform output```.  Use the local Administrator username and password.  After you RDP in, navigate the following file and make sure that the system has finished bootstrapping:
+   ```bash
+   C:\terraform\user_data.log
+   ```
 
-    When the system has finished bootstrapping, you will see this line:
-    ```
-    End of bootstrap powershell script
-    ```
+   When the system has finished bootstrapping, you will see this line:
+   ```
+   End of bootstrap powershell script
+   ```
 
-    This is important, because the DNS entries are added to the Windows hosts file that are important to all of the labs, allowing resolution between win1 and win2 systems.
+   This is important, because the DNS entries are added to the Windows hosts file that are important to all of the labs, allowing name resolution between win1 and win2 systems.
+
+2. Write the configuration script in Powershell.  Open up **Windows Powershell ISE**.  Once the application has opened, select **File** in the menu followed by **New**.
+
+   Copy and paste the following powershell into the top code editor area:
+   ```
+    Configuration AuditPolicyConfig {
+
+        Node "win1" {
+
+            Registry LogonAudit {
+                Key = "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Audit\AuditPolicy\Subsystem"
+                ValueName = "Logon"
+                ValueType = "Dword"
+                ValueData = "3"
+                Ensure = "Present"
+            }
+
+            Registry ObjectAccessAudit {
+                Key = "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Audit\AuditPolicy\Subsystem"
+                ValueName = "File System"
+                ValueType = "Dword"
+                ValueData = "3" 
+                Ensure = "Present"
+            }
+
+            Registry ProcessCreationAudit {
+                ValueName = "AuditProcessCreation"
+                ValueType = "Dword"
+                ValueData = "1" 
+                Ensure = "Present"
+            }
+        }
+    }
+
+    AuditPolicyConfig -OutputPath "C:\DSC"
+    ```
+   
 
 ## Lab 2:  DSC push between systems
 
