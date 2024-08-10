@@ -46,20 +46,19 @@ In this quick lab, we will build a desired state configuration on one system  (w
             ValueData = "3"
             Ensure = "Present"
          }
-            
-                 
+         Registry ProcessCreationAudit {
+            Key = "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Lsa"
+            ValueName = "AuditProcessCreation"
+            ValueType = "Dword"
+            ValueData = "1"
+            Ensure = "Present"
+         }
+      }
+   }
+   AuditPolicyConfig -OutPath "C:\DSC"
    ```
 
-      Registry ProcessCreationAudit {
-         ValueName = "AuditProcessCreation"
-         ValueType = "Dword"
-         ValueData = "1" 
-         Ensure = "Present"
-      }
-     }
-   }
-   AuditPolicyConfig -OutputPath "C:\DSC"
-   
+
 
 ## Lab 2:  DSC push between systems
 
