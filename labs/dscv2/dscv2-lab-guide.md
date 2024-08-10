@@ -129,11 +129,13 @@ In this quick lab, you will push DSC changes from **win1** to **win2**.  This is
    Rename-Item -Path "C:\DSC\win1.mof" -NewName "Win2.mof"
    ```
 
-5. PUsh the configuration from **win1** to **win2**.  Use the ```Start-DscConfiguration``` powershell cmdlet on **win1** to push the configuration to **win2**.  In the command, you pass a **ComputerName** parameter to specify that the configuration should be applied to the remote computer ```win2```.
+5. Push the configuration from **win1** to **win2**.  Use the ```Start-DscConfiguration``` powershell cmdlet on **win1** to push the configuration to **win2**.  In the command, you pass a **ComputerName** parameter to specify that the configuration should be applied to the remote computer ```win2```.
 
    ```bash
    Start-DscConfiguration -Path "C:\DSC" -ComputerName "Win2" -Wait -Verbose
    ```
+
+   You are able to track the output and see the configuration changes applied to the remote system with the ```-Verbose``` flag.  You now should have gained some knowledge on how to push DSC configurations to remote systems.  Nice job.  In the next section, we will setup a pull configuration and practice a lab.
    
 
 ## Lab 3:  DSC pull between systems
