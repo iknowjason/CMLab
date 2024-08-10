@@ -28,11 +28,9 @@ In this quick lab, we will build a desired state configuration on one system  (w
 2. Write the configuration script in Powershell.  Open up **Windows Powershell ISE**.  Once the application has opened, select **File** in the menu followed by **New**.
 
    Copy and paste the following powershell into the top code editor area:
-   ```
+   ```bash
     Configuration AuditPolicyConfig {
-
         Node "win1" {
-
             Registry LogonAudit {
                 Key = "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Audit\AuditPolicy\Subsystem"
                 ValueName = "Logon"
@@ -40,7 +38,6 @@ In this quick lab, we will build a desired state configuration on one system  (w
                 ValueData = "3"
                 Ensure = "Present"
             }
-
             Registry ObjectAccessAudit {
                 Key = "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Audit\AuditPolicy\Subsystem"
                 ValueName = "File System"
@@ -48,7 +45,6 @@ In this quick lab, we will build a desired state configuration on one system  (w
                 ValueData = "3" 
                 Ensure = "Present"
             }
-
             Registry ProcessCreationAudit {
                 ValueName = "AuditProcessCreation"
                 ValueType = "Dword"
@@ -57,10 +53,8 @@ In this quick lab, we will build a desired state configuration on one system  (w
             }
         }
     }
-
     AuditPolicyConfig -OutputPath "C:\DSC"
     ```
-   
 
 ## Lab 2:  DSC push between systems
 
