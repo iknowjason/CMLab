@@ -39,29 +39,17 @@ In this quick lab, we will build a desired state configuration on one system  (w
             ValueData = "3"
             Ensure = "Present"
          }
-         Registry LogonAudit {
+         Registry ObjectAccessAudit {
             Key = "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Audit\AuditPolicy\Subsystem"
-            ValueName = "Logon"
-            ValueType = "Dword"
-            ValueData = "3"
-            Ensure = "Present"
+            ValueName = "File System"
+            ValueType = "Dword"
+            ValueData = "3"
+            Ensure = "Present"
          }
+            
                  
    ```
-       Registry LogonAudit {
-         Key = "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Audit\AuditPolicy\Subsystem"
-         ValueName = "Logon"
-         ValueType = "Dword"
-         ValueData = "3"
-         Ensure = "Present"
-      }
-      Registry ObjectAccessAudit {
-         Key = "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Audit\AuditPolicy\Subsystem"
-         ValueName = "File System"
-         ValueType = "Dword"
-         ValueData = "3" 
-         Ensure = "Present"
-      }
+
       Registry ProcessCreationAudit {
          ValueName = "AuditProcessCreation"
          ValueType = "Dword"
