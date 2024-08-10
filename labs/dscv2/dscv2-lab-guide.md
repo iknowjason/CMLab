@@ -104,6 +104,21 @@ In this quick lab, you will push DSC changes from **win1** to **win2**.  This is
 
 1. On **win1**, ensure that you have already successfully completed lab 1.
 
-2. RDP into **win2** which will be the DSC client receiving the push from **win1**.  Follow the previous instructions for RDP by looking at the output from ```terraform output``` and ensure that you  
+2. RDP into **win2** which will be the DSC client receiving the push from **win1**.  Follow the previous instructions for RDP by looking at the output from ```terraform output``` and ensure that you use the local Administrator account.
+
+3. Open up a powershell session and **Run as Administrator**.  Configure ```win2``` to accept DSC configurations by setting the LCM (Local Configuration Manager) mode to ApplyAndAutoCorrect or ApplyAndMonitor.  This can be done with the following command which can be copy and pasted into the powershell session:
+   ```bash
+   [DSCLocalConfigurationManager()] 
+   configuration LCMConfig { 
+	   Node "Win2" { 
+		   Settings { 
+			   RefreshMode = "Push" 
+			   ConfigurationMode = "ApplyAndAutoCorrect" 
+		   } 
+	   } 
+   } 
+   LCMConfig -OutputPath "C:\DSC\LCMConfig" 
+   Set-DscLocalConfigurationManager -Path "C:\DSC\LCMConfig"
+   ```
 
 ## Lab 3:  DSC pull between systems
