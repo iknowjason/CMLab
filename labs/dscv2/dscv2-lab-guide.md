@@ -32,6 +32,14 @@ In this quick lab, we will build a desired state configuration on one system  (w
    ```bash
    Configuration AuditPolicyConfig {
      Node "win1" {
+         Registry LogonAudit {
+         Key = "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Audit\AuditPolicy\Subsystem"
+         ValueName = "Logon"
+         ValueType = "Dword"
+         ValueData = "3"
+         Ensure = "Present"
+      }
+       
    ```
        Registry LogonAudit {
          Key = "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Audit\AuditPolicy\Subsystem"
