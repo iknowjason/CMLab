@@ -121,5 +121,14 @@ echo "git clone ansible-lockdown for WS2022 repo"
 git clone https://github.com/ansible-lockdown/Windows-2022-CIS.git 
 cp winhosts Windows-2022-CIS/.
 
+# Adding /etc/hosts
+echo "Adding /etc/hosts for default domain"
+echo "${lin1_ip} puppet.${domain} puppet" >> /etc/hosts
+echo "${lin1_ip} chef.${domain} chef" >> /etc/hosts
+echo "${lin1_ip} salt.${domain} salt" >> /etc/hosts
+echo "${lin2_ip} lin2.${domain} lin2" >> /etc/hosts
+echo "${win1_ip} win1.${domain} win1" >> /etc/hosts
+echo "${win2_ip} win2.${domain} win2" >> /etc/hosts
+
 echo "End of bootstrap script"
 

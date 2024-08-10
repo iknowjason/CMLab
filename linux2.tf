@@ -52,6 +52,9 @@ resource "aws_instance" "linux2" {
   key_name               = module.key_pair.key_pair_name 
   vpc_security_group_ids = [aws_security_group.linux_ingress.id, aws_security_group.linux_ssh_ingress.id, aws_security_group.linux_allow_all_internal.id]
 
+  # Set the static private IP address
+  private_ip = cidrhost(var.user_subnet_prefix, 11)
+
   connection {
     type        = "ssh"
     user        = "ubuntu"
@@ -82,6 +85,13 @@ data "template_file" "linux2" {
     linux_os           = "ubuntu"
     ansible_linux_user = var.ansible_linux_user
     ansible_linux_pass = var.ansible_linux_pass 
+    domain            = var.default_domain
+    #lin1_ip           = aws_instance.linux1.private_ip 
+    #lin2_ip           = aws_instance.linux1.private_ip 
+    lin1_ip           = cidrhost(var.user_subnet_prefix, 10)
+    lin2_ip           = cidrhost(var.user_subnet_prefix, 11)
+    win1_ip           = aws_instance.win1.private_ip
+    win2_ip           = aws_instance.win2.private_ip
   }
 }
 

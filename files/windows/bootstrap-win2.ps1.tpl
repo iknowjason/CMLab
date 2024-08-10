@@ -197,6 +197,20 @@ lwrite("Very Silent install of VSCode")
 # Or just double-click on the VSCodeUserSetup-x64.exe
 Start-Process -Wait -FilePath "C:\terraform\VSCodeUserSetup-x64.exe" -ArgumentList "/VERYSILENT /NORESTART /MERGETASKS=!runcode"
 
+# adjust the hosts file
+lwrite("Adding to hosts file")
+$hostsPath = "$env:SystemRoot\System32\drivers\etc\hosts"
+$entries = @"
+${lin1_ip} puppet.${domain} puppet
+${lin1_ip} chef.${domain} chef
+${lin1_ip} salt.${domain} salt
+${lin2_ip} lin2.${domain} lin2
+${win1_ip} win1.${domain} win1
+${win2_ip} win2.${domain} win2
+"@
+
+Add-Content -Path $hostsPath -Value $entries
+
 lwrite("End of bootstrap powershell script")
 
 </powershell>

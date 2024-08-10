@@ -2,6 +2,10 @@ variable "vpc_cidr" {
   default = "10.100.0.0/16"
 }
 
+variable "default_domain" {
+  default = "example.local"
+}
+
 # Create vpc
 resource "aws_vpc" "operator" {
   cidr_block           = var.vpc_cidr 

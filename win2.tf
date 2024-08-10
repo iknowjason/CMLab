@@ -53,6 +53,9 @@ resource "aws_instance" "win2" {
     aws_security_group.operator_windows.id
   ]
 
+  # Set the static private IP address
+  private_ip = cidrhost(var.user_subnet_prefix, 13)
+
   
   
   root_block_device {
@@ -70,7 +73,7 @@ resource "aws_instance" "win2" {
 data "template_file" "ps_template_win2" {
   template = file("${path.module}/files/windows/bootstrap-win2.ps1.tpl")
 
-  vars  = {
+  vars = {
     hostname                  = var.win2_hostname 
     ad_domain                 = var.ad_domain_win2
     admin_username            = var.admin-username-win2
@@ -80,6 +83,11 @@ data "template_file" "ps_template_win2" {
     script_files              = join(",", local.script_files_win)
     s3_bucket                 = "${aws_s3_bucket.staging.id}"
     region                    = var.region
+    domain            = var.default_domain
+    lin1_ip           = cidrhost(var.user_subnet_prefix, 10)
+    lin2_ip           = cidrhost(var.user_subnet_prefix, 11)
+    win1_ip           = cidrhost(var.user_subnet_prefix, 12)
+    win2_ip           = cidrhost(var.user_subnet_prefix, 13)
   }
 }
 

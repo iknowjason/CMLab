@@ -86,6 +86,13 @@ echo "Enable sshd password authentication"
 sed -i 's/^PasswordAuthentication no/PasswordAuthentication yes/' /etc/ssh/sshd_config.d/60-cloudimg-settings.conf
 service ssh restart
 
+# Adding /etc/hosts
+echo "Adding /etc/hosts for default domain"
+echo "${lin1_ip} puppet.${domain} puppet" >> /etc/hosts
+echo "${lin1_ip} chef.${domain} chef" >> /etc/hosts
+echo "${lin1_ip} salt.${domain} salt" >> /etc/hosts
+echo "${lin2_ip} lin2.${domain} lin2" >> /etc/hosts
+echo "${win1_ip} win1.${domain} win1" >> /etc/hosts
+echo "${win2_ip} win2.${domain} win2" >> /etc/hosts
 
 echo "End of bootstrap script"
-
