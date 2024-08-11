@@ -152,7 +152,7 @@ In this next section, you will configure ```win1``` to be a pull server and set 
    ﻿Install-Module -Name xPSDesiredStateConfiguration -Repository PSGallery -Force
    ```
 
-3. Next, configure the DSC pull server on ```win1```.  Create a new powershell script to set up this service.  This script sets up two endpoints:  One for pulling configurations (PSDSCPullServer) and another for compliance reporting (PSDSCComplianceServer).  The pull server listens on port 8080 and is set to use unencrypted traffic by default (only for testing purposes):
+2. Next, configure the DSC pull server on ```win1```.  Create a new powershell script to set up this service.  This script sets up two endpoints:  One for pulling configurations (PSDSCPullServer) and another for compliance reporting (PSDSCComplianceServer).  The pull server listens on port 8080 and is set to use unencrypted traffic by default (only for testing purposes):
    ```bash
    Configuration DSC_PullServer {
    	param (
@@ -197,4 +197,17 @@ In this next section, you will configure ```win1``` to be a pull server and set 
 
    Start-DscConfiguration -Path "C:\DSC\PullServer" -Wait -Verbose
    ```
+
+   3. Now you need to generate the DSC Configurations that will be pulled from ```win1```.  In the previous lab 1, you had already generated a MOF file.  Copy the generated ```win2.mof``` to the Pull Server's configuration path:
+
+      ```bash
+      Copy-Item -Path "C:\DSC\Configurations\win2.mof" -Destination "$env:PROGRAMFILES\WindowsPowerShell\DscService\Configuration"
+      ```
+
+      Generate a checksum for the MOF file:
+      ```bash
+      New-DscChecksum -ConfigurationPath "$env:PROGRAMFILES\WindowsPowerShell\DscService\Configuration" -Force
+      ```
+
+      
    
