@@ -40,7 +40,7 @@ In this section, you'll set up the Chef Server on your Linux master server.  Thi
 
 2. On **linux1** system:  Set up a hostname on the linux system for puppet server.
    ```bash
-   sudo hostnamectl set-hostname puppet.acme.local
+   sudo hostnamectl set-hostname puppet.example.local
    ```
 
    Set up the ```/etc/hosts``` file to include the fqdn and private IP address.  You can get the private IP address for lin1 via ifconfig or terraform outputs:
@@ -50,7 +50,7 @@ In this section, you'll set up the Chef Server on your Linux master server.  Thi
 
    For my example, I am adding the line with private IP address of ```10.100.20.204```:
    ```bash
-   10.100.20.204 puppet.acme.local puppet
+   10.100.20.204 puppet.example.local puppet
    ```
 
    Reboot your lin1 Puppet master server by typing **sudo reboot**.
@@ -58,7 +58,7 @@ In this section, you'll set up the Chef Server on your Linux master server.  Thi
    sudo reboot
    ```
 
-4. Generate a self-signed certificate for the Puppet Master with the FQDN ```puppet.acme.local``` and restart the Puppet Master service telling it to use the new certificate.  Let's walk through the process.
+4. Generate a self-signed certificate for the Puppet Master with the FQDN ```puppet.example.local``` and restart the Puppet Master service telling it to use the new certificate.  Let's walk through the process.
 
    We will now generate a default SSL certificate.  First, we'll delete the default certificate path:
    ```bash
@@ -74,8 +74,8 @@ In this section, you'll set up the Chef Server on your Linux master server.  Thi
    Add this content into the end of the file:
    ```bash
    [main]
-   certname = puppet.acme.local
-   server = puppet.acme.local
+   certname = puppet.example.local
+   server = puppet.example.local
    ```
 
    Generate a CA with the following commands.  This will create a default certificate with the certname listed from **puppet.conf**.
@@ -103,7 +103,7 @@ We are going to set up the Puppet agent system for mutual TLS authentication, so
 
 1. On **linux2** system:  Set up a hostname on the linux system for the puppet agent to have a FQDN for certificates.
    ```bash
-   sudo hostnamectl set-hostname lin2.acme.local
+   sudo hostnamectl set-hostname lin2.example.local
    ```
 
    Set up the /etc/hosts file to include the fqdn and private IP address for both **puppet** (lin1) and pupper agent (lin2).  You can get the private IP address for lin12 via ifconfig or terraform outputs:
@@ -113,11 +113,11 @@ We are going to set up the Puppet agent system for mutual TLS authentication, so
 
    For my example, I am adding the line with private IP address of ```10.100.20.204```:
    ```bash
-   10.100.20.204 puppet.acme.local puppet
-   10.100.20.170 lin2.acme.local lin2
+   10.100.20.204 puppet.example.local puppet
+   10.100.20.170 lin2.example.local lin2
    ```
 
-   Now you should be able to successfully ping **puppet.acme.local**!
+   Now you should be able to successfully ping **puppet.example.local**!
 
    Reboot your lin2 Puppet agent system by typing **sudo reboot**.  This will ensure all changes take effect.
 
@@ -133,8 +133,8 @@ We are going to set up the Puppet agent system for mutual TLS authentication, so
    Add the **[main]** section to the end of the file:
    ```bash
    [main]
-   certname = lin2.acme.local
-   server = puppet.acme.local
+   certname = lin2.example.local
+   server = puppet.example.local
    ```
    This tells the puppet agent the local certificate that will be used as well as the puppet server to communicate with.
 
@@ -150,8 +150,8 @@ We are going to set up the Puppet agent system for mutual TLS authentication, so
 
    It is normal to see the following response, since the server is not automatically signing certificate requests:
    ```bash
-   Info: Certificate for lin2.acme.local has not been signed yet
-   Couldn't fetch certificate from CA server; you might still need to sign this agent's certificate (lin2.acme.local).
+   Info: Certificate for lin2.example.local has not been signed yet
+   Couldn't fetch certificate from CA server; you might still need to sign this agent's certificate (lin2.example.local).
    Exiting now because the waitforcert setting is set to 0.
    ```
 
@@ -163,7 +163,7 @@ We are going to set up the Puppet agent system for mutual TLS authentication, so
    You should see the pending certificate from lin2:
    ```bash
    Requested Certificates:
-    lin2.acme.local
+    lin2.example.local
    ```
 
    Sign all pending requests:
@@ -173,7 +173,7 @@ We are going to set up the Puppet agent system for mutual TLS authentication, so
 
    You should see this response:
    ```bash
-   Successfully signed certificate request for lin2.acme.local
+   Successfully signed certificate request for lin2.example.local
    ```
 
    Back on **lin2** chef agent, run the puppet agent command again to fetch a certificate from the server:
@@ -183,7 +183,7 @@ We are going to set up the Puppet agent system for mutual TLS authentication, so
 
    You should see a line with the response of:
    ```bash
-   Info: Downloaded certificate for lin2.acme.local from https://puppet.acme.local:8140/puppet-ca/v1
+   Info: Downloaded certificate for lin2.example.local from https://puppet.example.local:8140/puppet-ca/v1
    ```
 
    Nice job!  You are now ready for Configuration Management as Code:  That is, creating a manifest / module to pull configuration changes to the puppet agent!
@@ -320,7 +320,7 @@ In this section, you'll set up a Manifest Module for configuration changes you c
 
    Modify the node definition for your linux client named **lin2**:
    ```bash
-   node 'lin2.acme.local' {
+   node 'lin2.example.local' {
      include auditd
    }
    ```
@@ -369,7 +369,7 @@ In this section, you'll set up the two Windows systems with the puppet agent so 
    Edit the main section already included to allow the correct server for the puppet master server:
    ```
    [main]
-   server = puppet.acme.local
+   server = puppet.example.local
    ```
    Save when you are done but keep Notepad open (you'll be using it again in the next step).  This will ensure that the puppet agent will attempt TLS authentication with your server.
 
@@ -380,9 +380,9 @@ In this section, you'll set up the two Windows systems with the puppet agent so 
 
    Add the following line, adapting to the correct puppet linux master server.  For my example, it is 10.100.20.37.  Yours will be different.
    ```bash
-   10.100.20.37 puppet.acme.local
+   10.100.20.37 puppet.example.local
    ```
-   Save the file when you are done.  From a cmd prompt in Windows, you should be able to resolve and ping **puppet.acme.local**
+   Save the file when you are done.  From a cmd prompt in Windows, you should be able to resolve and ping **puppet.example.local**
 
 4. Open up a new ```Windows Powershell``` session and *Run as Administrator**.  Start the puppet service:
    ```bash
@@ -422,8 +422,8 @@ In this section, you'll set up the two Windows systems with the puppet agent so 
 
    You might see some certificate errors in red.  This is expected for this lab setup:
    ```
-   Error: request https://puppet.acme.local:8140//puppet-ca/v1/certificate_revocation_list/ca failed: SSL_connect returned=1 errno=0    state=error: certificate verify failed
-   Error: Could not request certificate: SSL_connect returned=1 errno=0 state=error: certificate verify failed: [unable to get issuer certificate for /CN=Puppet CA: puppet.acme.local]
+   Error: request https://puppet.example.local:8140//puppet-ca/v1/certificate_revocation_list/ca failed: SSL_connect returned=1 errno=0    state=error: certificate verify failed
+   Error: Could not request certificate: SSL_connect returned=1 errno=0 state=error: certificate verify failed: [unable to get issuer certificate for /CN=Puppet CA: puppet.example.local]
    ```
 
    To resolve for this lab, we need to manually copy over the public certificate on the puppet master and paste it into the local trusted certificate file on the windows system.
