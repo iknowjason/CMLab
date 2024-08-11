@@ -201,7 +201,7 @@ In this next section, you will configure ```win1``` to be a pull server and set 
 3. Now you need to generate the DSC Configurations that will be pulled from ```win1```.  In the previous lab 1, you had already generated a MOF file.  Copy the generated ```win2.mof``` to the Pull Server's configuration path:
 
    ```bash
-   Copy-Item -Path "C:\DSC\Configurations\win2.mof" -Destination "$env:PROGRAMFILES\WindowsPowerShell\DscService\Configuration"
+   Copy-Item -Path "C:\DSC\win2.mof" -Destination "$env:PROGRAMFILES\WindowsPowerShell\DscService\Configuration"
    ```
 
    Generate a checksum for the MOF file:
