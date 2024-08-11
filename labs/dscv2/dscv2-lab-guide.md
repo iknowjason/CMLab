@@ -158,9 +158,11 @@ In this next section, you will configure ```win1``` to be a pull server and set 
    	param (
    		[string[]]$NodeName = 'localhost',
         	[string]$certificateThumbprint = 'AllowUnencryptedTraffic'
+   		[string] $RegistrationKey
     	)
 
     Import-DscResource -ModuleName xPSDesiredStateConfiguration
+    Import-DSCResource -ModuleName PSDesiredStateConfiguration
 
     Node $NodeName {
         WindowsFeature DSCServiceFeature {
