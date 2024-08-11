@@ -157,7 +157,7 @@ In this next section, you will configure ```win1``` to be a pull server and set 
    Configuration DSC_PullServer {
    	param (
    		[string[]]$NodeName = 'localhost',
-        	[string]$certificateThumbprint = 'AllowUnencryptedTraffic'
+        	[string]$certificateThumbprint = 'AllowUnencryptedTraffic',
    		[string] $RegistrationKey
     	)
 
