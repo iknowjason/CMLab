@@ -209,5 +209,34 @@ In this next section, you will configure ```win1``` to be a pull server and set 
    New-DscChecksum -ConfigurationPath "$env:PROGRAMFILES\WindowsPowerShell\DscService\Configuration" -Force
    ```
 
+4. Next we need to configure the DSC pull client on **win2**.  Configure the Local Configuration Manager (LCM) on ```win2``` to pull its configuration from ```win1```.  Create a script to configure the LCM.  Copy and paste this code into a Windows Powershell session that is **Run as Administrator**:
+   ```bash
+   [DSCLocalConfigurationManager()]
+   Configuration LCMConfig {
+     Node "win2" {
+       Settings {
+         RefreshMode = "Pull"
+         ConfigurationMode = "ApplyAndAutoCorrect"
+         ConfigurationID = [guid]::NewGuid()
+         RefreshFrequencyMins = 30
+         RebootNodeIfNeeded = $true
+         AllowModuleOverwrite = $true
+       }
+
+       ConfigurationRepositoryWeb PullSrv {
+         ServerURL = "http://win1:8080/PSDSCPullServer.svc"
+         ConfigurationNames = @('AuditPolicyConfig')
+        }
+
+        ReportServerWeb ComplianceSrv {
+          ServerURL = "http://win1:8081/PSDSCComplianceServer.svc"
+          AllowUnsecureConnection = $true
+        }
+     }
+  }
+  LCMConfig -OutputPath "C:\DSC\LCMConfig"
+  Set-DscLocalConfigurationManager -Path "C:\DSC\LCMConfig"
+  ```
+
       
    
