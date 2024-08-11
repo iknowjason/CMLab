@@ -532,7 +532,7 @@ In this section, you'll create a Windows manifest that can add windows audit log
 
    Add the following to the file.  This will add a regular expression so that every windows host system has the following policy applied:
    ```bash
-   node /^win\d+\.acme\.local$/ {
+   node /^win\d+\.example\.local$/ {
      include windows_audit_policy
    }
    ```
