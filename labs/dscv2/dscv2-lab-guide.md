@@ -139,3 +139,10 @@ In this quick lab, you will push DSC changes from **win1** to **win2**.  This is
    
 
 ## Lab 3:  DSC pull between systems
+In this next section, you will configure ```win1``` to be a pull server and set up ```win2``` to fetch and apply configuration changes from the pull server.  
+
+1. Install the DSC Service Feature.  This is a Windows feature that needs to be insalled on ```win1```.
+
+   ```bash
+   Install-WindowsFeature -Name DSC-Serivce -IncludeManagementTools
+   ```
