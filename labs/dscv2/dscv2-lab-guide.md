@@ -179,6 +179,7 @@ In this next section, you will configure ```win1``` to be a pull server and set 
             State                   = 'Started'
             UseSecurityBestPractices = $false
             DependsOn               = '[WindowsFeature]DSCServiceFeature'
+            RegistrationKeyPath     = "C:\DSC\RegistrationKey.txt"
         }
 
         xDscWebService PSDSCComplianceServer {
