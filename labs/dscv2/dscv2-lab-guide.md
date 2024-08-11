@@ -213,30 +213,30 @@ In this next section, you will configure ```win1``` to be a pull server and set 
    ```bash
    [DSCLocalConfigurationManager()]
    Configuration LCMConfig {
-     Node "win2" {
-       Settings {
-         RefreshMode = "Pull"
-         ConfigurationMode = "ApplyAndAutoCorrect"
-         ConfigurationID = [guid]::NewGuid()
-         RefreshFrequencyMins = 30
-         RebootNodeIfNeeded = $true
-         AllowModuleOverwrite = $true
+      Node "win2" {
+         Settings {
+            RefreshMode = "Pull"
+            ConfigurationMode = "ApplyAndAutoCorrect"
+            ConfigurationID = [guid]::NewGuid()
+            RefreshFrequencyMins = 30
+            RebootNodeIfNeeded = $true
+            AllowModuleOverwrite = $true
+          }
+
+          ConfigurationRepositoryWeb PullSrv {
+            ServerURL = "http://win1:8080/PSDSCPullServer.svc"
+            ConfigurationNames = @('AuditPolicyConfig')
+          }
+
+          ReportServerWeb ComplianceSrv {
+             ServerURL = "http://win1:8081/PSDSCComplianceServer.svc"
+             AllowUnsecureConnection = $true
+          }
        }
-
-       ConfigurationRepositoryWeb PullSrv {
-         ServerURL = "http://win1:8080/PSDSCPullServer.svc"
-         ConfigurationNames = @('AuditPolicyConfig')
-        }
-
-        ReportServerWeb ComplianceSrv {
-          ServerURL = "http://win1:8081/PSDSCComplianceServer.svc"
-          AllowUnsecureConnection = $true
-        }
-     }
-  }
-  LCMConfig -OutputPath "C:\DSC\LCMConfig"
-  Set-DscLocalConfigurationManager -Path "C:\DSC\LCMConfig"
-  ```
+   }
+   LCMConfig -OutputPath "C:\DSC\LCMConfig"
+   Set-DscLocalConfigurationManager -Path "C:\DSC\LCMConfig"
+   ```
 
       
    
