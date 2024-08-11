@@ -217,7 +217,6 @@ In this next section, you will configure ```win1``` to be a pull server and set 
          Settings {
             RefreshMode = "Pull"
             ConfigurationMode = "ApplyAndAutoCorrect"
-            ConfigurationID = $guid
             RefreshFrequencyMins = 30
             RebootNodeIfNeeded = $true
             AllowModuleOverwrite = $true
