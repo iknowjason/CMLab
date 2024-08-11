@@ -151,7 +151,7 @@ In this next section, you will configure ```win1``` to be a pull server and set 
    ```bash
    Configuration DSC_PullServer {
    	param (
-        	[string[]]$NodeName = 'localhost',
+   		[string[]]$NodeName = 'localhost',
         	[string]$certificateThumbprint = 'AllowUnencryptedTraffic'
     	)
 
@@ -186,10 +186,10 @@ In this next section, you will configure ```win1``` to be a pull server and set 
             IsComplianceServer      = $true
             DependsOn               = '[xDscWebService]PSDSCPullServer'
         }
-    }
-  }
-  DSC_PullServer -OutputPath "C:\DSC\PullServer"
+     }
+   }
+   DSC_PullServer -OutputPath "C:\DSC\PullServer"
 
-  Start-DscConfiguration -Path "C:\DSC\PullServer" -Wait -Verbose
-  ```
+   Start-DscConfiguration -Path "C:\DSC\PullServer" -Wait -Verbose
+   ```
    
