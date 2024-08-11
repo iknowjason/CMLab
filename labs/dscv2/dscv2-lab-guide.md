@@ -188,11 +188,8 @@ In this next section, you will configure ```win1``` to be a pull server and set 
         }
     }
   }
+  DSC_PullServer -OutputPath "C:\DSC\PullServer"
 
-# Output the configuration
-DSC_PullServer -OutputPath "C:\DSC\PullServer"
-
-# Apply the configuration to set up the Pull Server
-Start-DscConfiguration -Path "C:\DSC\PullServer" -Wait -Verbose
-```
+  Start-DscConfiguration -Path "C:\DSC\PullServer" -Wait -Verbose
+  ```
    
