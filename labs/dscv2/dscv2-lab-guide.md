@@ -177,7 +177,6 @@ In this next section, you will configure ```win1``` to be a pull server and set 
             ModulePath              = "$env:PROGRAMFILES\WindowsPowerShell\DscService\Modules"
             ConfigurationPath       = "$env:PROGRAMFILES\WindowsPowerShell\DscService\Configuration"
             State                   = 'Started'
-            IsComplianceServer      = $true
             UseSecurityBestPractices = $false
             DependsOn               = '[WindowsFeature]DSCServiceFeature'
         }
