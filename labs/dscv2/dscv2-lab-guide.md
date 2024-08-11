@@ -226,6 +226,7 @@ In this next section, you will configure ```win1``` to be a pull server and set 
           ConfigurationRepositoryWeb PullSrv {
             ServerURL = "http://win1:8080/PSDSCPullServer.svc"
             ConfigurationNames = @('AuditPolicyConfig')
+            RegistrationKey = "<INSERT_FROM_WIN1>"
           }
 
           ReportServerWeb ComplianceSrv {
