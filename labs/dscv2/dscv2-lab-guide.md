@@ -147,7 +147,12 @@ In this next section, you will configure ```win1``` to be a pull server and set 
    Install-WindowsFeature -Name DSC-Service -IncludeManagementTools
    ```
 
-2. Next, configure the DSC pull server on ```win1```.  Create a new powershell script to set up this service.  This script sets up two endpoints:  One for pulling configurations (PSDSCPullServer) and another for compliance reporting (PSDSCComplianceServer).  The pull server listens on port 8080 and is set to use unencrypted traffic by default (only for testing purposes):
+   Install the xPSDesiredStateConfiguration module from the Powershell Gallery and follow the yes prompts to install it:
+   ```
+   ﻿Install-Module -Name xPSDesiredStateConfiguration -Repository PSGallery -Force
+   ```
+
+3. Next, configure the DSC pull server on ```win1```.  Create a new powershell script to set up this service.  This script sets up two endpoints:  One for pulling configurations (PSDSCPullServer) and another for compliance reporting (PSDSCComplianceServer).  The pull server listens on port 8080 and is set to use unencrypted traffic by default (only for testing purposes):
    ```bash
    Configuration DSC_PullServer {
    	param (
