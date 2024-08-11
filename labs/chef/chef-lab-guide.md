@@ -60,24 +60,24 @@ In this section, you'll set up the Chef Server on your Linux master server.  SSH
    ```
 ### Chef Master:  Reconfigure for self-signed TLS certificate
 
-8. You will need to generate a new self-signed TLS certificate that can be used to simulate proper DNS and certificate based authentication.  We will **cheat** here by using the /etc/hosts for DNS.  Get the private IP address of this system by typing ```ifconfig```.  Add an entry in the ```/etc/hosts``` file so that the chef workstation knife utility can manage the server.  This would show how a chef workstation administrator would be managing the chef installation to push changes from a secondary system.  For this lab, we are combining chef server and workstation into a single system.  In my example, my private IP address is ```10.100.20.143``` as determined by ```ifconfig``` or you can run ```terraform output``` to grab it.  Edit /etc/hosts to point an internal hosts entry for ```chef.acme.local``` pointing to this internal IP address, or replace it with whatever fqdn you desire.  For this example, we are using ```chef.acme.local``` to represent the chef server.
+8. You will need to generate a new self-signed TLS certificate that can be used to simulate proper DNS and certificate based authentication.  We will **cheat** here by using the /etc/hosts for DNS.  Get the private IP address of this system by typing ```ifconfig```.  Add an entry in the ```/etc/hosts``` file so that the chef workstation knife utility can manage the server.  This would show how a chef workstation administrator would be managing the chef installation to push changes from a secondary system.  For this lab, we are combining chef server and workstation into a single system.  In my example, my private IP address is ```10.100.20.143``` as determined by ```ifconfig``` or you can run ```terraform output``` to grab it.  Edit /etc/hosts to point an internal hosts entry for ```chef.example.local``` pointing to this internal IP address, or replace it with whatever fqdn you desire.  For this example, we are using ```chef.example.local``` to represent the chef server.
    ```bash
    sudo vi /etc/hosts
    ```
    My example shows:
    ```
-   10.100.20.143 chef.acme.local
+   10.100.20.143 chef.example.local
    ```
-   Verify hostname resolution by typing ```ping chef.acme.local```.  Nice work!  You are now ready to setup a self-signed TLS certificate and reconfigure Chef to bind and use the TLS certificate on its nginx port 443.
+   Verify hostname resolution by typing ```ping chef.example.local```.  Nice work!  You are now ready to setup a self-signed TLS certificate and reconfigure Chef to bind and use the TLS certificate on its nginx port 443.
 
 9. Generate a self-signed TLS certificate with the following commands.  First, generate a private key:
    ```bash
    openssl genrsa -out chef-server.key 2048
    ```
 
-   Next, create a certificate signing request (CSR).  In this example, we are using a Common Name (CN) of ```chef.acme.local```.  Replace as appropriate for your environment:
+   Next, create a certificate signing request (CSR).  In this example, we are using a Common Name (CN) of ```chef.example.local```.  Replace as appropriate for your environment:
    ```bash
-   openssl req -new -key chef-server.key -out chef-server.csr -subj "/CN=chef.acme.local"
+   openssl req -new -key chef-server.key -out chef-server.csr -subj "/CN=chef.example.local"
    ```
 
    Third, generate the self-signed certificate using the csr and private key:
@@ -116,7 +116,7 @@ In this section, you'll set up the Chef Server on your Linux master server.  SSH
     Test the connection using openssl.  You should see the TLS handshake and the self-signed certificate:
     
     ```bash
-    openssl s_client -connect chef.acme.local:443
+    openssl s_client -connect chef.example.local:443
     ```
 
 ### Chef Master:  Chef Workstation Setup
@@ -181,7 +181,7 @@ In this section, you'll set up the Chef Workstation software on your Linux maste
 
    Finally, copy the ssh public key you created at the beginning of this step to the authorized keys by typing the following command.  SSH to the private IP address of the same server:
    ```bash
-   ssh-copy-id ubuntu@chef.acme.local
+   ssh-copy-id ubuntu@chef.example.local
    ```
 
 7. Copy over the Chef admin user's keys used for authentication.  Normally you would use ```scp``` to copy them from the Chef server to the local Chef workstation.  But in this lab implementation, since you are running server and workstation on the same system, we can copy it locally.  Go ahead and copy the **admin.pem** and **acme.pem** from the server's directory to the workstation's ```~/chef-repo/.chef``` directory.
@@ -253,7 +253,7 @@ In this section, you'll set up the Chef Workstation software on your Linux maste
     client_key               "admin.pem"
     validation_client_name   'acme-validator'
     validation_key           "acme-validator.pem"
-    chef_server_url          'https://chef.acme.local/organizations/acme'
+    chef_server_url          'https://chef.example.local/organizations/acme'
     cache_type               'BasicFile'
     cache_options( :path => "#{ENV['HOME']}/.chef/checksums" )
     cookbook_path            ["#{current_dir}/../cookbooks"]
@@ -280,9 +280,9 @@ In this section, you'll bootstrap a chef node or client.  The **linux2** system 
    ```
    My example shows:
    ```
-   10.100.20.143 chef.acme.local
+   10.100.20.143 chef.example.local
    ```
-   Verify hostname resolution by typing ```ping chef.acme.local``` from **linux2**.
+   Verify hostname resolution by typing ```ping chef.example.local``` from **linux2**.
 
 2. On **linux2:**  setup a system password for the default ubuntu username and ensure that password authentication is enabled.  The Chef Workstation will be using password authentication to bootstrap this chef client node, linux2.
    ```bash
@@ -328,7 +328,7 @@ In this section, you'll bootstrap a chef node or client.  The **linux2** system 
     ```
     My example shows:
     ```
-    10.100.20.180 lin2.acme.local
+    10.100.20.180 lin2.example.local
     ```
 
  ### Bootstrapping the Chef Windows Nodes
@@ -347,7 +347,7 @@ In this section, you'll bootstrap the two Windows servers to be Chef nodes.  The
    After you have the powershell session established, you can use this section of code to add a hosts entry so the Windows server can resolve chef.  Here is a copy and paste that should be adapted:
    
    ```  
-   $hostname = "chef.acme.local"
+   $hostname = "chef.example.local"
    $ipAddress = "10.100.20.143"
    $entry = "$ipAddress `t $hostname"
    $hostsPath = "$env:SystemRoot\System32\drivers\etc\hosts"
@@ -355,7 +355,7 @@ In this section, you'll bootstrap the two Windows servers to be Chef nodes.  The
    # Verify that hosts file looks correct
    Get-Content -Path $hostsPath | Select-String -Pattern $hostname
    ```
-   Verify hostname resolution by typing ```ping chef.acme.local``` from **win1** powershell session.
+   Verify hostname resolution by typing ```ping chef.example.local``` from **win1** powershell session.
 
 2. On **win2:**  edit the Windows hosts file so that the fqdn of Chef Server can be resolved.  Get the remote SSH IP address from ```terraform output```.  Use the local administrator and password credentials.  The output in ```terraform output``` will look similar to this:
    ```bash
@@ -369,7 +369,7 @@ In this section, you'll bootstrap the two Windows servers to be Chef nodes.  The
    After you have the powershell session established, you can use this section of code to add a hosts entry so the Windows server can resolve chef.  Here is a copy and paste that should be adapted:
    
    ```  
-   $hostname = "chef.acme.local"
+   $hostname = "chef.example.local"
    $ipAddress = "10.100.20.143"
    $entry = "$ipAddress `t $hostname"
    $hostsPath = "$env:SystemRoot\System32\drivers\etc\hosts"
@@ -377,7 +377,7 @@ In this section, you'll bootstrap the two Windows servers to be Chef nodes.  The
    # Verify that hosts file looks correct
    Get-Content -Path $hostsPath | Select-String -Pattern $hostname
    ```
-   Verify hostname resolution by typing ```ping chef.acme.local``` from **win2** powershell session.
+   Verify hostname resolution by typing ```ping chef.example.local``` from **win2** powershell session.
    
 3. On the Chef Workstation/Server linux system, bootstrap win1.  Replace the private IP address below with the correct private IP address of win1, as shown from terraform output.  These two windows systems have been bootstrapped to enable WinRM transport protocol for provisioning.  The command uses winrm protocol.
    ```bash
@@ -404,9 +404,9 @@ In this section, you'll bootstrap the two Windows servers to be Chef nodes.  The
     ```
     My example shows:
     ```
-    10.100.20.180 lin2.acme.local
-    10.100.20.160 win1.acme.local
-    10.100.20.161 win2.acme.local
+    10.100.20.180 lin2.example.local
+    10.100.20.160 win1.example.local
+    10.100.20.161 win2.example.local
     ```
 
 
@@ -536,7 +536,7 @@ Some description here.
     ```
 5.  Add to the run list of win1 and win2 nodes:
     ```bash
-    knife node run_list add win1.acme.local 'recipe[windows_audit_policy]'
+    knife node run_list add win1.example.local 'recipe[windows_audit_policy]'
     ```
     You should see:
     ```bash
@@ -545,7 +545,7 @@ Some description here.
     ```
     Add to the run list of win2:
     ```bash
-    knife node run_list add win2.acme.local 'recipe[windows_audit_policy]'
+    knife node run_list add win2.example.local 'recipe[windows_audit_policy]'
     ```
     You should see:
     ```bash
@@ -554,28 +554,28 @@ Some description here.
     ```
 6. Push the cookbook changes to win1 using ```knife winrm``` command:
    ```bash
-   knife winrm 'win1.acme.local' 'chef-client' --winrm-user RTCAdmin --winrm-password 'Proud-lion-2024!' --manual-list
+   knife winrm 'win1.example.local' 'chef-client' --winrm-user RTCAdmin --winrm-password 'Proud-lion-2024!' --manual-list
    ```
 
    You should see in the output a verification that the powershell script in default.rb recipe has run:
    ```bash
-   win1.acme.local Recipe: windows_audit_policy::default
-   win1.acme.local   * powershell_script[Configure Audit Policy and Process Creation Auditing] action run
-   win1.acme.local
-   win1.acme.local     - execute "C:\Windows\system32\WindowsPowerShell\v1.0\powershell.exe" -NoLogo -NonInteractive -NoProfile -ExecutionPolicy Bypass -InputFormat None  -File "C:/Users/rtcadmin/AppData/Local/Temp/chef-script20240807-2852-ha25zd.ps1"
+   win1.example.local Recipe: windows_audit_policy::default
+   win1.example.local   * powershell_script[Configure Audit Policy and Process Creation Auditing] action run
+   win1.example.local
+   win1.example.local     - execute "C:\Windows\system32\WindowsPowerShell\v1.0\powershell.exe" -NoLogo -NonInteractive -NoProfile -ExecutionPolicy Bypass -InputFormat None  -File "C:/Users/rtcadmin/AppData/Local/Temp/chef-script20240807-2852-ha25zd.ps1"
    ```
 
 8. Push the cookbook changes to win2 using ```knife winrm``` command:
    ```bash
-   knife winrm 'win2.acme.local' 'chef-client' --winrm-user RTCAdmin --winrm-password 'Proud-lion-2024!' --manual-list
+   knife winrm 'win2.example.local' 'chef-client' --winrm-user RTCAdmin --winrm-password 'Proud-lion-2024!' --manual-list
    ```
 
    You should see in the output a verification that the powershell script in default.rb recipe has run:
    ```bash
-   win2.acme.local Recipe: windows_audit_policy::default
-   win2.acme.local   * powershell_script[Configure Audit Policy and Process Creation Auditing] action run
-   win2.acme.local
-   win2.acme.local     - execute "C:\Windows\system32\WindowsPowerShell\v1.0\powershell.exe" -NoLogo -NonInteractive -NoProfile -ExecutionPolicy Bypass -InputFormat None  -File "C:/Users/rtcadmin/AppData/Local/Temp/chef-script20240807-4912-fnu1g.ps1"
+   win2.example.local Recipe: windows_audit_policy::default
+   win2.example.local   * powershell_script[Configure Audit Policy and Process Creation Auditing] action run
+   win2.example.local
+   win2.example.local     - execute "C:\Windows\system32\WindowsPowerShell\v1.0\powershell.exe" -NoLogo -NonInteractive -NoProfile -ExecutionPolicy Bypass -InputFormat None  -File "C:/Users/rtcadmin/AppData/Local/Temp/chef-script20240807-4912-fnu1g.ps1"
    ```
 
    Excellent work!  You have successfully applied a cookbook recipe to two windows managed nodes using Chef!
