@@ -177,8 +177,7 @@ In this next section, you will configure ```win1``` to be a pull server and set 
             ModulePath              = "$env:PROGRAMFILES\WindowsPowerShell\DscService\Modules"
             ConfigurationPath       = "$env:PROGRAMFILES\WindowsPowerShell\DscService\Configuration"
             State                   = 'Started'
-            DisableSecurityBestPractices = $true
-   	    UseSecurityBestPractices = $false
+   	    AllowUnsecureConnection = $true
             DependsOn               = '[WindowsFeature]DSCServiceFeature'
             RegistrationKeyPath     = "C:\DSC\RegistrationKey.txt"
         }
@@ -190,8 +189,7 @@ In this next section, you will configure ```win1``` to be a pull server and set 
             PhysicalPath            = "$env:SystemDrive\inetpub\wwwroot\PSDSCComplianceServer"
             CertificateThumbprint   = $certificateThumbprint
             State                   = 'Started'
-            DisableSecurityBestPractices = $true
-            UseSecurityBestPractices = $false
+	    AllowUnsecureConnection = $true
             DependsOn               = '[xDscWebService]PSDSCPullServer'
         }
      }
