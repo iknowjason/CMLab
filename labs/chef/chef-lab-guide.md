@@ -50,9 +50,9 @@ In this section, you'll set up the Chef Server on your Linux master server.  SSH
    ```bash
    sudo chef-server-ctl user-list
    ```
-6. Create a new organizatin using the ```chef-server-ctl``` command.  For this example the organization is ```acme```.  The organization certificate will be associated with the ```admin``` user and stored in the ```.chef``` directory.
+6. Create a new organizatin using the ```chef-server-ctl``` command.  For this example the organization is ```example```.  The organization certificate will be associated with the ```admin``` user and stored in the ```.chef``` directory.
    ```bash
-   sudo chef-server-ctl org-create acme "acme_corporation" --association_user admin --filename ~/.chef/acme.pem
+   sudo chef-server-ctl org-create example "example_corporation" --association_user admin --filename ~/.chef/example.pem
    ```
 7. List out the organizations, confirming that it was created:
    ```bash
@@ -184,10 +184,10 @@ In this section, you'll set up the Chef Workstation software on your Linux maste
    ssh-copy-id ubuntu@chef.example.local
    ```
 
-7. Copy over the Chef admin user's keys used for authentication.  Normally you would use ```scp``` to copy them from the Chef server to the local Chef workstation.  But in this lab implementation, since you are running server and workstation on the same system, we can copy it locally.  Go ahead and copy the **admin.pem** and **acme.pem** from the server's directory to the workstation's ```~/chef-repo/.chef``` directory.
+7. Copy over the Chef admin user's keys used for authentication.  Normally you would use ```scp``` to copy them from the Chef server to the local Chef workstation.  But in this lab implementation, since you are running server and workstation on the same system, we can copy it locally.  Go ahead and copy the **admin.pem** and **example.pem** from the server's directory to the workstation's ```~/chef-repo/.chef``` directory.
    ```bash
    cp ~/.chef/admin.pem ~/chef-repo/.chef/.
-   cp ~/.chef/acme.pem ~/chef-repo/.chef/.
+   cp ~/.chef/example.pem ~/chef-repo/.chef/.
    ```
 
    Verify that the files are in place in the chef workstation target directory:
@@ -251,9 +251,9 @@ In this section, you'll set up the Chef Workstation software on your Linux maste
     log_location             STDOUT
     node_name                'admin'
     client_key               "admin.pem"
-    validation_client_name   'acme-validator'
-    validation_key           "acme-validator.pem"
-    chef_server_url          'https://chef.example.local/organizations/acme'
+    validation_client_name   'example-validator'
+    validation_key           "example-validator.pem"
+    chef_server_url          'https://chef.example.local/organizations/example'
     cache_type               'BasicFile'
     cache_options( :path => "#{ENV['HOME']}/.chef/checksums" )
     cookbook_path            ["#{current_dir}/../cookbooks"]
@@ -265,7 +265,7 @@ In this section, you'll set up the Chef Workstation software on your Linux maste
     knife ssl fetch
     ```
 
-    Now run the knife client list command to show the acme-validator.  If this shows the company name followed by validator, nice work!
+    Now run the knife client list command to show the example-validator.  If this shows the company name followed by validator, nice work!
     ```bash
     knife client list
     ```
