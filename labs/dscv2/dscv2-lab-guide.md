@@ -144,5 +144,55 @@ In this next section, you will configure ```win1``` to be a pull server and set 
 1. Install the DSC Service Feature.  This is a Windows feature that needs to be insalled on ```win1```.
 
    ```bash
-   Install-WindowsFeature -Name DSC-Serivce -IncludeManagementTools
+   Install-WindowsFeature -Name DSC-Service -IncludeManagementTools
    ```
+
+2. Next, configure the DSC pull server on ```win1```.  Create a new powershell script to set up this service.  This script sets up two endpoints:  One for pulling configurations (PSDSCPullServer) and another for compliance reporting (PSDSCComplianceServer).  The pull server listens on port 8080 and is set to use unencrypted traffic by default (only for testing purposes):
+   ```bash
+   Configuration DSC_PullServer {
+   	param (
+        	[string[]]$NodeName = 'localhost',
+        	[string]$certificateThumbprint = 'AllowUnencryptedTraffic'
+    	)
+
+    Import-DscResource -ModuleName xPSDesiredStateConfiguration
+
+    Node $NodeName {
+        WindowsFeature DSCServiceFeature {
+            Ensure = 'Present'
+            Name   = 'DSC-Service'
+        }
+
+        xDscWebService PSDSCPullServer {
+            Ensure                  = 'Present'
+            EndpointName            = 'PSDSCPullServer'
+            Port                    = 8080
+            PhysicalPath            = "$env:SystemDrive\inetpub\wwwroot\PSDSCPullServer"
+            CertificateThumbprint   = $certificateThumbprint
+            ModulePath              = "$env:PROGRAMFILES\WindowsPowerShell\DscService\Modules"
+            ConfigurationPath       = "$env:PROGRAMFILES\WindowsPowerShell\DscService\Configuration"
+            State                   = 'Started'
+            IsComplianceServer      = $true
+            DependsOn               = '[WindowsFeature]DSCServiceFeature'
+        }
+
+        xDscWebService PSDSCComplianceServer {
+            Ensure                  = 'Present'
+            EndpointName            = 'PSDSCComplianceServer'
+            Port                    = 8081
+            PhysicalPath            = "$env:SystemDrive\inetpub\wwwroot\PSDSCComplianceServer"
+            CertificateThumbprint   = $certificateThumbprint
+            State                   = 'Started'
+            IsComplianceServer      = $true
+            DependsOn               = '[xDscWebService]PSDSCPullServer'
+        }
+    }
+  }
+
+# Output the configuration
+DSC_PullServer -OutputPath "C:\DSC\PullServer"
+
+# Apply the configuration to set up the Pull Server
+Start-DscConfiguration -Path "C:\DSC\PullServer" -Wait -Verbose
+```
+   
