@@ -258,6 +258,7 @@ In this next section, you will configure ```win1``` to be a pull server and set 
 
 8. On **win2** system:  next we need to configure the DSC pull client on **win2**.  Configure the Local Configuration Manager (LCM) on ```win2``` to pull its configuration from ```win1```.  Create a script to configure the LCM.  Copy and paste this code into a Windows Powershell session that is **Run as Administrator**, or run in Powershell ISE and create a new script:
    ```bash
+   [DSCLocalConfigurationManager()]
    configuration PullClientConfigNames
    {
        Node localhost
