@@ -288,20 +288,21 @@ In this next section, you will configure ```win1``` to be a pull server and set 
    Registration of the Dsc Agent with the server http://win1.example.local:8080/PSDSCPullServer.svc was successful
    ```
 
-   9. Back on **win1**, we are very close to the finish line.  We simply need to copy the mof file to the target directory and update the checksum.  Then when the win2 client polls for an updated configuration, it knows from an updated checksum that it needs to pull a new configuration.  Run the following commands in an elevated powershell session. First, rename the previously created win2.mof to ClientConfig.mof:
-      ```bash
-      Rename-Item -Path C:\DSC\win2.mof -NewName "ClientConfig.mof"
-      ```
+9. Back on **win1**, we are very close to the finish line.  We simply need to copy the mof file to the target directory and update the checksum.  Then when the win2 client polls for an updated configuration, it knows from an updated checksum that it needs to pull a new configuration.  Run the following commands in an elevated powershell session. First, rename the previously created win2.mof to ClientConfig.mof:
+    
+   ```bash
+   Rename-Item -Path C:\DSC\win2.mof -NewName "ClientConfig.mof"
+   ```
 
-      Next, copy the ClientConfig.mof to the destination DSC configuration directory that the client checks for its configuration with a pull:
-      ```bash
-      Copy-Item -Path "C:\DSC\ClientConfig.mof" -Destination "$env:PROGRAMFILES\WindowsPowerShell\DscService\Configuration"
-      ```
+   Next, copy the ClientConfig.mof to the destination DSC configuration directory that the client checks for its configuration with a pull:
+   ```bash
+   Copy-Item -Path "C:\DSC\ClientConfig.mof" -Destination "$env:PROGRAMFILES\WindowsPowerShell\DscService\Configuration"
+   ```
 
-      Finally, add a DSC checksum so the changes will get picked up by the DSC client:
-      ```bash
-      New-Dscchecksum "C:\Program Files\WindowsPowershell\DscService\configuration\ClientConfig.mof"
-      ```
+   Finally, add a DSC checksum so the changes will get picked up by the DSC client:
+   ```bash
+   New-Dscchecksum "C:\Program Files\WindowsPowershell\DscService\configuration\ClientConfig.mof"
+   ```
 
       
    
