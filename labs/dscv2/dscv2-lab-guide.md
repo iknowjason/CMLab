@@ -153,7 +153,7 @@ In this next section, you will configure ```win1``` to be a pull server and set 
    ﻿Install-Module -Name PSDesiredStateConfiguration -Repository PSGallery -Force
    ```
 
-2. Next, configure the DSC pull server on ```win1```.  Create a new powershell script to set up this service.  This script sets up two endpoints:  One for pulling configurations (PSDSCPullServer) and another for compliance reporting (PSDSCComplianceServer).  The pull server listens on port 8080 and is set to use unencrypted traffic by default (only for testing purposes):
+2. Next, configure the DSC pull server on ```win1```.  Create a new powershell script to set up this service.  This script sets up one endpoint for pulling configurations (PSDSCPullServer) using cleartext HTTP transport.  As an additional challenge, you can set up a certificate and use HTTPS for additional security.  The pull server listens on port 8080 and is set to use unencrypted traffic by default (only for testing purposes).  The **registrationKey** is hard-coded in this example but you can generate a dynamic one.  It is used as a shared secret between pull server and clients, allowing the clients to register.
    ```bash
    $registrationKey = "8dd78714-b559-496b-8911-56554bc4bda5"
 
