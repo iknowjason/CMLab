@@ -258,31 +258,28 @@ In this next section, you will configure ```win1``` to be a pull server and set 
 
 8. On **win2** system:  next we need to configure the DSC pull client on **win2**.  Configure the Local Configuration Manager (LCM) on ```win2``` to pull its configuration from ```win1```.  Create a script to configure the LCM.  Copy and paste this code into a Windows Powershell session that is **Run as Administrator**:
    ```bash
-   [DSCLocalConfigurationManager()]
-   Configuration LCMConfig {
-      Node "win2" {
-         Settings {
-            RefreshMode = "Pull"
-            ConfigurationMode = "ApplyAndAutoCorrect"
-            RefreshFrequencyMins = 30
-            RebootNodeIfNeeded = $true
-            AllowModuleOverwrite = $true
-          }
-
-          ConfigurationRepositoryWeb PullSrv {
-            ServerURL = "http://win1:8080/PSDSCPullServer.svc"
-            ConfigurationNames = @('AuditPolicyConfig')
-            RegistrationKey = "<INSERT_FROM_WIN1>"
-          }
-
-          ReportServerWeb ComplianceSrv {
-             ServerURL = "http://win1:8081/PSDSCComplianceServer.svc"
-             AllowUnsecureConnection = $true
-          }
+   configuration PullClientConfigNames
+   {
+       Node localhost
+       {
+           Settings
+           {
+               RefreshMode = 'Pull'
+               ConfigurationMode = 'ApplyOnly'
+               RefreshFrequencyMins = 30
+               RebootNodeIfNeeded = $true
+           }
+           ConfigurationRepositoryWeb win1
+           {
+               ServerURL = 'http://win1.example.local:8080/PSDSCPullServer.svc'
+               RegistrationKey = '8dd78714-b559-496b-8911-56554bc4bda5'
+               AllowUnsecureConnection = $true
+               ConfigurationNames = @('ClientConfig')
+           }
        }
    }
-   LCMConfig -OutputPath "C:\DSC\LCMConfig"
-   Set-DscLocalConfigurationManager -Path "C:\DSC\LCMConfig"
+   PullClientConfigNames
+   Set-DSCLocalConfigurationManager –ComputerName localhost –Path .\PullClientConfigNames –Verbose
    ```
 
       
