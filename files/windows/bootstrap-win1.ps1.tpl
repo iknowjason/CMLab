@@ -73,6 +73,19 @@ lwrite("RemoteHostName: $RemoteHostName")
 lwrite("Enabling PSRemoting SkipNetworkProfileCheck")
 Enable-PSRemoting -SkipNetworkProfileCheck -Force
 
+# adjust the hosts file
+lwrite("Adding to hosts file")
+$hostsPath = "$env:SystemRoot\System32\drivers\etc\hosts"
+$entries = @"
+${lin1_ip} puppet.${domain} puppet
+${lin1_ip} chef.${domain} chef
+${lin1_ip} salt.${domain} salt
+${lin2_ip} lin2.${domain} lin2
+${win1_ip} win1.${domain} win1
+${win2_ip} win2.${domain} win2
+"@
+Add-Content -Path $hostsPath -Value $entries
+
 lwrite("Set Execution Policy Unrestricted")
 Set-ExecutionPolicy -ExecutionPolicy Unrestricted -Force
 
@@ -123,10 +136,10 @@ msiexec.exe /package "C:\terraform\PowerShell-7.4.1-win-x64.msi" /quiet ADD_EXPL
 
 lwrite("Installing DSCv3")
 lwrite("Downloading DSCv3")
-iwr -Uri "https://github.com/PowerShell/DSC/releases/download/v3.0.0-alpha.5/DSC-3.0.0-alpha.5-x86_64-pc-windows-msvc.zip" -Outfile "C:\terraform\DSC-3.0.0-alpha.5-x86_64-pc-windows-msvc.zip"
+iwr -Uri "https://github.com/PowerShell/DSC/releases/download/v3.0.0-preview.8/DSC-3.0.0-preview.8-x86_64-pc-windows-msvc.zip"  -Outfile "C:\terraform\DSC-3.0.0-preview.8-x86_64-pc-windows-msvc.zip"
 lwrite("Download complete")
 cd C:\terraform
-Expand-Archive .\DSC-3.0.0-alpha.5-x86_64-pc-windows-msvc.zip
+Expand-Archive .\DSC-3.0.0-preview.8-x86_64-pc-windows-msvc.zip
 
 lwrite("VSCode Install")
 lwrite("Download VSCode")
@@ -181,33 +194,19 @@ New-ItemProperty -Path "HKLM:\SOFTWARE\OpenSSH" -Name DefaultShell -Value "C:\Wi
 lwrite("Restart sshd service")
 Restart-Service sshd
 
-lwrite("Install chef-workstation")
-cd C:\terraform
-lwrite("Download chef-workstation")
-iwr -Uri "https://packages.chef.io/files/stable/chef-workstation/24.2.1058/windows/2016/chef-workstation-24.2.1058-1-x64.msi" -OutFile "C:\terraform\chef-workstation-24.2.1058-1-x64.msi"
-lwrite("Download complete")
-lwrite("Install chef-workstation with msiexec")
-#Install with Chef GUI
-#msiexec /q /i C:\terraform\chef-workstation-24.2.1058-1-x64.msi ADDLOCAL=ALL
+#lwrite("Install chef-workstation")
+#cd C:\terraform
+#lwrite("Download chef-workstation")
+#iwr -Uri "https://packages.chef.io/files/stable/chef-workstation/24.2.1058/windows/2016/chef-workstation-24.2.1058-1-x64.msi" -OutFile "C:\terraform\chef-workstation-24.2.1058-1-x64.msi"
+#lwrite("Download complete")
+#lwrite("Install chef-workstation with msiexec")
 #Install unattended with CLI
-msiexec /q /i C:\terraform\chef-workstation-24.2.1058-1-x64.msi ADDLOCAL=ALL REMOVE=ChefWSApp
+#msiexec /q /i C:\terraform\chef-workstation-24.2.1058-1-x64.msi ADDLOCAL=ALL REMOVE=ChefWSApp
 
 lwrite("Very Silent install of VSCode")
 # Note:  This is not working to auto install, so you can just type this in elevated powershell after booting
 # Or just double-click on the VSCodeUserSetup-x64.exe
 Start-Process -Wait -FilePath "C:\terraform\VSCodeUserSetup-x64.exe" -ArgumentList "/VERYSILENT /NORESTART /MERGETASKS=!runcode"
-
-# adjust the hosts file
-lwrite("Adding to hosts file")
-$hostsPath = "$env:SystemRoot\System32\drivers\etc\hosts"
-$entries = @"
-${lin1_ip} puppet.${domain} puppet
-${lin1_ip} chef.${domain} chef
-${lin1_ip} salt.${domain} salt
-${lin2_ip} lin2.${domain} lin2
-${win1_ip} win1.${domain} win1
-${win2_ip} win2.${domain} win2
-"@
 
 Add-Content -Path $hostsPath -Value $entries
 
