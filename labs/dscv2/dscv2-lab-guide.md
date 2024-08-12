@@ -309,5 +309,20 @@ In this next section, you will configure ```win1``` to be a pull server and set 
    ```bash
    Update-DscConfiguration -Wait -Verbose
    ```
+
+   You should see the client pulling the configuration for password policy changes and applying them, as shown below:
+   ```bash
+   VERBOSE: [WIN2]:                            [] Applying the new configuration(s) pulled.
+   VERBOSE: [WIN2]: LCM:  [ Start  Resource ]  [[Script]SetPasswordPolicy]
+   VERBOSE: [WIN2]: LCM:  [ Start  Test     ]  [[Script]SetPasswordPolicy]
+   VERBOSE: [WIN2]: LCM:  [ End    Test     ]  [[Script]SetPasswordPolicy]  in 0.6320 seconds.
+   VERBOSE: [WIN2]: LCM:  [ Start  Set      ]  [[Script]SetPasswordPolicy]
+   VERBOSE: [WIN2]:                            [[Script]SetPasswordPolicy] Performing the operation "Set-TargetResource" on target "Executing the SetScript with 
+   the user supplied credential".
+   VERBOSE: [WIN2]: LCM:  [ End    Set      ]  [[Script]SetPasswordPolicy]  in 0.6690 seconds.
+   VERBOSE: [WIN2]: LCM:  [ End    Resource ]  [[Script]SetPasswordPolicy] 
+   ```
+
+   Nice work!  You have successfuly setup a pull server, pull client, and pulled a new configuration. For an added challenge, try to setup HTTPS encryption with certificates and apply a different configuration to the client.
       
    
