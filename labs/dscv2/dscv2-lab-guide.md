@@ -155,56 +155,54 @@ In this next section, you will configure ```win1``` to be a pull server and set 
 
 2. Next, configure the DSC pull server on ```win1```.  Create a new powershell script to set up this service.  This script sets up two endpoints:  One for pulling configurations (PSDSCPullServer) and another for compliance reporting (PSDSCComplianceServer).  The pull server listens on port 8080 and is set to use unencrypted traffic by default (only for testing purposes):
    ```bash
-   Configuration DSC_PullServer {
-   	param (
-   		[string[]]$NodeName = 'localhost',
-        	[string]$certificateThumbprint = 'AllowUnencryptedTraffic',
-   		[string] $RegistrationKey
-    	)
+   $registrationKey = "8dd78714-b559-496b-8911-56554bc4bda5"
 
-    Import-DscResource -ModuleName xPSDesiredStateConfiguration
-    Import-DSCResource -ModuleName PSDesiredStateConfiguration
+   configuration Sample_xDscWebServiceRegistration
+   {
+     param
+     (
+        [string[]]$NodeName = 'localhost',
+        [string] $RegistrationKey
+     )
 
-    Node $NodeName {
-        WindowsFeature DSCServiceFeature {
-            Ensure = 'Present'
-            Name   = 'DSC-Service'
+   Import-DSCResource -ModuleName PSDesiredStateConfiguration
+   Import-DSCResource -ModuleName xPSDesiredStateConfiguration
+
+   Node $NodeName
+   {
+        WindowsFeature DSCServiceFeature
+        {
+            Ensure = "Present"
+            Name   = "DSC-Service"
         }
 
-        xDscWebService PSDSCPullServer {
-            Ensure                  = 'Present'
-            EndpointName            = 'PSDSCPullServer'
+   xDscWebService PSDSCPullServer
+        {
+            Ensure                  = "Present"
+            EndpointName            = "PSDSCPullServer"
             Port                    = 8080
-            PhysicalPath            = "$env:SystemDrive\inetpub\wwwroot\PSDSCPullServer"
-            CertificateThumbprint   = $certificateThumbprint
+            PhysicalPath            = "$env:SystemDrive\inetpub\PSDSCPullServer"
+            CertificateThumbPrint   = "AllowUnencryptedTraffic"
             ModulePath              = "$env:PROGRAMFILES\WindowsPowerShell\DscService\Modules"
             ConfigurationPath       = "$env:PROGRAMFILES\WindowsPowerShell\DscService\Configuration"
-            State                   = 'Started'
-   	    UseSecurityBestPractices = $false
-            DependsOn               = '[WindowsFeature]DSCServiceFeature'
-            RegistrationKeyPath     = "C:\DSC\RegistrationKey.txt"
+            State                   = "Started"
+            DependsOn               = "[WindowsFeature]DSCServiceFeature"
+            RegistrationKeyPath     = "$env:PROGRAMFILES\WindowsPowerShell\DscService"
+            AcceptSelfSignedCertificates = $true
+            UseSecurityBestPractices     = $false
+            Enable32BitAppOnWin64   = $false
+
         }
-        File RegistrationKeyFile {
+
+   File RegistrationKeyFile
+        {
             Ensure          = 'Present'
             Type            = 'File'
-            DestinationPath = "C:\DSC\RegistrationKey.txt"
+            DestinationPath = "$env:ProgramFiles\WindowsPowerShell\DscService\RegistrationKeys.txt"
             Contents        = $RegistrationKey
-        }
-        xDscWebService PSDSCComplianceServer {
-            Ensure                  = 'Present'
-            EndpointName            = 'PSDSCComplianceServer'
-            Port                    = 8081
-            PhysicalPath            = "$env:SystemDrive\inetpub\wwwroot\PSDSCComplianceServer"
-            CertificateThumbprint   = $certificateThumbprint
-            State                   = 'Started'
-	    UseSecurityBestPractices = $false
-            DependsOn               = '[xDscWebService]PSDSCPullServer'
         }
      }
    }
-   DSC_PullServer -OutputPath "C:\DSC\PullServer"
-
-   Start-DscConfiguration -Path "C:\DSC\PullServer" -Wait -Verbose
    ```
 
 3. Now you need to generate the DSC Configurations that will be pulled from ```win1```.  In the previous lab 1, you had already generated a MOF file.  Copy the generated ```win2.mof``` to the Pull Server's configuration path:
