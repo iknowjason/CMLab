@@ -256,7 +256,7 @@ In this next section, you will configure ```win1``` to be a pull server and set 
 
    YOu should see a file created with the name of ```win2.mof```.  In DSC, you can configure the Pull client to fetch a configuration with a ConfigurationId or a ConfigurationName.  For this lab, we will be using the ConfigurationName.  You will see shortly that we will be renaming this ```win2.mof``` to a file named ```ClientConfig.mof``` and copying it to a destination directory where the client will trigger a pull from.  Very nice!
 
-8. On **win2** system:  next we need to configure the DSC pull client on **win2**.  Configure the Local Configuration Manager (LCM) on ```win2``` to pull its configuration from ```win1```.  Create a script to configure the LCM.  Copy and paste this code into a Windows Powershell session that is **Run as Administrator**:
+8. On **win2** system:  next we need to configure the DSC pull client on **win2**.  Configure the Local Configuration Manager (LCM) on ```win2``` to pull its configuration from ```win1```.  Create a script to configure the LCM.  Copy and paste this code into a Windows Powershell session that is **Run as Administrator**, or run in Powershell ISE and create a new script:
    ```bash
    configuration PullClientConfigNames
    {
