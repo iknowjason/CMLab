@@ -150,10 +150,14 @@ In this next section, you will configure ```win1``` to be a pull server and set 
    Install the xPSDesiredStateConfiguration module from the Powershell Gallery and follow the yes prompts to install it:
    ```
    ﻿Install-Module -Name xPSDesiredStateConfiguration -Repository PSGallery -Force
+   ```
+
+   Install the PSDesiredStateConfiguration module and follow the yes prompts to install it:
+   ```bash
    ﻿Install-Module -Name PSDesiredStateConfiguration -Repository PSGallery -Force
    ```
 
-2. Next, configure the DSC pull server on ```win1```.  Create a new powershell script to set up this service.  This script sets up one endpoint for pulling configurations (PSDSCPullServer) using cleartext HTTP transport.  As an additional challenge, you can set up a certificate and use HTTPS for additional security.  The pull server listens on port 8080 and is set to use unencrypted traffic by default (only for testing purposes).  The **registrationKey** is hard-coded in this example but you can generate a dynamic one.  It is used as a shared secret between pull server and clients, allowing the clients to register.
+1. Next, configure the DSC pull server on ```win1```.  Create a new powershell script to set up this service.  This script sets up one endpoint for pulling configurations (PSDSCPullServer) using cleartext HTTP transport.  As an additional challenge, you can set up a certificate and use HTTPS for additional security.  The pull server listens on port 8080 and is set to use unencrypted traffic by default (only for testing purposes).  The **registrationKey** is hard-coded in this example but you can generate a dynamic one.  It is used as a shared secret between pull server and clients, allowing the clients to register.  Copy and paste this into your powershell session as Administrator, or open up Powershell ISE and create a new script and run it interactively.
    ```bash
    $registrationKey = "8dd78714-b559-496b-8911-56554bc4bda5"
 
@@ -204,8 +208,20 @@ In this next section, you will configure ```win1``` to be a pull server and set 
      }
    }
    ```
+4. On win1, apply the DSC configuration to the Location Configuration Manager by using the ```Start-DscConfiguration``` cmdlet:
+   
+   ```bash
+   $registrationKey = "8dd78714-b559-496b-8911-56554bc4bda5"
 
-3. Now you need to generate the DSC Configurations that will be pulled from ```win1```.  In the previous lab 1, you had already generated a MOF file.  Copy the generated ```win2.mof``` to the Pull Server's configuration path:
+   $sample_xDscWebServiceRegistrationSplat = @{
+       RegistrationKey = $registrationKey
+       OutputPath = 'C:\Configs\PullServer'
+   }
+   Sample_xDscWebServiceRegistration @sample_xDscWebServiceRegistrationSplat
+   Start-DscConfiguration -Path c:\Configs\PullServer -Wait -Verbose
+   ```
+
+6. Now you need to generate the DSC Configurations that will be pulled from ```win1```.  In the previous lab 1, you had already generated a MOF file.  Copy the generated ```win2.mof``` to the Pull Server's configuration path:
 
    ```bash
    Copy-Item -Path "C:\DSC\win2.mof" -Destination "$env:PROGRAMFILES\WindowsPowerShell\DscService\Configuration"
@@ -216,7 +232,7 @@ In this next section, you will configure ```win1``` to be a pull server and set 
    New-DscChecksum -ConfigurationPath "$env:PROGRAMFILES\WindowsPowerShell\DscService\Configuration" -Force
    ```
 
-4. Next we need to configure the DSC pull client on **win2**.  Configure the Local Configuration Manager (LCM) on ```win2``` to pull its configuration from ```win1```.  Create a script to configure the LCM.  Copy and paste this code into a Windows Powershell session that is **Run as Administrator**:
+7. Next we need to configure the DSC pull client on **win2**.  Configure the Local Configuration Manager (LCM) on ```win2``` to pull its configuration from ```win1```.  Create a script to configure the LCM.  Copy and paste this code into a Windows Powershell session that is **Run as Administrator**:
    ```bash
    [DSCLocalConfigurationManager()]
    Configuration LCMConfig {
