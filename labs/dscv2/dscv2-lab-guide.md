@@ -157,7 +157,7 @@ In this next section, you will configure ```win1``` to be a pull server and set 
    ﻿Install-Module -Name PSDesiredStateConfiguration -Repository PSGallery -Force
    ```
 
-1. Next, configure the DSC pull server on ```win1```.  Create a new powershell script to set up this service.  This script sets up one endpoint for pulling configurations (PSDSCPullServer) using cleartext HTTP transport.  As an additional challenge, you can set up a certificate and use HTTPS for additional security.  The pull server listens on port 8080 and is set to use unencrypted traffic by default (only for testing purposes).  The **registrationKey** is hard-coded in this example but you can generate a dynamic one.  It is used as a shared secret between pull server and clients, allowing the clients to register.  Copy and paste this into your powershell session as Administrator, or open up Powershell ISE and create a new script and run it interactively.
+2. Next, configure the DSC pull server on ```win1```.  Create a new powershell script to set up this service.  This script sets up one endpoint for pulling configurations (PSDSCPullServer) using cleartext HTTP transport.  As an additional challenge, you can set up a certificate and use HTTPS for additional security.  The pull server listens on port 8080 and is set to use unencrypted traffic by default (only for testing purposes).  The **registrationKey** is hard-coded in this example but you can generate a dynamic one.  It is used as a shared secret between pull server and clients, allowing the clients to register.  Copy and paste this into your powershell session as Administrator, or open up Powershell ISE and create a new script and run it interactively.
    ```bash
    $registrationKey = "8dd78714-b559-496b-8911-56554bc4bda5"
 
@@ -208,7 +208,7 @@ In this next section, you will configure ```win1``` to be a pull server and set 
      }
    }
    ```
-4. On win1, open up a new powershell session as Administrator or use the Powershell ISE open a **New Script**.  Paste this code in and hit the green button in Powershell ISE.  This will apply the DSC configuration to the Location Configuration Manager by using the ```Start-DscConfiguration``` cmdlet:
+3. On win1, open up a new powershell session as Administrator or use the Powershell ISE open a **New Script**.  Paste this code in and hit the green button in Powershell ISE.  This will apply the DSC configuration to the Location Configuration Manager by using the ```Start-DscConfiguration``` cmdlet:
    
    ```bash
    $registrationKey = "8dd78714-b559-496b-8911-56554bc4bda5"
@@ -223,7 +223,7 @@ In this next section, you will configure ```win1``` to be a pull server and set 
 
    You should seee some debug output showing succesful run of the configuration changes.  This will also add the RegistrationKey shared secret to a file used by the PullServer.
 
-6. Still on **win1**, you need to generate the DSC Configurations that will be pulled from ```win1```.  In the previous lab you had created a mof file for applying a configuration.  In this step, we will create a new client configuration.  This DSC configuration will change or otherwise control the password policy on the clients.  Copy and paste this into a new Windows Powershell Administrator session or use Powershell ISE as Administrator to open a new script and run it:
+4. Still on **win1**, you need to generate the DSC Configurations that will be pulled from ```win1```.  In the previous lab you had created a mof file for applying a configuration.  In this step, we will create a new client configuration.  This DSC configuration will change or otherwise control the password policy on the clients.  Copy and paste this into a new Windows Powershell Administrator session or use Powershell ISE as Administrator to open a new script and run it:
 
    ```bash
    Configuration ClientConfig {
@@ -256,7 +256,7 @@ In this next section, you will configure ```win1``` to be a pull server and set 
 
    YOu should see a file created with the name of ```win2.mof```.  In DSC, you can configure the Pull client to fetch a configuration with a ConfigurationId or a ConfigurationName.  For this lab, we will be using the ConfigurationName.  You will see shortly that we will be renaming this ```win2.mof``` to a file named ```ClientConfig.mof``` and copying it to a destination directory where the client will trigger a pull from.  Very nice!
 
-8. On **win2** system:  next we need to configure the DSC pull client on **win2**.  Configure the Local Configuration Manager (LCM) on ```win2``` to pull its configuration from ```win1```.  Create a script to configure the LCM.  Copy and paste this code into a Windows Powershell session that is **Run as Administrator**, or run in Powershell ISE and create a new script:
+5. On **win2** system:  next we need to configure the DSC pull client on **win2**.  Configure the Local Configuration Manager (LCM) on ```win2``` to pull its configuration from ```win1```.  Create a script to configure the LCM.  Copy and paste this code into a Windows Powershell session that is **Run as Administrator**, or run in Powershell ISE and create a new script:
    ```bash
    [DSCLocalConfigurationManager()]
    configuration PullClientConfigNames
@@ -288,7 +288,7 @@ In this next section, you will configure ```win1``` to be a pull server and set 
    Registration of the Dsc Agent with the server http://win1.example.local:8080/PSDSCPullServer.svc was successful
    ```
 
-9. Back on **win1**, we are very close to the finish line.  We simply need to copy the mof file to the target directory and update the checksum.  Then when the win2 client polls for an updated configuration, it knows from an updated checksum that it needs to pull a new configuration.  Run the following commands in an elevated powershell session. First, rename the previously created win2.mof to ClientConfig.mof:
+6. Back on **win1**, we are very close to the finish line.  We simply need to copy the mof file to the target directory and update the checksum.  Then when the win2 client polls for an updated configuration, it knows from an updated checksum that it needs to pull a new configuration.  Run the following commands in an elevated powershell session. First, rename the previously created win2.mof to ClientConfig.mof:
     
    ```bash
    Rename-Item -Path C:\DSC\win2.mof -NewName "ClientConfig.mof"
@@ -304,5 +304,10 @@ In this next section, you will configure ```win1``` to be a pull server and set 
    New-Dscchecksum "C:\Program Files\WindowsPowershell\DscService\configuration\ClientConfig.mof"
    ```
 
+7. Now for the final step of pulling the configuration from the DSC client!  On **win2** DSC client, return to the last powershell session you ran when you set up the PullClient configuration and run:
+
+   ```bash
+   Update-DscConfiguration -Wait -Verbose
+   ```
       
    
