@@ -208,7 +208,7 @@ In this next section, you will configure ```win1``` to be a pull server and set 
      }
    }
    ```
-4. On win1, apply the DSC configuration to the Location Configuration Manager by using the ```Start-DscConfiguration``` cmdlet:
+4. On win1, open up a new powershell session as Administrator or use the Powershell ISE open a **New Script**.  Paste this code in and hit the green button in Powershell ISE.  This will apply the DSC configuration to the Location Configuration Manager by using the ```Start-DscConfiguration``` cmdlet:
    
    ```bash
    $registrationKey = "8dd78714-b559-496b-8911-56554bc4bda5"
@@ -221,18 +221,40 @@ In this next section, you will configure ```win1``` to be a pull server and set 
    Start-DscConfiguration -Path c:\Configs\PullServer -Wait -Verbose
    ```
 
-6. Now you need to generate the DSC Configurations that will be pulled from ```win1```.  In the previous lab 1, you had already generated a MOF file.  Copy the generated ```win2.mof``` to the Pull Server's configuration path:
+   You should seee some debug output showing succesful run of the configuration changes.  This will also add the RegistrationKey shared secret to a file used by the PullServer.
+
+6. Still on **win1**, you need to generate the DSC Configurations that will be pulled from ```win1```.  In the previous lab you had created a mof file for applying a configuration.  In this step, we will create a new client configuration.  This DSC configuration will change or otherwise control the password policy on the clients.  Copy and paste this into a new Windows Powershell Administrator session or use Powershell ISE as Administrator to open a new script and run it:
 
    ```bash
-   Copy-Item -Path "C:\DSC\win2.mof" -Destination "$env:PROGRAMFILES\WindowsPowerShell\DscService\Configuration"
+   Configuration ClientConfig {
+
+   Node "win2" {
+      Script SetPasswordPolicy {
+         SetScript = {
+               secedit.exe /export /cfg C:\windows\temp\secpol.cfg
+               $secpol = Get-Content -Path C:\windows\temp\secpol.cfg
+               $secpol = $secpol -replace 'MinimumPasswordLength = .+', 'MinimumPasswordLength = 12'
+               $secpol = $secpol -replace 'PasswordComplexity = .+', 'PasswordComplexity = 1'
+               $secpol = $secpol -replace 'MaximumPasswordAge = .+', 'MaximumPasswordAge = 42'
+               Set-Content -Path C:\windows\temp\secpol.cfg -Value $secpol -Force
+                secedit.exe /configure /db C:\windows\temp\secpol.sdb /cfg C:\windows\temp\secpol.cfg /areas SECURITYPOLICY
+           }
+           TestScript = {
+               $result = secedit.exe /export /cfg C:\windows\temp\secpol.cfg
+               $secpol = Get-Content -Path C:\windows\temp\secpol.cfg
+               $minLength = $secpol -match 'MinimumPasswordLength = 12'
+               $complexity = $secpol -match 'PasswordComplexity = 1'
+               $maxAge = $secpol -match 'MaximumPasswordAge = 42'
+                return ($minLength -and $complexity -and $maxAge)
+           }
+           GetScript = { return $null }
+          }
+      }
+   }
+   ClientConfig -OutputPath "C:\DSC"
    ```
 
-   Generate a checksum for the MOF file:
-   ```bash
-   New-DscChecksum -ConfigurationPath "$env:PROGRAMFILES\WindowsPowerShell\DscService\Configuration" -Force
-   ```
-
-7. Next we need to configure the DSC pull client on **win2**.  Configure the Local Configuration Manager (LCM) on ```win2``` to pull its configuration from ```win1```.  Create a script to configure the LCM.  Copy and paste this code into a Windows Powershell session that is **Run as Administrator**:
+8. Next we need to configure the DSC pull client on **win2**.  Configure the Local Configuration Manager (LCM) on ```win2``` to pull its configuration from ```win1```.  Create a script to configure the LCM.  Copy and paste this code into a Windows Powershell session that is **Run as Administrator**:
    ```bash
    [DSCLocalConfigurationManager()]
    Configuration LCMConfig {
