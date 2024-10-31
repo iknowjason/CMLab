@@ -63,7 +63,7 @@ systemctl start puppetserver
 
 # SaltStack bootstrap script 
 echo "Installing Salt bootrap for master and minion"
-curl -o bootstrap-salt.sh -L https://bootstrap.saltproject.io
+curl -o bootstrap-salt.sh -L https://github.com/saltstack/salt-bootstrap/releases/latest/download/bootstrap-salt.sh
 chmod +x bootstrap-salt.sh
 echo "Installing both master and minion services"
 ./bootstrap-salt.sh -M
