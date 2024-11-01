@@ -61,13 +61,6 @@ apt-get update -y
 apt-get install puppetserver -y 
 systemctl start puppetserver
 
-# SaltStack bootstrap script 
-echo "Installing Salt bootrap for master and minion"
-curl -o bootstrap-salt.sh -L https://github.com/saltstack/salt-bootstrap/releases/latest/download/bootstrap-salt.sh
-chmod +x bootstrap-salt.sh
-echo "Installing both master and minion services"
-./bootstrap-salt.sh -M
-
 # Install DSCv3
 echo "Installing DSCv3"
 cd /home/ubuntu
@@ -129,6 +122,13 @@ echo "${lin1_ip} salt.${domain} salt" >> /etc/hosts
 echo "${lin2_ip} lin2.${domain} lin2" >> /etc/hosts
 echo "${win1_ip} win1.${domain} win1" >> /etc/hosts
 echo "${win2_ip} win2.${domain} win2" >> /etc/hosts
+
+# SaltStack bootstrap script
+echo "Installing Salt bootrap for master and minion"
+curl -o bootstrap-salt.sh -L https://github.com/saltstack/salt-bootstrap/releases/latest/download/bootstrap-salt.sh
+chmod +x bootstrap-salt.sh
+echo "Installing both master and minion services"
+./bootstrap-salt.sh -M
 
 echo "End of bootstrap script"
 
