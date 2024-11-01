@@ -128,7 +128,8 @@ echo "Installing Salt bootrap for master and minion"
 curl -o bootstrap-salt.sh -L https://github.com/saltstack/salt-bootstrap/releases/latest/download/bootstrap-salt.sh
 chmod +x bootstrap-salt.sh
 echo "Installing both master and minion services"
-./bootstrap-salt.sh -M
+# Seems to be an issue with this script, build manually
+#./bootstrap-salt.sh -M
 
 echo "End of bootstrap script"
 
