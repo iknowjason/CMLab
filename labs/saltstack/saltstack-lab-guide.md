@@ -14,7 +14,7 @@ Your lab environment consists of two Linux systems:
 
 ### Verify Salt Master
 
-1. SSH into the **linux1** master by looking at output from ```terraform output```.  The Salt Stack master software is already installed when the linux1 system bootstraps through the user-data script and ec2-agent.  Verify that the service is running:
+1. Install salt on the master using the bootstrap script with instructions here:  https://docs.saltproject.io/salt/install-guide/en/latest/topics/bootstrap.html.  SSH into the **linux1** master by looking at output from ```terraform output```.  The Salt Stack master software is already installed when the linux1 system bootstraps through the user-data script and ec2-agent.  Verify that the service is running:
    
    ```bash
    sudo systemctl status salt-master
@@ -22,7 +22,7 @@ Your lab environment consists of two Linux systems:
 
 ### Salt Minion Setup
 
-1. SSH into the **linux2** minion by looking at output from ```terraform output```.  The Salt Stack minion software is already installed when the linux2 system bootstraps through the user-data script and ec2-agent.  Verify that the service is running:
+1. Install salt on the minion using the bootstrap script with instructions here:  https://docs.saltproject.io/salt/install-guide/en/latest/topics/bootstrap.html.  SSH into the **linux2** minion by looking at output from ```terraform output```.  The Salt Stack minion software is already installed when the linux2 system bootstraps through the user-data script and ec2-agent.  Verify that the service is running:
 
    ```bash
    sudo systemctl status salt-minion
